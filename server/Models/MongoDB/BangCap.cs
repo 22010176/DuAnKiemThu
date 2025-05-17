@@ -1,7 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using server.Repositories;
 
-namespace server.Models;
+namespace server.Models.MongoDB;
 
 public class BangCap : BangCapDto, IEntity
 {
@@ -10,6 +10,9 @@ public class BangCap : BangCapDto, IEntity
 
 public class BangCapDto
 {
+  [BsonElement("maBangCap")]
+  public string MaBangCap { get; set; } = null!;
+
   [BsonElement("tenBangCap")]
   public string TenBangCap { get; set; } = null!;
 

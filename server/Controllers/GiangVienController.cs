@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using server.Models;
+using server.Models.MongoDB;
 using server.Repositories;
 
 namespace server.Controllers;
@@ -38,6 +39,7 @@ public class GiangVienController(IRepository<GiangVien> repo, IRepository<BangCa
     GiangVien giangVien = new()
     {
       Id = Guid.NewGuid().ToString(),
+      MaGiangVien = dto.MaGiangVien,
       BangCapId = dto.BangCapId,
       GioiTinh = dto.GioiTinh,
       Mail = dto.Mail,
@@ -45,7 +47,7 @@ public class GiangVienController(IRepository<GiangVien> repo, IRepository<BangCa
       SoDienThoai = dto.SoDienThoai,
       TenGiangVien = dto.TenGiangVien
     };
-    try { await _giangVienRepository.CreateAsync(giangVien); }
+    try { await _giangVienRepository.CreateAsync([giangVien]); }
     catch (Exception) { return BadRequest(new { Message = "Invalid Input!" }); }
 
     return CreatedAtAction(nameof(Get), new { id = giangVien.Id }, dto);

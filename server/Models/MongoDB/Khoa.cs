@@ -1,7 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using server.Repositories;
 
-namespace server.Models;
+namespace server.Models.MongoDB;
 
 public class Khoa : KhoaDto, IEntity
 {
@@ -10,6 +10,10 @@ public class Khoa : KhoaDto, IEntity
 
 public class KhoaDto
 {
+
+  [BsonElement("maKhoa")]
+  public string MaKhoa { get; set; } = null!;
+
   [BsonElement("tenKhoa")]
   public string TenKhoa { get; set; } = null!;
 

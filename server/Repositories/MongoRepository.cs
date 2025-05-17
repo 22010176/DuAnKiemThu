@@ -13,8 +13,8 @@ public class MongoRepository<T>(IMongoDatabase database, string collectionName) 
     public async Task<T?> GetByIdAsync(string id) =>
         await Collection.Find(e => e.Id == id).FirstOrDefaultAsync();
 
-    public async Task CreateAsync(T entity) =>
-        await Collection.InsertOneAsync(entity);
+    public async Task CreateAsync(List<T> entity) =>
+        await Collection.InsertManyAsync(entity);
 
     public async Task UpdateAsync(string id, T entity) =>
         await Collection.ReplaceOneAsync(e => e.Id == id, entity);

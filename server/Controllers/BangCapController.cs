@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
+using server.Models.MongoDB;
 using server.Repositories;
 
 namespace server.Controllers;
@@ -13,10 +14,11 @@ public class BangCapController(IRepository<BangCap> repo) : TemplateController<B
     BangCap bangCap = new()
     {
       Id = Guid.NewGuid().ToString(),
+      MaBangCap = dto.MaBangCap,
       TenBangCap = dto.TenBangCap,
       MoTa = dto.MoTa
     };
-    await _repo.CreateAsync(bangCap);
+    await _repo.CreateAsync([bangCap]);
     return CreatedAtAction(nameof(Get), new { id = bangCap.Id }, bangCap);
   }
 }

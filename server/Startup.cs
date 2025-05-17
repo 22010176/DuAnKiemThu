@@ -1,5 +1,6 @@
 using MongoDB.Driver;
-using server.Models;
+
+using server.Models.MongoDB;
 using server.Repositories;
 using server.Services;
 using server.Settings;
@@ -58,6 +59,11 @@ public class Startup(IConfiguration configuration)
       return collection;
     });
 
+    services.AddSingleton<IRepository<GiangVienKhoa>>(sp =>
+    {
+      var db = sp.GetRequiredService<IMongoDatabase>();
+      return new MongoRepository<GiangVienKhoa>(db, "GiangVienKhoa");
+    });
     services.AddHostedService<MongoIndexHostedService>();
   }
 

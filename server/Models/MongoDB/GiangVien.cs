@@ -1,7 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using server.Repositories;
 
-namespace server.Models;
+namespace server.Models.MongoDB;
 
 public class GiangVien : GiangVienDto, IEntity
 {
@@ -15,6 +15,9 @@ public class GiangVienBangCap : GiangVien
 
 public class GiangVienDto
 {
+  [BsonElement("maGiangVien")]
+  public string MaGiangVien { get; set; } = null!;
+
   [BsonElement("tenGiangVien")]
   public string TenGiangVien { get; set; } = null!;
 

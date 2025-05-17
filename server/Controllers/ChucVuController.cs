@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using server.Models;
+
+using server.Models.MongoDB;
 using server.Repositories;
 
 namespace server.Controllers;
@@ -13,9 +14,10 @@ public class ChucVuController(IRepository<ChucVu> repo) : TemplateController<Chu
     ChucVu chucVu = new()
     {
       Id = Guid.NewGuid().ToString(),
+      MaChucVu = dto.MaChucVu,
       TenChucVu = dto.TenChucVu
     };
-    await _repo.CreateAsync(chucVu);
+    await _repo.CreateAsync([chucVu]);
     return CreatedAtAction(nameof(Get), new { id = chucVu.Id }, dto);
   }
 }
