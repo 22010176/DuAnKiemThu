@@ -14,7 +14,7 @@ function KhoaPage() {
       title: 'STT', dataIndex: 'stt', width: 70,
       render: (_, record, index) => index + 1
     },
-    { title: 'Mã Khoa', dataIndex: 'id', key: 'id', width: 70, },
+    { title: 'Mã Khoa', dataIndex: 'maKhoa', key: 'maKhoa', width: 70, },
     { title: 'Tên Khoa', dataIndex: 'tenKhoa', key: 'tenKhoa', width: 180, },
     { title: 'Vị Trí', dataIndex: 'viTri', key: 'viTri', width: 120, },
     { title: 'Trưởng Khoa', dataIndex: 'truongKhoa', key: 'truongKhoa', width: 180, },

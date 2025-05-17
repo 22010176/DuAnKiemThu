@@ -32,7 +32,8 @@ const theme = {
     Collapse: {
       contentBg: "#2D3064",
       colorText: "white",
-      colorTextHeading: "white"
+      colorTextHeading: "white",
+      headerPadding: "20px 15px"
     }
   },
 }
@@ -40,8 +41,8 @@ const theme = {
 const items = [
   { content: "Bằng cấp", to: "/bang-cap" },
   { content: "Khoa", to: "/khoa" },
-  { content: "Giảng viên", to: "" },
-  { content: "Thống kê", to: "" },
+  { content: "Giảng viên", to: "/giao-vien" },
+  { content: "Thống kê", to: "/thong-ke" },
 ]
 
 const items2 = [
