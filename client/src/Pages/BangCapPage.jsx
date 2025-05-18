@@ -1,3 +1,4 @@
+import { getNextIdNumber } from "@/Utils/FormUtils";
 import { faArrowRotateRight, faCheck, faPen, faPlus, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, Modal, Space, Table } from "antd";
@@ -71,7 +72,7 @@ function BangCapPage() {
           }}>
           <div>
             <label className="font-semibold">Mã bằng cấp</label>
-            <Input name="maBangCap" className="pointer-events-none opacity-75" value={`BC-${data.length + 1}`} />
+            <Input name="maBangCap" className="pointer-events-none opacity-75" value={`BC-${getNextIdNumber(data.map(i => i.maBangCap))}`} />
           </div>
           <div>
             <label className="font-semibold">Tên bằng cấp</label>

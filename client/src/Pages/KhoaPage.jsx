@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 function KhoaPage() {
   const createFormRef = useRef();
   const [createForm, setCreateForm] = useState(false)
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   const { current: columns } = useRef([
     {
@@ -63,22 +63,21 @@ function KhoaPage() {
         centered
         open={createForm}
         onCancel={() => setCreateForm(false)}
-        footer={[
-          <Button
-            variant="solid"
-            color="orange"
-            icon={<FontAwesomeIcon icon={faCheck} />}
-            onClick={async function () {
-              const data = Object.fromEntries(new FormData(createFormRef.current))
-              await axios.post('http://localhost:5249/Khoa', data)
-                .then(() => updateData())
-              setCreateForm(false)
-              createFormRef.current.reset()
-            }}>
-            Hoàn thành
-          </Button>
-        ]}>
-        <form ref={createFormRef} className="flex flex-col gap-5">
+        footer={[]}>
+        <form ref={createFormRef} className="flex flex-col gap-5"
+          onSubmit={async function (e) {
+            e.preventDefault()
+            const data = Object.fromEntries(new FormData(createFormRef.current))
+            await axios.post('http://localhost:5249/Khoa', data)
+              .then(() => updateData())
+            setCreateForm(false)
+            createFormRef.current.reset()
+          }
+          }>
+          <div>
+            <label className="font-semibold">Mã bằng cấp</label>
+            <Input name="maKhoa" className="pointer-events-none opacity-75" value={`MK-${data.length + 1}`} />
+          </div>
           <div>
             <label className="font-semibold">Tên khoa</label>
             <Input name="tenKhoa" />
@@ -91,6 +90,9 @@ function KhoaPage() {
             <label className="font-semibold">Mô tả</label>
             <Input name="moTa" />
           </div>
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
+            Hoàn thành
+          </Button>
         </form>
       </Modal>
     </>
