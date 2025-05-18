@@ -9,16 +9,18 @@ namespace server.Controllers;
 [Route("[controller]")]
 public class KhoaController(IRepository<Khoa> repo) : TemplatePostgreController<Khoa, KhoaDto>(repo)
 {
-  public override async Task<IActionResult> Create(KhoaDto dto)
+  [HttpPost]
+  public override async Task<IActionResult> Create(KhoaDto _k)
   {
-    Khoa _khoa = new()
+    Khoa khoa = new()
     {
-      TenKhoa = dto.TenKhoa,
-      MoTa = dto.MoTa,
-      ViTri = dto.ViTri
+      MaKhoa = _k.MaKhoa,
+      TenKhoa = _k.TenKhoa,
+      MoTa = _k.MoTa,
+      ViTri = _k.ViTri
     };
-    await _context.CreateAsync([_khoa]);
+    await _context.CreateAsync([khoa]);
 
-    return CreatedAtAction(nameof(Get), new { id = _khoa.Id }, _khoa);
+    return CreatedAtAction(nameof(Get), new { id = khoa.Id }, _k);
   }
 }

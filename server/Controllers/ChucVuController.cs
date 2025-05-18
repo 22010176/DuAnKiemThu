@@ -9,10 +9,15 @@ namespace server.Controllers;
 [Route("[controller]")]
 public class ChucVuController(IRepository<ChucVu> repo) : TemplatePostgreController<ChucVu, ChucVuDto>(repo)
 {
-  public override async Task<IActionResult> Create(ChucVuDto dto)
+  [HttpPost]
+  public override async Task<IActionResult> Create(ChucVuDto _cv)
   {
-    ChucVu chucVu = new() { TenChucVu = dto.TenChucVu };
+    ChucVu chucVu = new()
+    {
+      MaChucVu = _cv.MaChucVu,
+      TenChucVu = _cv.TenChucVu
+    };
     await _context.CreateAsync([chucVu]);
-    return CreatedAtAction(nameof(Get), new { id = chucVu.Id }, dto);
+    return CreatedAtAction(nameof(Get), new { id = chucVu.Id }, _cv);
   }
 }

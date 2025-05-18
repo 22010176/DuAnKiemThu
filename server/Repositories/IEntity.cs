@@ -12,5 +12,5 @@ public interface IEntityMongo
 
 public interface IEntityPostgre
 {
-  int Id { get; set; }
+  Guid Id { get; set; }
 }

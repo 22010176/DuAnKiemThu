@@ -14,10 +14,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    base.OnModelCreating(modelBuilder);
-
-    modelBuilder.Entity<Khoa_GiangVien>()
-      .HasKey(e => new { e.ChucVuId, e.GiangVienId, e.KhoaId });
+    modelBuilder.Entity<BangCap>().HasIndex(b => b.MaBangCap).IsUnique();
+    modelBuilder.Entity<ChucVu>().HasIndex(b => b.MaChucVu).IsUnique();
+    modelBuilder.Entity<GiangVien>().HasIndex(b => b.MaGiangVien).IsUnique();
+    modelBuilder.Entity<Khoa>().HasIndex(b => b.MaKhoa).IsUnique();
+    modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.ChucVuId, k.KhoaId, k.GiangVienId }).IsUnique();
 
     modelBuilder.Entity<Khoa_GiangVien>()
       .HasOne(e => e.GiangVien)
@@ -33,6 +34,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       .HasOne(e => e.Khoa)
       .WithMany(k => k.Khoa_GiangViens)
       .HasForeignKey(e => e.KhoaId);
+
+    base.OnModelCreating(modelBuilder);
   }
 
 }
