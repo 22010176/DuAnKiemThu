@@ -1,9 +1,10 @@
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using server.Repositories;
 
 namespace server.Models.MongoDB;
 
-public class GiangVien : GiangVienDto, IEntity
+public class GiangVien : GiangVienDto, IEntityMongo
 {
   public string Id { get; set; } = null!;
 }

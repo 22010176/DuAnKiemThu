@@ -1,12 +1,13 @@
+using System.Linq.Expressions;
 using MongoDB.Driver;
 
 namespace server.Repositories;
 
 public interface IRepository<T>
 {
-  Task<List<T>> GetAllAsync();
-  Task<T?> GetByIdAsync(string id);
-  Task CreateAsync(List<T> entity);
-  Task UpdateAsync(string id, T entity);
-  Task DeleteAsync(string id);
+  Task<ICollection<T>> GetAllAsync();
+  Task<ICollection<T>> FindAsync(Expression<Func<T, bool>> predicate);
+  Task CreateAsync(ICollection<T> entities);
+  Task UpdateAsync(ICollection<T> entities);
+  Task DeleteAsync(ICollection<T> entities);
 }

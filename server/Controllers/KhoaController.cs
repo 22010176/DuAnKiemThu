@@ -1,25 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
-using server.Models.MongoDB;
+using server.Models.PostgreSQL;
 using server.Repositories;
 
 namespace server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class KhoaController(IRepository<Khoa> repo) : TemplateController<Khoa, KhoaDto>(repo)
+public class KhoaController(IRepository<Khoa> repo) : TemplatePostgreController<Khoa, KhoaDto>(repo)
 {
-  public override async Task<ActionResult> Create(KhoaDto dto)
+  public override async Task<IActionResult> Create(KhoaDto dto)
   {
     Khoa _khoa = new()
     {
-      Id = Guid.NewGuid().ToString(),
-      MaKhoa = dto.MaKhoa,
       TenKhoa = dto.TenKhoa,
       MoTa = dto.MoTa,
       ViTri = dto.ViTri
     };
-    await _repo.CreateAsync([_khoa]);
+    await _context.CreateAsync([_khoa]);
 
     return CreatedAtAction(nameof(Get), new { id = _khoa.Id }, _khoa);
   }

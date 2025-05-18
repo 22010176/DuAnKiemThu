@@ -1,9 +1,10 @@
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using server.Repositories;
 
 namespace server.Models.MongoDB;
 
-public class BangCap : BangCapDto, IEntity
+public class BangCap : BangCapDto, IEntityMongo
 {
   public string Id { get; set; } = null!;
 }

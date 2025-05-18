@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
+using server.Data;
 using server.Models.MongoDB;
 using server.Repositories;
 using server.Services;
@@ -11,19 +13,8 @@ public class Startup(IConfiguration configuration)
 {
   public IConfiguration Configuration { get; } = configuration;
 
-  public void ConfigureServices(IServiceCollection services)
+  void InitMongoDb(IServiceCollection services)
   {
-    services.AddCors(options =>
-    {
-      options.AddDefaultPolicy(builder =>
-      {
-        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-      });
-    });
-    services.AddControllers();
-    services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen();
-
     services.AddSingleton(sp =>
     {
       var settings = Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
@@ -67,15 +58,32 @@ public class Startup(IConfiguration configuration)
     services.AddHostedService<MongoIndexHostedService>();
   }
 
+  void InitPostgre(IServiceCollection services)
+  {
+    services.AddDbContext<AppDbContext>(options =>
+          options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+    services.AddScoped(typeof(IRepository<>), typeof(PostgreRepository<>));
+  }
+
+  public void ConfigureServices(IServiceCollection services)
+  {
+    services.AddCors(options =>
+      options.AddDefaultPolicy(builder =>
+        builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+
+    services.AddControllers();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+
+    InitPostgre(services);
+    // InitMongoDb(services);
+  }
+
   public void Configure(WebApplication app, IWebHostEnvironment env)
   {
-    app.UseCors();
-    if (env.IsDevelopment())
-    {
-      app.UseSwagger();
-      app.UseSwaggerUI();
-    }
+    if (env.IsDevelopment()) app.UseSwagger().UseSwaggerUI();
 
+    app.UseCors();
     app.UseHttpsRedirection();
     app.UseAuthorization();
     app.MapControllers();
