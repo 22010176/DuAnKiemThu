@@ -1,19 +1,20 @@
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
-import { faChevronDown, faGear, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight, faGear, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Collapse, ConfigProvider } from 'antd'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 import logo from '@/assets/Logo.png'
+import { useState } from 'react'
 
 function Icon({ icon, className, ...props }) {
-  return <FontAwesomeIcon icon={icon} className={[className, 'text-white scale-150'].join(' ')} {...props} />
+  return <FontAwesomeIcon icon={icon} className={[className, 'scale-150'].join(' ')} {...props} />
 }
 
-function SubLink({ to, content }) {
+function SubLink({ to, active = false, content }) {
   return (
-    <li className='list-disc'>
-      <Link to={to} className='font-semibold' style={{ color: "#ffffff" }}>{content}</Link>
+    <li className={[' list-disc', active && 'text-orange-400'].join(' ')}>
+      <Link to={to} className='font-semibold' style={{ color: active ? "#FB8D18" : "#ffffff" }}>{content}</Link>
     </li>
   )
 }
@@ -41,9 +42,10 @@ const theme = {
 const items = [
   { content: "Bằng cấp", to: "/bang-cap" },
   { content: "Khoa", to: "/khoa" },
-  { content: "Giảng viên", to: "/giao-vien" },
+  { content: "Giáo viên", to: "/giao-vien" },
   { content: "Thống kê", to: "/thong-ke" },
 ]
+const links = items.map(i => i.to)
 
 const items2 = [
   { content: "Thời khóa biểu", to: "", icon: faCalendar },
@@ -52,6 +54,11 @@ const items2 = [
 ]
 
 function Sidebar() {
+  const { pathname } = useLocation();
+  const [open, setOpen] = useState(true)
+
+  // console.log(pathname)
+
   return (
     <div className="w-60 h-full flex flex-col" style={{ backgroundColor: "#2D3064" }}>
       <img src={logo} />
@@ -59,19 +66,22 @@ function Sidebar() {
       {/* Giang Vien */}
       <ConfigProvider theme={theme}>
         <Collapse
+          accordion
           expandIconPosition='end'
           bordered={false}
-          expandIcon={({ isActive }) => <FontAwesomeIcon icon={faChevronDown} className='scale-130' rotation={isActive ? 0 : 90} />}
+          activeKey={(links.includes(pathname) || open) && "2"}
+          expandIcon={({ isActive }) => <FontAwesomeIcon icon={faChevronRight} className='scale-130' rotation={isActive ? 90 : 0} />}
           items={[{
+            key: "2",
             label: (
-              <div className='flex gap-5 items-center'>
+              <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
                 <Icon icon={faUser} />
-                <h1 className='font-bold'>Giảng viên</h1>
+                <h1 className='font-bold' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
               </div>
             ),
             children: (
               <ul className='flex flex-col gap-2 ps-5 relative'>
-                {items.map((i, j) => <SubLink {...i} key={j} />)}
+                {items.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
               </ul>
             ),
           }]} />

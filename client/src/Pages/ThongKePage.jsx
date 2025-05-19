@@ -82,11 +82,14 @@ function ThongKePage() {
 
   const columns = [
     { title: 'Tên khoa', dataIndex: 'name', key: 'name', },
-    { title: 'Tổng số giảng viên', dataIndex: 'totalLecturers', key: 'totalLecturers', sorter: (a, b) => a.totalLecturers - b.totalLecturers, },
+    { title: 'Tổng số giáo viên', dataIndex: 'totalLecturers', key: 'totalLecturers', sorter: (a, b) => a.totalLecturers - b.totalLecturers, },
     { title: 'Nam', dataIndex: 'maleCount', key: 'maleCount', sorter: (a, b) => a.maleCount - b.maleCount, },
     { title: 'Nữ', dataIndex: 'femaleCount', key: 'femaleCount', sorter: (a, b) => a.femaleCount - b.femaleCount, },
     { title: 'Thạc sĩ', dataIndex: 'masterCount', key: 'masterCount', sorter: (a, b) => a.masterCount - b.masterCount, },
     { title: 'Tiến sĩ', dataIndex: 'phdCount', key: 'phdCount', sorter: (a, b) => a.phdCount - b.phdCount, },
+    { title: 'Phó giáo sư', dataIndex: 'phdCount', key: 'phdCount', sorter: (a, b) => a.phdCount - b.phdCount, },
+    { title: 'Giáo sư', dataIndex: 'phdCount', key: 'phdCount', sorter: (a, b) => a.phdCount - b.phdCount, },
+    { title: 'Cử nhân', dataIndex: 'phdCount', key: 'phdCount', sorter: (a, b) => a.phdCount - b.phdCount, },
   ];
 
   // Dữ liệu cho biểu đồ phân phối giới tính
@@ -107,44 +110,44 @@ function ThongKePage() {
   // Dữ liệu cho biểu đồ cột so sánh các khoa
   const facultyCompareData = dummyData.faculties.map(faculty => ({
     name: faculty.name.replace('Khoa ', ''),
-    'Giảng viên': faculty.totalLecturers,
+    'Giáo viên': faculty.totalLecturers,
   }));
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Content className="p-6">
         <div className="bg-white p-6 rounded shadow">
-          <Title level={3} className="mb-6">Thống kê giảng viên toàn trường</Title>
+          <Title level={3} className="mb-6">Thống kê giáo viên toàn trường</Title>
 
-          <Row gutter={[16, 16]} className="mb-8">
-            <Col xs={24} sm={12} lg={6}>
+          <div gutter={[16, 16]} className="mb-8 grid grid-cols-3 gap-3">
+            <div xs={24} sm={12} lg={6}>
               <Card className="bg-blue-50">
-                <Statistic title="Tổng số giảng viên" value={dummyData.totalLecturers} prefix={<TeamOutlined />} valueStyle={{ color: '#1890ff' }} />
+                <Statistic title="Tổng số giáo viên" value={dummyData.totalLecturers} prefix={<TeamOutlined />} valueStyle={{ color: '#1890ff' }} />
               </Card>
-            </Col>
-            <Col xs={24} sm={12} lg={6}>
+            </div>
+            <div xs={24} sm={12} lg={6}>
               <Card className="bg-green-50">
                 <Statistic
-                  title="Giảng viên nam"
+                  title="Giáo viên nam"
                   value={dummyData.maleCount}
                   prefix={<ManOutlined />}
                   valueStyle={{ color: '#3f8600' }}
                   suffix={`(${Math.round(dummyData.maleCount / dummyData.totalLecturers * 100)}%)`}
                 />
               </Card>
-            </Col>
-            <Col xs={24} sm={12} lg={6}>
+            </div>
+            <div xs={24} sm={12} lg={6}>
               <Card className="bg-pink-50">
                 <Statistic
-                  title="Giảng viên nữ"
+                  title="Giáo viên nữ"
                   value={dummyData.femaleCount}
                   prefix={<WomanOutlined />}
                   valueStyle={{ color: '#eb2f96' }}
                   suffix={`(${Math.round(dummyData.femaleCount / dummyData.totalLecturers * 100)}%)`}
                 />
               </Card>
-            </Col>
-            <Col xs={24} sm={12} lg={6}>
+            </div>
+            {/* <Col xs={24} sm={12} lg={6}>
               <Card className="bg-purple-50">
                 <Statistic
                   title="Số lượng tiến sĩ"
@@ -153,10 +156,10 @@ function ThongKePage() {
                   valueStyle={{ color: '#722ed1' }}
                 />
               </Card>
-            </Col>
-          </Row>
+            </Col> */}
+          </div>
 
-          <Divider orientation="left">Thống kê theo học vị</Divider>
+          {/* <Divider orientation="left">Thống kê theo bằng cấp</Divider> */}
           <Row gutter={[24, 24]} className="mb-8">
             <Col xs={24} sm={12}>
               <Card>
@@ -164,7 +167,7 @@ function ThongKePage() {
                   <div className="w-8 h-8 bg-blue-500 flex items-center justify-center rounded-full mr-2">
                     <BookOutlined className="text-white" />
                   </div>
-                  <Title level={4} className="m-0">Phân bố theo trình độ học vị</Title>
+                  <Title level={4} className="m-0">Phân bố theo bằng cấp</Title>
                 </div>
                 <Row gutter={16}>
                   <Col span={12}>
@@ -233,7 +236,7 @@ function ThongKePage() {
               <div className="w-8 h-8 bg-green-500 flex items-center justify-center rounded-full mr-2">
                 <BarChartOutlined className="text-white" />
               </div>
-              <Title level={4} className="m-0">Số lượng giảng viên theo khoa</Title>
+              <Title level={4} className="m-0">Số lượng giáo viên theo khoa</Title>
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={facultyCompareData}>
@@ -242,7 +245,7 @@ function ThongKePage() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="Giảng viên" fill="#1890ff" />
+                <Bar dataKey="Giáo viên" fill="#1890ff" />
               </BarChart>
             </ResponsiveContainer>
           </Card>
@@ -268,29 +271,24 @@ function ThongKePage() {
                     <Row gutter={[16, 16]} className="mb-4">
                       <Col xs={24} sm={12} md={8} lg={6}>
                         <Card className="bg-blue-50">
-                          <Statistic title="Tổng số giảng viên" value={facultyDetails.totalLecturers} prefix={<TeamOutlined />} valueStyle={{ color: '#1890ff' }} />
+                          <Statistic title="Tổng số giáo viên" value={facultyDetails.totalLecturers} prefix={<TeamOutlined />} valueStyle={{ color: '#1890ff' }} />
                         </Card>
                       </Col>
                       <Col xs={24} sm={12} md={8} lg={6}>
                         <Card className="bg-green-50">
-                          <Statistic title="Giảng viên nam" value={facultyDetails.maleCount} prefix={<ManOutlined />} valueStyle={{ color: '#3f8600' }} suffix={`(${Math.round(facultyDetails.maleCount / facultyDetails.totalLecturers * 100)}%)`} />
+                          <Statistic title="Giáo viên nam" value={facultyDetails.maleCount} prefix={<ManOutlined />} valueStyle={{ color: '#3f8600' }} suffix={`(${Math.round(facultyDetails.maleCount / facultyDetails.totalLecturers * 100)}%)`} />
                         </Card>
                       </Col>
                       <Col xs={24} sm={12} md={8} lg={6}>
                         <Card className="bg-pink-50">
-                          <Statistic title="Giảng viên nữ" value={facultyDetails.femaleCount} prefix={<WomanOutlined />} valueStyle={{ color: '#eb2f96' }} suffix={`(${Math.round(facultyDetails.femaleCount / facultyDetails.totalLecturers * 100)}%)`} />
+                          <Statistic title="Giáo viên nữ" value={facultyDetails.femaleCount} prefix={<WomanOutlined />} valueStyle={{ color: '#eb2f96' }} suffix={`(${Math.round(facultyDetails.femaleCount / facultyDetails.totalLecturers * 100)}%)`} />
                         </Card>
                       </Col>
-                      <Col xs={24} sm={12} md={8} lg={6}>
+                      {/* <Col xs={24} sm={12} md={8} lg={6}>
                         <Card className="bg-purple-50">
                           <Statistic title="Số lượng tiến sĩ" value={`${Math.round(facultyDetails.phdCount / facultyDetails.masterCount * 100)}%`} prefix={<BookOutlined />} valueStyle={{ color: '#722ed1' }} />
                         </Card>
-                      </Col>
-                      <Col xs={24} sm={12} md={8} lg={6}>
-                        <Card className="bg-purple-50">
-                          <Statistic title="Số lượng tiến sĩ" value={`${Math.round(facultyDetails.phdCount / facultyDetails.masterCount * 100)}%`} prefix={<BookOutlined />} valueStyle={{ color: '#722ed1' }} />
-                        </Card>
-                      </Col>
+                      </Col> */}
                     </Row>
 
                     <Row gutter={16}>
@@ -314,7 +312,7 @@ function ThongKePage() {
                         </Card>
                       </Col>
                       <Col xs={24} md={12}>
-                        <Card title="Phân bố học vị">
+                        <Card title="Phân bố bằng cấp">
                           <ResponsiveContainer width="100%" height={250}>
                             <PieChart>
                               <Pie
