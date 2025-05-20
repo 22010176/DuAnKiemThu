@@ -10,7 +10,7 @@ public class GiangVien : GiangVienDto, IEntityPostgre
   {
     var random = new Random();
     var range = (to - from).Days;
-    return from.AddDays(random.Next(range)).AddHours(random.Next(0, 24)).AddMinutes(random.Next(0, 60));
+    return new DateTime();
   }
   public static string GenerateRandomVietnamPhoneNumber()
   {
@@ -30,7 +30,7 @@ public class GiangVien : GiangVienDto, IEntityPostgre
     int number = random.Next(0, int.MaxValue);
     string domain = domains[random.Next(domains.Length)];
 
-    return $"{namePrefix}{number}@{domain}";
+    return $"{namePrefix}{number}{Guid.NewGuid()}@{domain}";
   }
   public static GiangVien Generate(Guid bangCapId)
   {
@@ -39,7 +39,7 @@ public class GiangVien : GiangVienDto, IEntityPostgre
     {
       MaGiangVien = Guid.NewGuid().ToString(),
       TenGiangVien = Guid.NewGuid().ToString(),
-      GioiTinh = random.Next(),
+      GioiTinh = random.Next() % 2,
       SinhNhat = GenerateRandomDate(new DateTime(1950, 1, 1), new DateTime(2000, 1, 1)),
       SoDienThoai = GenerateRandomVietnamPhoneNumber(),
       Mail = GenerateRandomEmail(),

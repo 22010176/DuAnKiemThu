@@ -1,15 +1,16 @@
 import axios from "axios"
 import { useContext, useEffect } from "react"
 
-import Context from "./context"
-import { Button, DatePicker, Input, Radio, Select } from "antd"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { convertDateToInput, getNextIdNumber, parseDateFromInput } from "@/Utils/FormUtils"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
-import { convertDateToInput, parseDateFromInput } from "@/Utils/FormUtils"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button, Input, Radio, Select } from "antd"
+import Context from "./context"
 
 function CreateForm() {
   const [state, dispatch] = useContext(Context)
-  console.log(state)
+  console.log(state.giangVienData)
+
   useEffect(function () {
     axios.get("http://localhost:5249/BangCap")
       .then(res => dispatch({ type: "updateBangCap", payload: res.data }))
@@ -17,9 +18,17 @@ function CreateForm() {
       .then(res => dispatch({ type: "updateKhoa", payload: res.data }))
     axios.get('http://localhost:5249/ChucVu')
       .then(res => dispatch({ type: "updateChucVu", payload: res.data }))
-    dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `MK-${state.giangVienData.length + 1}` } })
-  }, [])
 
+
+  }, [])
+  function updateData() {
+    axios.get('http://localhost:5249/GiangVien')
+      .then(res => {
+        dispatch({ type: "updateGiangVienData", payload: res.data })
+        return res.data
+      })
+      .then(res => dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } }))
+  }
   return (
     <form className="grid gap-5 grid-cols-[2fr_3fr]"
       onSubmit={async function (e) {
@@ -27,7 +36,10 @@ function CreateForm() {
         // const data = Object.fromEntries(new FormData(e.target))
         console.log(JSON.stringify(state.formValue))
         // await axios.post('http://localhost:5249/Khoa', data)
+        await axios.post('http://localhost:5249/GiangVien/them-giang-vien', state.formValue)
+          .then(a => console.log(a.data))
 
+        updateData()
       }
       }>
       <div>
@@ -106,7 +118,8 @@ function CreateForm() {
           className="w-full"
           name="chucVuId"
           value={state.formValue.chucVuId}
-          options={state.chucVuData.map(i => ({ value: i.id, label: i.tenChucVu }))} />
+          options={state.chucVuData.map(i => ({ value: i.id, label: i.tenChucVu }))}
+          onChange={e => dispatch({ type: "updateChucVuInput", payload: e })} />
       </div>
       <div className="col-span-2 flex justify-end">
         <Button htmlType="submit" className="w-min" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>

@@ -29,6 +29,7 @@ public class GiangVienController(
     join kgv in _ct.Khoa_GiangVien on g.Id equals kgv.GiangVienId
     join k in _ct.Khoa on kgv.KhoaId equals k.Id
     join c in _ct.ChucVu on kgv.ChucVuId equals c.Id
+    orderby g.MaGiangVien.Length, g.MaGiangVien
     select new
     {
       g.Id,
@@ -43,7 +44,7 @@ public class GiangVienController(
       k.MaKhoa,
       TenKhoa = k.TenVietTat,
       c.MaChucVu,
-      TenChucVu = c.TenVietTat
+      c.TenChucVu
     };
     return Ok(await result.ToListAsync());
   }
@@ -65,10 +66,7 @@ public class GiangVienController(
       TenGiangVien = _gv.TenGiangVien
     };
 
-    try
-    {
-      await _context.CreateAsync([giangVien]);
-    }
+    try { await _context.CreateAsync([giangVien]); }
     catch (Exception) { return BadRequest(new { Message = "Invalid Input!" }); }
 
     return CreatedAtAction(nameof(Get), new { id = giangVien.Id }, _gv);

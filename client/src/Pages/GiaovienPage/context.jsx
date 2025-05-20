@@ -18,6 +18,7 @@ export const intitialValue = {
     khoaId: "",
     chucVuId: ""
   },
+  viewOption: "all",
   giangVienData: [],
   khoaData: [],
   bangCapData: [],
@@ -37,6 +38,12 @@ export function reducer(state = {}, action = {}) {
     case "updateKhoaInput":
       _state.formValue = { ..._state.formValue, khoaId: payload }
       break
+    case "updateChucVuInput":
+      _state.formValue = { ..._state.formValue, chucVuId: payload }
+      break
+    case "updateGiangVienTable":
+      _state.viewOption = payload
+      break
     case "updateBangCap":
       _state.bangCapData = [...payload]
       _state.formValue.giangVien.bangCapId = payload[0]?.id
@@ -52,7 +59,9 @@ export function reducer(state = {}, action = {}) {
         chucVuId: payload[0]?.id
       }
       break
-
+    case "updateGiangVienData":
+      _state.giangVienData = payload;
+      break;
 
     default:
       break;

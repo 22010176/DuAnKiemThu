@@ -35,6 +35,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       .WithMany(k => k.Khoa_GiangViens)
       .HasForeignKey(e => e.KhoaId);
 
+    modelBuilder.Entity<GiangVien>()
+      .HasOne(e => e.BangCap)
+      .WithMany(e => e.GiangViens)
+      .HasForeignKey(e => e.BangCapId);
+
     base.OnModelCreating(modelBuilder);
   }
 

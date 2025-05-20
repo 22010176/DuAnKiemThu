@@ -71,7 +71,7 @@ function KhoaPage() {
           }
           }>
           <div>
-            <label className="font-semibold">Mã bằng cấp</label>
+            <label className="font-semibold">Mã khoa</label>
             <Input name="maKhoa" className="pointer-events-none opacity-75" value={`MK-${data.length + 1}`} />
           </div>
           <div>

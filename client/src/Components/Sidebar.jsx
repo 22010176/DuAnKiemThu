@@ -1,5 +1,5 @@
 import { faCalendar } from '@fortawesome/free-regular-svg-icons'
-import { faChevronDown, faChevronRight, faGear, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faChevronRight, faGear, faMagnifyingGlass, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Collapse, ConfigProvider } from 'antd'
 import { Link, useLocation } from 'react-router'
@@ -13,7 +13,7 @@ function Icon({ icon, className, ...props }) {
 
 function SubLink({ to, active = false, content }) {
   return (
-    <li className={[' list-disc', active && 'text-orange-400'].join(' ')}>
+    <li className={[' list-disc text-lg', active && 'text-orange-400'].join(' ')}>
       <Link to={to} className='font-semibold' style={{ color: active ? "#FB8D18" : "#ffffff" }}>{content}</Link>
     </li>
   )
@@ -21,9 +21,9 @@ function SubLink({ to, active = false, content }) {
 
 function SubLink2({ icon, to, content }) {
   return (
-    <div className='flex gap-5 ps-3.5 items-center border-t-1 border-white py-5'>
+    <div className='flex gap-5 ps-5 items-center border-t-1 border-white py-5'>
       <Icon icon={icon} className='text-white' />
-      <Link to={to} className='font-bold' style={{ color: "#ffffff" }}>{content}</Link>
+      <Link to={to} className='font-bold text-lg' style={{ color: "#ffffff" }}>{content}</Link>
     </div>
   )
 }
@@ -76,7 +76,7 @@ function Sidebar() {
             label: (
               <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
                 <Icon icon={faUser} />
-                <h1 className='font-bold' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
+                <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
               </div>
             ),
             children: (

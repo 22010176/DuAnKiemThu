@@ -1,73 +1,91 @@
-import { faArrowRotateRight, faCheck, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, DatePicker, Form, Input, Modal, Radio, Select, Space, Table } from "antd";
+import { Button, Input, Modal, Select, Table } from "antd";
 import axios from "axios";
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import TableHeader from "@/Components/TableHeader";
 import Context, { intitialValue, reducer } from "./context";
 import CreateForm from "./CreateForm";
+import { getNextIdNumber } from "@/Utils/FormUtils";
 
 function GiaoVienPage() {
   const [state, dispatch] = useReducer(reducer, intitialValue)
-
   const [createForm, setCreateForm] = useState(false)
-  const [data, setData] = useState([
-    { key: 0, stt: 1, id: 1, tenGiangVien: "test", gioiTinh: "Nam", sinhNhat: "12/44/2033", soDienThoai: "123456789012", mail: "22010176@st.phenikaa-uni.edu.vn", chucVu: "Trưởng khoa", bangCap: "Phó giáo sư" }
-  ])
-
-  const columns = [
-    { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 5, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
-    { title: <TableHeader>Mã số</TableHeader>, dataIndex: 'id', key: 'id', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
-    { title: <TableHeader>Họ tên</TableHeader>, dataIndex: 'tenGiangVien', key: 'tenGiangVien', width: 200, render: i => <div className="text-lg">{i}</div> },
-    { title: <TableHeader>Giới tính</TableHeader>, dataIndex: 'gioiTinh', key: 'gioiTinh', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
-    { title: <TableHeader>Ngày sinh</TableHeader>, dataIndex: 'sinhNhat', key: 'sinhNhat', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
-    { title: <TableHeader>Số điện thoại</TableHeader>, dataIndex: 'soDienThoai', key: 'soDienThoai', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
-    { title: <TableHeader>Mail</TableHeader>, dataIndex: 'mail', key: 'mail', width: 200, render: i => <div className="text-lg">{i}</div> },
-    { title: <TableHeader>Chức vụ</TableHeader>, dataIndex: 'chucVu', key: 'chucVu', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
-    { title: <TableHeader>Bằng cấp</TableHeader>, dataIndex: 'bangCap', key: 'bangCap', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
-    {
-      title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 5,
-      render: (_, entry) => (
-        <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} />
-          <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={() => axios.delete(`http://localhost:5249/BangCap/${entry.id}`).then(updateData)} />
-        </div>
-      ),
-    },
-  ];
 
   function updateData() {
-    // ~
-    // setData([])
-    // axios.get('http://localhost:5249/BangCap')
-    //   .then(function (reponse) {
-    //     setData(reponse.data.map((i, j) => ({ ...i, key: j })))
-    //     console.log(reponse.data)
-    //   })
+    axios.get('http://localhost:5249/GiangVien')
+      .then(res => {
+        dispatch({ type: "updateGiangVienData", payload: res.data })
+        return res.data
+      })
+      .then(res => dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } }))
+
+    axios.get("http://localhost:5249/Khoa")
+      .then(res => dispatch({ type: "updateKhoa", payload: res.data }))
   }
 
   useEffect(function () {
     updateData()
   }, [])
 
+  const columns = [
+    { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 5, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
+    { title: <TableHeader>Mã số</TableHeader>, dataIndex: 'maGiangVien', key: 'maGiangVien', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
+    { title: <TableHeader>Họ tên</TableHeader>, dataIndex: 'tenGiangVien', key: 'tenGiangVien', width: 100, render: i => <div className="text-lg">{i}</div> },
+    { title: <TableHeader>Giới tính</TableHeader>, dataIndex: 'gioiTinh', key: 'gioiTinh', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
+    { title: <TableHeader>Ngày sinh</TableHeader>, dataIndex: 'sinhNhat', key: 'sinhNhat', width: 100, render: i => <div className="text-lg text-center">{new Date(i).toLocaleDateString()}</div> },
+    { title: <TableHeader>Số điện thoại</TableHeader>, dataIndex: 'soDienThoai', key: 'soDienThoai', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
+    { title: <TableHeader>Mail</TableHeader>, dataIndex: 'mail', key: 'mail', width: 100, render: i => <div className="text-lg">{i}</div> },
+    { title: <TableHeader>Chức vụ</TableHeader>, dataIndex: 'tenChucVu', key: 'tenChucVu', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
+    state.viewOption == 'all' && { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
+    { title: <TableHeader>Bằng cấp</TableHeader>, dataIndex: 'tenBangCap', key: 'tenBangCap', width: 100, render: i => <div className="text-lg text-center">{i}</div> },
+    {
+      title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 5,
+      render: (_, entry) => (
+        <div className="flex gap-5 items-center justify-center" >
+          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} />
+          <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
+            onClick={() => axios.delete(`http://localhost:5249/GiangVien/${entry.id}`).then(updateData)} />
+        </div>
+      ),
+    },
+  ].filter(i => !!i);
+  console.log(state.giangVienData)
   return (
     <Context.Provider value={[state, dispatch]}>
       <div className="p-5 flex flex-col gap-5" >
-        <div className="flex justify-end gap-2 items-center">
-          <Input placeholder="Tìm kiếm" style={{ width: "200px" }} />
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
-          <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => setCreateForm(true)} />
-          <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} />
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
+        <div className="flex justify-between gap-2 items-center">
+          <div className="flex gap-5">
+            <Select
+              // style={{ width: 120 }}
+              className="w-60"
+              value={state.viewOption}
+              onChange={e => dispatch({ type: "updateGiangVienTable", payload: e })}
+              options={[
+                { value: 'all', label: 'Toàn trường' },
+                ...state.khoaData.map(i => ({ value: i.tenVietTat, label: i.tenKhoa }))
+              ]}
+            />
+          </div>
+          <div className="flex justify-end gap-2 items-center">
+            <Input placeholder="Tìm kiếm" style={{ width: "200px" }} />
+            <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
+            <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => setCreateForm(true)} />
+            <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} />
+            <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
+          </div>
         </div>
 
-        <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
+        <Table
+          columns={columns}
+          dataSource={state.giangVienData.filter(i => state.viewOption === 'all' || i.tenKhoa === state.viewOption)}
+          pagination={{ pageSize: 10 }}
+          size="small" bordered className="shadow-md" />
       </div>
 
       <Modal
-        title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}
+        title={<h1 className="text-xl font-bold text-blue-900">THÊM GIÁO VIÊN MỚI</h1>}
         centered
         open={createForm}
         onCancel={() => setCreateForm(false)}

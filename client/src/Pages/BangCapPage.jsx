@@ -1,6 +1,6 @@
 import TableHeader from "@/Components/TableHeader";
 import { getNextIdNumber } from "@/Utils/FormUtils";
-import { faArrowRotateRight, faCheck, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faCheck, faPen, faPlus, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, Modal, Table } from "antd";
 import axios from "axios";
@@ -19,7 +19,7 @@ function BangCapPage() {
       render: (_, record, index) => <TableHeader>{index + 1}</TableHeader>
     },
     {
-      title: () => <TableHeader>Mã bằng cấp</TableHeader>, dataIndex: 'maBangCap', key: 'maBangCap', width: 90,
+      title: () => <TableHeader>Mã bằng cấp</TableHeader>, dataIndex: 'maBangCap', key: 'maBangCap', width: 120,
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
@@ -27,7 +27,7 @@ function BangCapPage() {
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
-      title: () => <TableHeader>Tên viết tắt</TableHeader>, dataIndex: 'tenVietTat', key: 'tenVietTat', width: 100,
+      title: () => <TableHeader>Tên viết tắt</TableHeader>, dataIndex: 'tenVietTat', key: 'tenVietTat', width: 120,
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
@@ -60,7 +60,7 @@ function BangCapPage() {
       <div className="p-5 flex flex-col gap-5" >
         <div className="flex justify-end gap-2 items-center">
           {/* <Input placeholder="Tìm kiếm" style={{ width: "200px" }} /> */}
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
+          {/* <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} /> */}
           <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => setCreateForm(true)} />
           <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} />
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
@@ -70,7 +70,7 @@ function BangCapPage() {
       </div>
 
       <Modal
-        title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}
+        title={<h1 className="text-xl font-bold text-blue-900">THÊM BẰNG CẤP MỚI</h1>}
         centered
         open={createForm}
         onCancel={() => setCreateForm(false)}

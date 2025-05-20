@@ -10,24 +10,29 @@ namespace server.Controllers;
 [Route("[controller]")]
 public class TestController(AppDbContext context) : ControllerBase
 {
-  readonly AppDbContext _context = context;
+  readonly AppDbContext _ct = context;
   [HttpDelete]
   public async Task<ActionResult> Delete()
   {
-    _context.Khoa_GiangVien.RemoveRange(await _context.Khoa_GiangVien.ToListAsync());
-    _context.GiangVien.RemoveRange(await _context.GiangVien.ToListAsync());
-    _context.BangCap.RemoveRange(await _context.BangCap.ToListAsync());
-    _context.ChucVu.RemoveRange(await _context.ChucVu.ToListAsync());
-    _context.Khoa.RemoveRange(await _context.Khoa.ToListAsync());
-    await _context.SaveChangesAsync();
+    _ct.Khoa_GiangVien.RemoveRange(await _ct.Khoa_GiangVien.ToListAsync());
+    _ct.GiangVien.RemoveRange(await _ct.GiangVien.ToListAsync());
+    _ct.BangCap.RemoveRange(await _ct.BangCap.ToListAsync());
+    _ct.ChucVu.RemoveRange(await _ct.ChucVu.ToListAsync());
+    _ct.Khoa.RemoveRange(await _ct.Khoa.ToListAsync());
+    await _ct.SaveChangesAsync();
 
     return Ok();
   }
 
-  [HttpGet]
-  public async Task<ActionResult> Get()
+  [HttpGet("add1")]
+  public async Task<ActionResult> DD()
   {
-    List<Khoa> khoa = [
+    _ct.BangCap.RemoveRange(await _ct.BangCap.ToListAsync());
+    _ct.ChucVu.RemoveRange(await _ct.ChucVu.ToListAsync());
+    _ct.Khoa.RemoveRange(await _ct.Khoa.ToListAsync());
+    await _ct.SaveChangesAsync();
+
+    List<Khoa> _khoa = [
         new () { MaKhoa = "K-1", TenKhoa = "Khoa Công nghệ thông tin", TenVietTat = "CNTT", ViTri="" },
         new () { MaKhoa = "K-2", TenKhoa = "Khoa Kỹ thuật phần mềm", TenVietTat = "KTPM", ViTri="" },
         new () { MaKhoa = "K-3", TenKhoa = "Khoa Hệ thống thông tin", TenVietTat = "HTTT", ViTri="" },
@@ -96,22 +101,47 @@ public class TestController(AppDbContext context) : ControllerBase
 
     try
     {
-      await _context.Khoa.AddRangeAsync(khoa);
-      await _context.BangCap.AddRangeAsync(_bangCap);
-      await _context.ChucVu.AddRangeAsync(_chucVu);
-
-      var random = new Random();
-
-
-
-      await _context.SaveChangesAsync();
-
-
+      await _ct.Khoa.AddRangeAsync(_khoa);
+      await _ct.BangCap.AddRangeAsync(_bangCap);
+      await _ct.ChucVu.AddRangeAsync(_chucVu);
+      await _ct.SaveChangesAsync();
     }
-    catch (System.Exception)
+    catch (Exception)
     {
 
-      throw;
+    }
+    return Ok();
+  }
+
+  [HttpGet("add2")]
+  public async Task<ActionResult> AddGV()
+  {
+    List<BangCap> _bangCap = await _ct.BangCap.ToListAsync();
+    List<ChucVu> _ChucVu = await _ct.ChucVu.ToListAsync();
+    List<Khoa> _Khoa = await _ct.Khoa.ToListAsync();
+    var random = new Random();
+    for (int i = 0; i < 10000; ++i)
+    {
+      try
+      {
+        GiangVien giangVien = GiangVien.Generate(_bangCap[random.Next(_bangCap.Count)].Id);
+        Khoa_GiangVien kgv = new()
+        {
+          ChucVuId = _ChucVu[random.Next(_ChucVu.Count)].Id,
+          GiangVienId = giangVien.Id,
+          KhoaId = _Khoa[random.Next(_Khoa.Count)].Id
+        };
+
+        await _ct.GiangVien.AddAsync(giangVien);
+        await _ct.Khoa_GiangVien.AddAsync(kgv);
+        await _ct.SaveChangesAsync();
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return BadRequest();
+      }
+
     }
 
     return Ok();
