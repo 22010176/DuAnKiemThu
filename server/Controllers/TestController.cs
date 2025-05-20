@@ -120,7 +120,7 @@ public class TestController(AppDbContext context) : ControllerBase
     List<ChucVu> _ChucVu = await _ct.ChucVu.ToListAsync();
     List<Khoa> _Khoa = await _ct.Khoa.ToListAsync();
     var random = new Random();
-    for (int i = 0; i < 10000; ++i)
+    for (int i = 0; i < 1000; ++i)
     {
       try
       {

@@ -2,6 +2,7 @@ using System.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using server.Data;
 using server.Models.PostgreSQL;
 using server.Repositories;
@@ -48,6 +49,15 @@ public class GiangVienController(
     };
     return Ok(await result.ToListAsync());
   }
+
+  [HttpGet("thong-tin")]
+  public async Task<ActionResult> GetInfo()
+  {
+    // var result = _ct.Database.ExecuteSqlRawAsync("SELECT * FROM public.\"GiangVien\";").ToList();
+
+    return Ok();
+  }
+
 
   [HttpPost]
   public override async Task<IActionResult> Create(GiangVienDto _gv)
@@ -104,8 +114,6 @@ public class GiangVienController(
       Console.WriteLine(e);
       return BadRequest();
     }
-
-
 
     return Ok();
   }
