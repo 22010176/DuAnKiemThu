@@ -1,6 +1,6 @@
 import { faArrowRotateRight, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, Modal, Select, Table } from "antd";
+import { Button, Input, message, Modal, Select, Table } from "antd";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 
@@ -10,6 +10,7 @@ import CreateForm from "./CreateForm";
 import { getNextIdNumber } from "@/Utils/FormUtils";
 
 function GiaoVienPage() {
+  const [messageApi, contextHolder] = message.useMessage();
   const [state, dispatch] = useReducer(reducer, intitialValue)
   const [createForm, setCreateForm] = useState(false)
 
@@ -28,6 +29,12 @@ function GiaoVienPage() {
   useEffect(function () {
     updateData()
   }, [])
+  const success = m => {
+    messageApi.open({
+      type: 'success',
+      content: m,
+    });
+  };
 
   const columns = [
     { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 5, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
@@ -44,9 +51,33 @@ function GiaoVienPage() {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 5,
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} />
+          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
+            onClick={function () {
+              console.log(entry)
+              dispatch({
+                type: "setEditForm", payload: {
+                  giangVien: {
+                    maGiangVien: entry.maGiangVien,
+                    tenGiangVien: entry.tenGiangVien,
+                    gioiTinh: entry.gioiTinh === "Nam" ? 0 : 1,
+                    sinhNhat: new Date(entry.sinhNhat),
+                    soDienThoai: entry.soDienThoai,
+                    mail: entry.mail,
+                    bangCapId: state.bangCapData.find(i => i.maBangCap === entry.maBangCap).id,
+                    id: entry.id
+                  },
+                  khoaId: state.khoaData.find(i => i.maKhoa === entry.maKhoa).id,
+                  chucVuId: state.chucVuData.find(i => i.maChucVu === entry.maChucVu).id
+                }
+              })
+              dispatch({ type: "openForm" })
+            }} />
           <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={() => axios.delete(`http://localhost:5249/GiangVien/${entry.id}`).then(updateData)} />
+            onClick={async () => {
+              await axios.delete(`http://localhost:5249/GiangVien/${entry.id}`)
+              success("Xoá giáo viên thành công!")
+              updateData()
+            }} />
         </div>
       ),
     },
@@ -54,6 +85,7 @@ function GiaoVienPage() {
   console.log(state.giangVienData)
   return (
     <Context.Provider value={[state, dispatch]}>
+      {contextHolder}
       <div className="p-5 flex flex-col gap-5" >
         <div className="flex justify-between gap-2 items-center">
           <div className="flex gap-5">
@@ -71,7 +103,10 @@ function GiaoVienPage() {
           <div className="flex justify-end gap-2 items-center">
             <Input placeholder="Tìm kiếm" style={{ width: "200px" }} />
             <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
-            <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => setCreateForm(true)} />
+            <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
+              dispatch({ type: "openForm" })
+              dispatch({ type: "resetInput" })
+            }} />
             <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} />
             <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
           </div>
@@ -81,14 +116,16 @@ function GiaoVienPage() {
           columns={columns}
           dataSource={state.giangVienData.filter(i => state.viewOption === 'all' || i.tenKhoa === state.viewOption)}
           pagination={{ pageSize: 10 }}
-          size="small" bordered className="shadow-md" />
+          size="small"
+          bordered
+          className="shadow-md" />
       </div>
 
       <Modal
         title={<h1 className="text-xl font-bold text-blue-900">THÊM GIÁO VIÊN MỚI</h1>}
         centered
-        open={createForm}
-        onCancel={() => setCreateForm(false)}
+        open={state.openForm}
+        onCancel={() => dispatch({ type: "closeForm" })}
         footer={[]}>
         <CreateForm />
       </Modal>

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext } from "react";
 import structuredClone from '@ungap/structured-clone';
+import { getNextIdNumber } from "@/Utils/FormUtils";
 
 export const Context = createContext()
 
@@ -19,10 +20,12 @@ export const intitialValue = {
     chucVuId: ""
   },
   viewOption: "all",
+  mode: "create",
   giangVienData: [],
   khoaData: [],
   bangCapData: [],
-  chucVuData: []
+  chucVuData: [],
+  openForm: false
 }
 
 export function reducer(state = {}, action = {}) {
@@ -62,7 +65,30 @@ export function reducer(state = {}, action = {}) {
     case "updateGiangVienData":
       _state.giangVienData = payload;
       break;
-
+    case "resetInput":
+      _state.formValue = {
+        giangVien: {
+          maGiangVien: `GV-${getNextIdNumber(_state.giangVienData.map(i => i.maGiangVien))}`,
+          tenGiangVien: "",
+          gioiTinh: 0,
+          sinhNhat: new Date(),
+          soDienThoai: "",
+          mail: "",
+          bangCapId: ""
+        },
+        khoaId: "",
+        chucVuId: ""
+      }
+      break
+    case "openForm":
+      _state.openForm = true
+      break
+    case "closeForm":
+      _state.openForm = false
+      break
+    case "setEditForm":
+      _state.formValue = payload;
+      break
     default:
       break;
   }
