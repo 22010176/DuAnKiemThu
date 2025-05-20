@@ -85,10 +85,5 @@ public class MongoIndexHostedService(IServiceProvider serviceProvider) : IHosted
 
   public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-
-
-  public void Dispose()
-  {
-    _scope.Dispose();
-  }
+  public void Dispose() => _scope.Dispose();
 };

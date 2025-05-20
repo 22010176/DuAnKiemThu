@@ -16,7 +16,7 @@ public class KhoaController(IRepository<Khoa> repo) : TemplatePostgreController<
     {
       MaKhoa = _k.MaKhoa,
       TenKhoa = _k.TenKhoa,
-      MoTa = _k.MoTa,
+      TenVietTat = _k.TenVietTat,
       ViTri = _k.ViTri
     };
     await _context.CreateAsync([khoa]);

@@ -18,7 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<ChucVu>().HasIndex(b => b.MaChucVu).IsUnique();
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.MaGiangVien).IsUnique();
     modelBuilder.Entity<Khoa>().HasIndex(b => b.MaKhoa).IsUnique();
-    modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.ChucVuId, k.KhoaId, k.GiangVienId }).IsUnique();
+    modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.KhoaId, k.GiangVienId }).IsUnique();
 
     modelBuilder.Entity<Khoa_GiangVien>()
       .HasOne(e => e.GiangVien)

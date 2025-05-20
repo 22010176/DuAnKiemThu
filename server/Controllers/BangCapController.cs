@@ -15,7 +15,8 @@ public class BangCapController(IRepository<BangCap> repo) : TemplatePostgreContr
     BangCap bc = new()
     {
       MaBangCap = item.MaBangCap,
-      TenBangCap = item.TenBangCap
+      TenBangCap = item.TenBangCap,
+      TenVietTat = item.TenVietTat
     };
     await _context.CreateAsync([bc]);
     return CreatedAtAction(nameof(Get), new { id = bc.Id }, item);

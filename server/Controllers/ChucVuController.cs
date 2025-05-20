@@ -15,7 +15,8 @@ public class ChucVuController(IRepository<ChucVu> repo) : TemplatePostgreControl
     ChucVu chucVu = new()
     {
       MaChucVu = _cv.MaChucVu,
-      TenChucVu = _cv.TenChucVu
+      TenChucVu = _cv.TenChucVu,
+      TenVietTat = _cv.TenVietTat
     };
     await _context.CreateAsync([chucVu]);
     return CreatedAtAction(nameof(Get), new { id = chucVu.Id }, _cv);

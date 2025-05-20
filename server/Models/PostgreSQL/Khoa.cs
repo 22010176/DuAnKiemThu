@@ -5,6 +5,16 @@ namespace server.Models.PostgreSQL;
 
 public class Khoa : KhoaDto, IEntityPostgre
 {
+  public static Khoa Generate()
+  {
+    return new()
+    {
+      MaKhoa = Guid.NewGuid().ToString(),
+      TenKhoa = Guid.NewGuid().ToString(),
+      TenVietTat = Guid.NewGuid().ToString(),
+      ViTri = Guid.NewGuid().ToString()
+    };
+  }
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -15,6 +25,6 @@ public class KhoaDto
 {
   public string MaKhoa { get; set; } = null!;
   public string TenKhoa { get; set; } = null!;
+  public string TenVietTat { get; set; } = null!;
   public string ViTri { get; set; } = null!;
-  public string MoTa { get; set; } = null!;
 }
