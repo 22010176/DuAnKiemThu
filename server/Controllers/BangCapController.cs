@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using server.Data;
-using server.Models.PostgreSQL;
+using server.Models;
 using server.Repositories;
 
 namespace server.Controllers;

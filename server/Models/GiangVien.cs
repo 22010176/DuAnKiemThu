@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using server.Data;
 using server.Repositories;
 
-namespace server.Models.PostgreSQL;
+namespace server.Models;
 
 public class GiangVien : GiangVienDto, IEntityPostgre
 {

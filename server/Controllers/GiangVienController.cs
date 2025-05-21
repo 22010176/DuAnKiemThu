@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using server.Data;
-using server.Models.PostgreSQL;
+using server.Models;
 using server.Repositories;
 
 namespace server.Controllers;
@@ -42,20 +42,62 @@ public class GiangVienController(
       g.Mail,
       b.MaBangCap,
       TenBangCap = b.TenVietTat,
+      idBangCap = b.Id,
       k.MaKhoa,
       TenKhoa = k.TenVietTat,
+      idKhoa = k.Id,
       c.MaChucVu,
-      c.TenChucVu
+      c.TenChucVu,
+      IdChucVu = c.Id
     };
     return Ok(await result.ToListAsync());
   }
 
-  [HttpGet("thong-tin")]
-  public async Task<ActionResult> GetInfo()
+  [HttpPut("sua-thong-tin")]
+  public async Task<ActionResult> GetInfo([FromBody] UpdateGiangVienDto c)
   {
-    // var result = _ct.Database.ExecuteSqlRawAsync("SELECT * FROM public.\"GiangVien\";").ToList();
+    GiangVien gv = c.GiangVien!;
+    await _context.UpdateAsync([gv]);
 
-    return Ok();
+    Khoa_GiangVien? kgv = _ct.Khoa_GiangVien.Where(a => a.GiangVienId == c.GiangVien!.Id).FirstOrDefault();
+    if (kgv is null) return BadRequest();
+
+    await _k_gvRepository.UpdateAsync([new() {
+      ChucVuId = c.ChucVuId,
+      GiangVienId = gv.Id,
+      KhoaId = c.KhoaId,
+      Id = kgv.Id
+    }]);
+    // Console.WriteLine(kgv.Id);
+    // if (kgv is null) await _ct.Khoa_GiangVien.AddAsync(
+    //   new() { ChucVuId = c.ChucVuId, GiangVienId = gv.Id, KhoaId = c.KhoaId });
+    var result = from g in _ct.GiangVien
+                 join b in _ct.BangCap on g.BangCapId equals b.Id
+                 join _kgv in _ct.Khoa_GiangVien on g.Id equals _kgv.GiangVienId
+                 join k in _ct.Khoa on _kgv.KhoaId equals k.Id
+                 join _c in _ct.ChucVu on _kgv.ChucVuId equals _c.Id
+                 where g.Id == gv.Id
+                 orderby g.MaGiangVien.Length, g.MaGiangVien
+                 select new
+                 {
+                   g.Id,
+                   g.MaGiangVien,
+                   g.TenGiangVien,
+                   GioiTinh = g.GioiTinh == 0 ? "Nam" : "Nữ",
+                   g.SinhNhat,
+                   g.SoDienThoai,
+                   g.Mail,
+                   b.MaBangCap,
+                   TenBangCap = b.TenVietTat,
+                   idBangCap = b.Id,
+                   k.MaKhoa,
+                   TenKhoa = k.TenVietTat,
+                   idKhoa = k.Id,
+                   _c.MaChucVu,
+                   _c.TenChucVu,
+                   IdChucVu = _c.Id
+                 };
+    return Ok(await result.ToListAsync());
   }
 
 

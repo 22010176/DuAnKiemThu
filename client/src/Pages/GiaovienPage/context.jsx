@@ -89,6 +89,9 @@ export function reducer(state = {}, action = {}) {
     case "setEditForm":
       _state.formValue = payload;
       break
+    case "updateInputMode":
+      _state.mode = payload;
+      break
     default:
       break;
   }

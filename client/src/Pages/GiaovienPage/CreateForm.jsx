@@ -11,9 +11,8 @@ function CreateForm() {
 
   const [state, dispatch] = useContext(Context)
   const [messageApi, contextHolder] = message.useMessage();
-  const success = (m) => {
-    messageApi.open({ type: 'success', content: m, });
-  };
+  const success = (m) => messageApi.open({ type: 'success', content: m, });
+
   useEffect(function () {
     axios.get("http://localhost:5249/BangCap")
       .then(res => dispatch({ type: "updateBangCap", payload: res.data }))
@@ -21,9 +20,8 @@ function CreateForm() {
       .then(res => dispatch({ type: "updateKhoa", payload: res.data }))
     axios.get('http://localhost:5249/ChucVu')
       .then(res => dispatch({ type: "updateChucVu", payload: res.data }))
+  }, [dispatch])
 
-
-  }, [])
   function updateData() {
     axios.get('http://localhost:5249/GiangVien')
       .then(res => {
@@ -41,12 +39,19 @@ function CreateForm() {
           // const data = Object.fromEntries(new FormData(e.target))
           console.log(JSON.stringify(state.formValue))
           // await axios.post('http://localhost:5249/Khoa', data)
-          await axios.post('http://localhost:5249/GiangVien/them-giang-vien', state.formValue)
-            .then(a => console.log(a.data))
+          if (state.mode === 'create') {
+
+            await axios.post('http://localhost:5249/GiangVien/them-giang-vien', state.formValue)
+              .then(a => console.log(a.data))
+            success("Thêm giáo viên thành công!")
+          } else if (state.mode === 'update') {
+            await axios.put('http://localhost:5249/GiangVien/sua-thong-tin', state.formValue)
+              .then(a => console.log(a.data))
+            success("Sửa giáo viên thành công!")
+          }
           dispatch({ type: "resetInput" })
           dispatch({ type: "closeForm" })
           updateData()
-          success("Thêm giáo viên thành công!")
         }
         }>
         <div>

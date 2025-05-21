@@ -20,7 +20,10 @@ function GiaoVienPage() {
         dispatch({ type: "updateGiangVienData", payload: res.data })
         return res.data
       })
-      .then(res => dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } }))
+      .then(res => {
+        dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } })
+        console.log(res.filter(i => i.id == '6fb69d92-313b-41d9-be9b-02fe4146e381'))
+      })
 
     axios.get("http://localhost:5249/Khoa")
       .then(res => dispatch({ type: "updateKhoa", payload: res.data }))
@@ -63,13 +66,14 @@ function GiaoVienPage() {
                     sinhNhat: new Date(entry.sinhNhat),
                     soDienThoai: entry.soDienThoai,
                     mail: entry.mail,
-                    bangCapId: state.bangCapData.find(i => i.maBangCap === entry.maBangCap).id,
+                    bangCapId: entry.idBangCap,
                     id: entry.id
                   },
-                  khoaId: state.khoaData.find(i => i.maKhoa === entry.maKhoa).id,
-                  chucVuId: state.chucVuData.find(i => i.maChucVu === entry.maChucVu).id
+                  khoaId: entry.idKhoa,
+                  chucVuId: entry.idChucVu
                 }
               })
+              dispatch({ type: "updateInputMode", payload: "update" })
               dispatch({ type: "openForm" })
             }} />
           <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
@@ -105,6 +109,7 @@ function GiaoVienPage() {
             <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
             <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
               dispatch({ type: "openForm" })
+              dispatch({ type: "updateInputMode", payload: "create" })
               dispatch({ type: "resetInput" })
             }} />
             <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} />
@@ -125,6 +130,7 @@ function GiaoVienPage() {
         title={<h1 className="text-xl font-bold text-blue-900">THÊM GIÁO VIÊN MỚI</h1>}
         centered
         open={state.openForm}
+        width={800}
         onCancel={() => dispatch({ type: "closeForm" })}
         footer={[]}>
         <CreateForm />

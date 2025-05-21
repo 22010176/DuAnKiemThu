@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using server.Data;
-using server.Models.PostgreSQL;
-
+using server.Models;
 
 namespace server.Controllers;
 

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using server.Models.PostgreSQL;
+using server.Models;
 
 namespace server.Data;
 

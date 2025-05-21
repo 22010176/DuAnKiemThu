@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using server.Repositories;
 
-namespace server.Models.PostgreSQL;
+namespace server.Models;
 
 public class Khoa_GiangVien : Khoa_GiangVienDto, IEntityPostgre
 {
@@ -11,6 +11,13 @@ public class Khoa_GiangVien : Khoa_GiangVienDto, IEntityPostgre
   public GiangVien? GiangVien { get; set; }
   public Khoa? Khoa { get; set; }
   public ChucVu? ChucVu { get; set; }
+}
+
+public class UpdateGiangVienDto
+{
+  public GiangVien? GiangVien { get; set; }
+  public Guid KhoaId { get; set; }
+  public Guid ChucVuId { get; set; }
 }
 
 public class CreateGiangVienDto

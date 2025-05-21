@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using server.Repositories;
 
-namespace server.Models.PostgreSQL;
+namespace server.Models;
 
 public class ChucVu : ChucVuDto, IEntityPostgre
 {
