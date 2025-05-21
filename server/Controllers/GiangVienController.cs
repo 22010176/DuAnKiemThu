@@ -1,8 +1,10 @@
 using System.Collections;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Npgsql;
 using server.Data;
 using server.Models;
 using server.Repositories;
@@ -15,11 +17,93 @@ public class GiangVienController(
   IRepository<GiangVien> repo,
   IRepository<BangCap> bangCapRepository,
   IRepository<Khoa_GiangVien> k_gvRepository,
-  AppDbContext context) : TemplatePostgreController<GiangVien, GiangVienDto>(repo)
+  AppDbContext context,
+  IConfiguration configuration) : TemplatePostgreController<GiangVien, GiangVienDto>(repo)
 {
+  readonly string _connection = configuration.GetConnectionString("DefaultConnection")!;
   readonly IRepository<BangCap> _bangCapRepository = bangCapRepository;
   readonly IRepository<Khoa_GiangVien> _k_gvRepository = k_gvRepository;
   readonly AppDbContext _ct = context;
+
+  [HttpGet("/thong-ke-giao-vien")]
+  public async Task<ActionResult> GetKhoa()
+  {
+    using var conn = new NpgsqlConnection(_connection);
+    await conn.OpenAsync();
+
+    string bangCapQuery = """
+SELECT
+	K."MaKhoa",
+	K."TenKhoa",
+	B."MaBangCap",
+	B."TenBangCap",
+	COUNT(G."Id") SOGIAOVIEN
+FROM
+	"GiangVien" G
+	LEFT JOIN "BangCap" B ON B."Id" = G."BangCapId"
+	INNER JOIN "Khoa_GiangVien" KG ON G."Id" = KG."GiangVienId"
+	LEFT JOIN "Khoa" K ON K."Id" = KG."KhoaId"
+GROUP BY
+	K."Id",
+	B."Id"
+ORDER BY
+	LENGTH(K."MaKhoa"),
+	K."MaKhoa",
+	LENGTH(B."MaBangCap"),
+	B."MaBangCap";
+
+SELECT
+	K."MaKhoa",
+	K."TenKhoa",
+	G."GioiTinh",
+	CASE
+		WHEN G."GioiTinh" = 0 THEN 'Nam'
+		WHEN G."GioiTinh" = 1 THEN 'Nữ'
+	END,
+	COUNT(G."Id")
+FROM
+	"GiangVien" G
+	INNER JOIN "Khoa_GiangVien" KG ON KG."GiangVienId" = G."Id"
+	RIGHT JOIN "Khoa" K ON K."Id" = KG."KhoaId"
+GROUP BY
+	K."Id",
+	G."GioiTinh"
+ORDER BY
+	LENGTH(K."MaKhoa"),
+	K."MaKhoa";
+""";
+    List<object> user = [];
+    using var cmd = new NpgsqlCommand(bangCapQuery, conn);
+    using var reader = cmd.ExecuteReader();
+    while (reader.Read())
+    {
+      user.Add(new
+      {
+        MaKhoa = reader.GetString(0),
+        TenKhoa = reader.GetString(1),
+        MaBangCap = reader.GetString(2),
+        TenBangCap = reader.GetString(3),
+        SoGiangVien = reader.GetInt32(4)
+      });
+    }
+
+    List<object> user2 = [];
+    await reader.NextResultAsync();
+    while (reader.Read())
+    {
+      user2.Add(new
+      {
+        MaKhoa = reader.GetString(0),
+        TenKhoa = reader.GetString(1),
+        GioiTinh = reader.GetInt32(2),
+        GioiTinhText = reader.GetString(3),
+        SoGiangVien = reader.GetInt32(4)
+      });
+    }
+    await conn.CloseAsync();
+
+    return Ok(new { BangCap = user, GioiTinh = user2 });
+  }
 
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Layout, Card, Row, Col, Statistic, Table, Tabs, Divider, Typography, Progress, Breadcrumb, Select, Space } from 'antd';
 import { TeamOutlined, UserOutlined, WomanOutlined, ManOutlined, BookOutlined, BankOutlined, BarChartOutlined, PieChartOutlined } from '@ant-design/icons';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Context } from './context';
 
 
 const { Header, Content, Footer } = Layout;
@@ -29,7 +30,8 @@ const dummyData = {
 
 
 function MajorStats() {
-
+  const [state,] = useContext(Context);
+  const { processData: data } = state;
   const [selectedFaculty, setSelectedFaculty] = useState(null);
 
   const facultyDetails = selectedFaculty

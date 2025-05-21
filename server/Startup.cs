@@ -14,6 +14,7 @@ public class Startup(IConfiguration configuration)
 
   void InitPostgre(IServiceCollection services)
   {
+
     services.AddDbContext<AppDbContext>(options =>
           options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
     services.AddScoped(typeof(IRepository<>), typeof(PostgreRepository<>));
