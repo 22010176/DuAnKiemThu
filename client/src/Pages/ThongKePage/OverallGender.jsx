@@ -1,7 +1,9 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Card, Layout, Select, Tabs, Typography } from 'antd';
 import { useContext } from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+
 import { Context } from './context';
 
 const { Header, Content, Footer } = Layout;
@@ -36,6 +38,7 @@ function OverallGender() {
           <Tooltip />
         </PieChart>
       </ResponsiveContainer>
+
     </Card>
   )
 }

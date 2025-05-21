@@ -54,7 +54,7 @@ ORDER BY
 
 SELECT
 	K."MaKhoa",
-	K."TenKhoa",
+	K."TenVietTat" TenKhoa,
 	G."GioiTinh",
 	CASE
 		WHEN G."GioiTinh" = 0 THEN 'Nam'
@@ -71,6 +71,20 @@ GROUP BY
 ORDER BY
 	LENGTH(K."MaKhoa"),
 	K."MaKhoa";
+
+SELECT
+	K."MaKhoa",
+	K."TenKhoa",
+	K."TenVietTat"
+FROM
+	"Khoa" K;
+
+SELECT
+	B."MaBangCap",
+	B."TenBangCap",
+	B."TenVietTat"
+FROM
+	"BangCap" B;
 """;
     List<object> user = [];
     using var cmd = new NpgsqlCommand(bangCapQuery, conn);
@@ -100,9 +114,33 @@ ORDER BY
         SoGiangVien = reader.GetInt32(4)
       });
     }
+
+    List<object> khoa = [];
+    await reader.NextResultAsync();
+    while (reader.Read())
+    {
+      khoa.Add(new
+      {
+        MaKhoa = reader.GetString(0),
+        TenKhoa = reader.GetString(1),
+        TenVietTat = reader.GetString(2),
+      });
+    }
+
+    List<object> bangCap = [];
+    await reader.NextResultAsync();
+    while (reader.Read())
+    {
+      bangCap.Add(new
+      {
+        MaBangCap = reader.GetString(0),
+        TenBangCap = reader.GetString(1),
+        TenVietTat = reader.GetString(2)
+      });
+    }
     await conn.CloseAsync();
 
-    return Ok(new { BangCap = user, GioiTinh = user2 });
+    return Ok(new { BangCap = user, GioiTinh = user2, KhoaList = khoa, BangCapList = bangCap });
   }
 
   [HttpGet]
