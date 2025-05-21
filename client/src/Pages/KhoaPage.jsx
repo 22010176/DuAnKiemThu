@@ -2,42 +2,39 @@ import TableHeader from "@/Components/TableHeader";
 import { getNextIdNumber } from "@/Utils/FormUtils";
 import { faArrowRotateRight, faCheck, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, message, Modal, Space, Table } from "antd";
+import { Button, Input, message, Modal, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
 function KhoaPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const createFormRef = useRef();
+  const [search, setSearch] = useState("")
   const [createForm, setCreateForm] = useState(false)
-  const [form, setForm] = useState({
-    maKhoa: "",
-    tenKhoa: "",
-    viTri: "",
-    tenVietTat: ""
-  })
+  const [form, setForm] = useState({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
   const [mode, setMode] = useState("create")
   const [data, setData] = useState([]);
+
   const success = m => {
     messageApi.open({
       type: 'success',
       content: m,
     });
   };
-
-  const error = () => {
+  const error = m => {
     messageApi.open({
       type: 'error',
-      content: 'This is an error message',
+      content: m,
     });
   };
 
-  const warning = () => {
-    messageApi.open({
-      type: 'warning',
-      content: 'This is a warning message',
-    });
-  };
+  // const warning = () => {
+  //   messageApi.open({
+  //     type: 'warning',
+  //     content: 'This is a warning message',
+  //   });
+  // };
+
   const { current: columns } = useRef([
     { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 50, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
     { title: <TableHeader>Mã khoa</TableHeader>, dataIndex: 'maKhoa', key: 'maKhoa', width: 70, render: i => <div className="text-lg text-center">{i}</div> },
@@ -50,8 +47,7 @@ function KhoaPage() {
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
           <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
-            onClick={function (e) {
-              console.log(entry)
+            onClick={function () {
               setMode("update")
               setCreateForm(true)
               setForm({
@@ -62,11 +58,16 @@ function KhoaPage() {
                 id: entry.id
               })
             }} />
-          <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={() => axios.delete(`http://localhost:5249/Khoa/${entry.id}`).then(e => {
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa khoa này không?"
+            description="Khoa này sẽ bị xóa vĩnh viễn!"
+            placement="left"
+            onConfirm={() => axios.delete(`http://localhost:5249/Khoa/${entry.id}`).then(e => {
               updateData()
               success("Xoá khoa thành công!")
-            })} />
+            })}>
+            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+          </Popconfirm>
         </div>
       ),
     },
@@ -88,8 +89,13 @@ function KhoaPage() {
       {contextHolder}
       <div className="p-5 flex flex-col gap-5" >
         <div className="flex justify-end gap-2 items-center">
-          <Input placeholder="Tìm kiếm" style={{ width: "200px" }} />
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} />
+          <Input placeholder="Tìm kiếm" style={{ width: "200px" }} value={search} onChange={e => setSearch(e.target.value)} />
+          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
+            const response = await axios.get("http://localhost:5249/Khoa")
+            const result = response.data.filter(i => JSON.stringify(i).includes(search.toLowerCase()))
+            if (result.length === 0) error("Không tìm thấy khoa nào!")
+            setData(result)
+          }} />
           <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
             setMode("create")
             setForm(d => ({ ...d, maKhoa: `K-${getNextIdNumber(data.map(i => i.maKhoa))}` }))
@@ -99,7 +105,10 @@ function KhoaPage() {
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
         </div>
 
-        <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
       </div>
 
       <Modal

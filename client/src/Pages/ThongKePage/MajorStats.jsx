@@ -1,23 +1,15 @@
 import { ManOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
-import { Card, Col, Layout, Row, Select, Space, Statistic, Table, Tabs, Typography } from 'antd';
+import { Card, Select, Space, Statistic, Table, Tabs, Typography } from 'antd';
 import { useContext, useEffect, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { Context } from './context';
 
-
-const { Header, Content, Footer } = Layout;
-const { Title, Text } = Typography;
-const { TabPane } = Tabs;
-const { Option } = Select;
-
-
+const { Title } = Typography;
 
 const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
 function MajorStats() {
   const [state,] = useContext(Context);
   const [selectedFaculty, setSelectedFaculty] = useState(null);
-
-  console.log();
 
   useEffect(() => {
     if (state.khoa && state.khoa.length > 0)
@@ -62,7 +54,7 @@ function MajorStats() {
             totalLecturers: state.gioiTinh.filter(j => j.maKhoa === i.maKhoa).reduce((acc, item) => acc + item.soGiangVien, 0),
             maleCount: state.gioiTinh.filter(j => j.maKhoa === i.maKhoa && j.gioiTinhText === 'Nam').reduce((acc, item) => acc + item.soGiangVien, 0),
             femaleCount: state.gioiTinh.filter(j => j.maKhoa === i.maKhoa && j.gioiTinhText === 'Nữ').reduce((acc, item) => acc + item.soGiangVien, 0),
-            ...Object.fromEntries(state.bC.map(k => [k.tenVietTat, state.bangCap.filter(j => j.maKhoa === i.maKhoa && j.maBangCap === k.maBangCap)[0].soGiangVien || 0]))
+            ...Object.fromEntries(state.bC.map(k => [k.tenVietTat, state.bangCap.filter(j => j.maKhoa === i.maKhoa && j.maBangCap === k.maBangCap)[0]?.soGiangVien || 0]))
           }))} />
       ),
     },

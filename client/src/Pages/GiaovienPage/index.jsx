@@ -1,6 +1,6 @@
 import { faArrowRotateRight, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, message, Modal, Select, Table } from "antd";
+import { Button, Input, message, Modal, Popconfirm, Select, Table } from "antd";
 import axios from "axios";
 import { useEffect, useReducer, useState } from "react";
 
@@ -12,7 +12,8 @@ import { getNextIdNumber } from "@/Utils/FormUtils";
 function GiaoVienPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [state, dispatch] = useReducer(reducer, intitialValue)
-  const [createForm, setCreateForm] = useState(false)
+  const [search, setSearch] = useState("")
+  // const [createForm, setCreateForm] = useState(false)
 
   function updateData() {
     axios.get('http://localhost:5249/GiangVien')
@@ -38,7 +39,12 @@ function GiaoVienPage() {
       content: m,
     });
   };
-
+  const error = m => {
+    messageApi.open({
+      type: 'error',
+      content: m,
+    });
+  };
   const columns = [
     { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 5, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
     { title: <TableHeader>Mã số</TableHeader>, dataIndex: 'maGiangVien', key: 'maGiangVien', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
@@ -76,17 +82,21 @@ function GiaoVienPage() {
               dispatch({ type: "updateInputMode", payload: "update" })
               dispatch({ type: "openForm" })
             }} />
-          <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={async () => {
-              await axios.delete(`http://localhost:5249/GiangVien/${entry.id}`)
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa giảng viên này không?"
+            description="Giảng viên này sẽ bị xóa vĩnh viễn!"
+            placement="left"
+            onConfirm={() => axios.delete(`http://localhost:5249/GiangVien/${entry.id}`).then(() => {
               success("Xoá giáo viên thành công!")
               updateData()
-            }} />
+            })}>
+            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+          </Popconfirm>
         </div>
       ),
     },
   ].filter(i => !!i);
-  console.log(state.giangVienData)
+
   return (
     <Context.Provider value={[state, dispatch]}>
       {contextHolder}
@@ -105,8 +115,14 @@ function GiaoVienPage() {
             />
           </div>
           <div className="flex justify-end gap-2 items-center">
-            <Input placeholder="Tìm kiếm" style={{ width: "200px" }} />
-            <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={() => setCreateForm(true)} />
+            <Input placeholder="Tìm kiếm" style={{ width: "200px" }} value={search} onChange={e => setSearch(e.target.value)} />
+            <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
+              const response = await axios.get('http://localhost:5249/GiangVien')
+              const result = response.data.filter(i => JSON.stringify(i).includes(search.toLowerCase()))
+              if (result.length === 0) error("Không tìm thấy giảng viên nào!")
+              dispatch({ type: "updateGiangVienData", payload: result })
+
+            }} />
             <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
               dispatch({ type: "openForm" })
               dispatch({ type: "updateInputMode", payload: "create" })

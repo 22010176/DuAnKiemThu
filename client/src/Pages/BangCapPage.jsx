@@ -2,7 +2,7 @@ import TableHeader from "@/Components/TableHeader";
 import { getNextIdNumber } from "@/Utils/FormUtils";
 import { faArrowRotateRight, faCheck, faPen, faPlus, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, message, Modal, Table } from "antd";
+import { Button, Input, message, Modal, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
@@ -24,12 +24,13 @@ function BangCapPage() {
     messageApi.open({ type: 'success', content });
   };
 
-  // const error = () => {
-  //   messageApi.open({
-  //     type: 'error',
-  //     content: 'This is an error message',
-  //   });
-  // };
+  const error = m => {
+    messageApi.open({
+      type: 'error',
+      content: m,
+    });
+  };
+
 
   // const warning = () => {
   //   messageApi.open({
@@ -71,11 +72,16 @@ function BangCapPage() {
                 id: entry.id
               })
             }} />
-          <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />}
-            onClick={async () => {
-              await axios.delete(`http://localhost:5249/BangCap/${entry.id}`).then(updateData)
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa bằng cấp này không?"
+            description="Bằng cấp này sẽ bị xóa vĩnh viễn!"
+            placement="left"
+            onConfirm={() => axios.delete(`http://localhost:5249/BangCap/${entry.id}`).then(() => {
+              updateData()
               success("Xoá bằng cấp thành công!")
-            }} />
+            })}>
+            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+          </Popconfirm>
         </div>
       ),
     },

@@ -1,15 +1,11 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Card, Layout, Select, Tabs, Typography } from 'antd';
+import { Card, Typography } from 'antd';
 import { useContext } from 'react';
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 import { Context } from './context';
 
-const { Header, Content, Footer } = Layout;
-const { Title, Text } = Typography;
-const { TabPane } = Tabs;
-const { Option } = Select;
+const { Title } = Typography;
 
 const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
 

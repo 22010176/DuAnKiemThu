@@ -1,11 +1,8 @@
-import { Layout, Select, Tabs, Typography } from 'antd';
+import { Typography } from 'antd';
 import axios from 'axios';
 import { useEffect, useReducer } from 'react';
 
-const { Header, Content, Footer } = Layout;
-const { Title, Text } = Typography;
-const { TabPane } = Tabs;
-const { Option } = Select;
+const { Title } = Typography;
 
 import MajorStats from './MajorStats';
 import OverallDegree from './OverallDegree';

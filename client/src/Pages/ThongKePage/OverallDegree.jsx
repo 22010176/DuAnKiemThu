@@ -1,13 +1,10 @@
 import { BookOutlined } from '@ant-design/icons';
-import { Card, Col, Layout, Progress, Row, Select, Tabs, Typography } from 'antd';
+import { Card, Typography } from 'antd';
+import { useContext } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { Context } from './context';
-import { useContext } from 'react';
 
-const { Header, Content, Footer } = Layout;
-const { Title, Text } = Typography;
-const { TabPane } = Tabs;
-const { Option } = Select;
+const { Title } = Typography;
 
 const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
 function OverallDegree() {
