@@ -1,17 +1,17 @@
+import { faCheck } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button, Input, message, Radio, Select } from "antd"
 import axios from "axios"
 import { useContext, useEffect } from "react"
 
 import { convertDateToInput, getNextIdNumber, parseDateFromInput } from "@/Utils/FormUtils"
-import { faCheck } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Input, message, Radio, Select } from "antd"
 import Context from "./context"
 
 function CreateForm() {
-
   const [state, dispatch] = useContext(Context)
   const [messageApi, contextHolder] = message.useMessage();
   const success = (m) => messageApi.open({ type: 'success', content: m, });
+  const error = m => messageApi.open({ type: 'error', content: m, });
 
   useEffect(function () {
     axios.get("http://localhost:5249/BangCap")
@@ -27,8 +27,7 @@ function CreateForm() {
       .then(res => {
         dispatch({ type: "updateGiangVienData", payload: res.data })
         return res.data
-      })
-      .then(res => dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } }))
+      }).then(res => dispatch({ type: "updateGVInput", payload: { name: "maGiangVien", value: `GV-${getNextIdNumber(res.map(i => i.maGiangVien))}` } }))
   }
   return (
     <>
@@ -42,16 +41,22 @@ function CreateForm() {
           if (state.mode === 'create') {
 
             await axios.post('http://localhost:5249/GiangVien/them-giang-vien', state.formValue)
-              .then(a => console.log(a.data))
-            success("Thêm giáo viên thành công!")
+              .then(() => {
+                success("Thêm giáo viên thành công!")
+                dispatch({ type: "resetInput" })
+                dispatch({ type: "closeForm" })
+                updateData()
+              }).catch(err => error(`Thông tin không hợp lệ. ${err.response.data}`))
+
           } else if (state.mode === 'update') {
             await axios.put('http://localhost:5249/GiangVien/sua-thong-tin', state.formValue)
-              .then(a => console.log(a.data))
-            success("Sửa giáo viên thành công!")
+              .then(() => {
+                success("Sửa giáo viên thành công!")
+                dispatch({ type: "resetInput" })
+                dispatch({ type: "closeForm" })
+                updateData()
+              }).catch(err => error(`Thông tin không hợp lệ. ${err.response.data}`))
           }
-          dispatch({ type: "resetInput" })
-          dispatch({ type: "closeForm" })
-          updateData()
         }
         }>
         <div>

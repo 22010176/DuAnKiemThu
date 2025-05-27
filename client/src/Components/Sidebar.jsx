@@ -60,7 +60,7 @@ function Sidebar() {
   // console.log(pathname)
 
   return (
-    <div className="w-60 h-full flex flex-col" style={{ backgroundColor: "#2D3064" }}>
+    <div className="w-full h-full flex flex-col" style={{ backgroundColor: "#2D3064" }}>
       <img src={logo} />
 
       {/* Giang Vien */}

@@ -5,12 +5,12 @@ import { Outlet } from "react-router";
 
 function MainLayout() {
   return (
-    <div className="w-screen h-screen overflow-hidden flex" >
+    <div className="w-screen h-screen overflow-hidden grid grid-cols-[1fr_4fr]" >
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main */}
-      <div className="flex-grow overflow-auto h-full">
+      <div className="overflow-auto h-full">
         <Topbar />
         <Outlet />
       </div>

@@ -7,7 +7,11 @@ import { Context } from './context';
 
 const { Title } = Typography;
 
-const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
+const COLORS = [
+  '#0088FE',
+  // '#FF8042',
+  // '#FFBB28'
+];
 function OverallMajor() {
   const [state,] = useContext(Context);
   const temp = state.gioiTinh.reduce((acc, khoa) => {
@@ -19,7 +23,7 @@ function OverallMajor() {
   return (
     <>
       <Divider orientation="left">So sánh giữa các khoa</Divider>
-      <Card className="mb-8">
+      <div className="mb-8 w-full overflow-hidden" >
         <div className="flex items-center mb-4">
           <div className="w-8 h-8 bg-green-500 flex items-center justify-center rounded-full mr-2">
             <BarChartOutlined className="text-white" />
@@ -27,21 +31,25 @@ function OverallMajor() {
           <Title level={4} className="m-0">Số lượng giáo viên theo khoa</Title>
         </div>
 
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart width="100%" height={400} data={Object.values(temp)} >
-            <CartesianGrid strokeDasharray="1 0" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Số giảng viên" stackId="name" fill="#534bde" barSize={30} >
-              {Object.values(temp).map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </Card>
+        <div className='w-250 m-auto overflow-auto'>
+          <div className='w-400'>
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart width="100%" height={400} data={Object.values(temp)} >
+                <CartesianGrid strokeDasharray="1 0" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="Số giảng viên" stackId="name" fill="#534bde" barSize={30} >
+                  {Object.values(temp).map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
     </>
 
   )

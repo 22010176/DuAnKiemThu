@@ -24,12 +24,7 @@ function BangCapPage() {
     messageApi.open({ type: 'success', content });
   };
 
-  const error = m => {
-    messageApi.open({
-      type: 'error',
-      content: m,
-    });
-  };
+  const error = m => messageApi.open({ type: 'error', content: m, });
 
 
   // const warning = () => {
@@ -131,17 +126,19 @@ function BangCapPage() {
             const elem = e.target;
             const data = Object.fromEntries(new FormData(elem))
 
-            if (mode === 'create') await axios.post('http://localhost:5249/BangCap', data)
-              .then(() => updateData())
-              .then(success.bind({}, "Thêm bằng cấp thành công!"))
-              .then(() => {
-                setForm({
-                  maBangCap: "",
-                  tenBangCap: "",
-                  tenVietTat: "",
+            if (mode === 'create')
+              await axios.post('http://localhost:5249/BangCap', data)
+                .catch(res => error(res.response.data))
+                .then(() => updateData())
+                .then(success.bind({}, "Thêm bằng cấp thành công!"))
+                .then(() => {
+                  setForm({
+                    maBangCap: "",
+                    tenBangCap: "",
+                    tenVietTat: "",
+                  })
+                  setCreateForm(false)
                 })
-                setCreateForm(false)
-              })
 
             else if (mode === 'edit') {
               await axios.put('http://localhost:5249/BangCap', form)

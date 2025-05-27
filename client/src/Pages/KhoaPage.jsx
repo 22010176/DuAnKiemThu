@@ -40,7 +40,7 @@ function KhoaPage() {
     { title: <TableHeader>Mã khoa</TableHeader>, dataIndex: 'maKhoa', key: 'maKhoa', width: 70, render: i => <div className="text-lg text-center">{i}</div> },
     { title: <TableHeader>Tên khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, render: i => <div className="text-lg">{i}</div> },
     { title: <TableHeader>Vị trí</TableHeader>, dataIndex: 'viTri', key: 'viTri', width: 150, render: i => <div className="text-lg">{i}</div> },
-    { title: <TableHeader>Trưởng khoa</TableHeader>, dataIndex: 'truongKhoa', key: 'truongKhoa', width: 100, render: i => <div className="text-lg">{i}</div> },
+    { title: <TableHeader>Mô tả</TableHeader>, dataIndex: 'truongKhoa', key: 'truongKhoa', width: 100, render: i => <div className="text-lg">{i}</div> },
     { title: <TableHeader>Tên viết tắt</TableHeader>, dataIndex: 'tenVietTat', key: 'tenVietTat', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
     {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 20,
@@ -62,7 +62,7 @@ function KhoaPage() {
             title="Bạn có chắc chắn muốn xóa khoa này không?"
             description="Khoa này sẽ bị xóa vĩnh viễn!"
             placement="left"
-            onConfirm={() => axios.delete(`http://localhost:5249/Khoa/${entry.id}`).then(e => {
+            onConfirm={() => axios.delete(`http://localhost:5249/Khoa/${entry.id}`).then(() => {
               updateData()
               success("Xoá khoa thành công!")
             })}>
@@ -123,7 +123,9 @@ function KhoaPage() {
             const data = Object.fromEntries(new FormData(createFormRef.current))
             if (mode === 'create') {
               await axios.post('http://localhost:5249/Khoa', data)
-              success("Thêm khoa thành công!")
+                .then(() => success("Thêm khoa thành công!"))
+                .catch(err => error(`Thêm khoa thất bại! ${err.response.data}`))
+
             }
             else if (mode === 'update') {
               await axios.put('http://localhost:5249/Khoa', form)
