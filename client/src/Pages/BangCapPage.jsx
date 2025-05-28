@@ -125,7 +125,7 @@ function BangCapPage() {
             e.preventDefault()
             const elem = e.target;
             const data = Object.fromEntries(new FormData(elem))
-
+            data.maBangCap = ""
             if (mode === 'create')
               await axios.post('http://localhost:5249/BangCap', data)
                 .catch(res => error(res.response.data))
@@ -147,10 +147,10 @@ function BangCapPage() {
 
             }
           }}>
-          <div>
+          {/* <div>
             <label className="font-semibold">Mã bằng cấp</label>
             <Input required name="maBangCap" className="pointer-events-none opacity-75" value={form.maBangCap} onChange={e => setForm(d => ({ ...d, maBangCap: e.target.value }))} />
-          </div>
+          </div> */}
           <div>
             <label className="font-semibold">Tên bằng cấp</label>
             <Input required name="tenBangCap" value={form.tenBangCap} onChange={e => setForm(d => ({ ...d, tenBangCap: e.target.value }))} />

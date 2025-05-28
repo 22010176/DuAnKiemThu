@@ -58,9 +58,7 @@ function KhoaPage() {
                 id: entry.id
               })
             }} />
-          <Popconfirm
-            title="Bạn có chắc chắn muốn xóa khoa này không?"
-            description="Khoa này sẽ bị xóa vĩnh viễn!"
+          <Popconfirm title="Bạn có chắc chắn muốn xóa khoa này không?" description="Khoa này sẽ bị xóa vĩnh viễn!"
             placement="left"
             onConfirm={() => axios.delete(`http://localhost:5249/Khoa/${entry.id}`).then(() => {
               updateData()
@@ -109,12 +107,14 @@ function KhoaPage() {
           pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
       </div>
 
-      <Modal centered open={createForm} onCancel={() => setCreateForm(false)} footer={[]}>
-        title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}
+      <Modal centered open={createForm} onCancel={() => setCreateForm(false)} footer={[]}
+        title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}>
         <form ref={createFormRef} className="flex flex-col gap-5"
           onSubmit={async function (e) {
             e.preventDefault()
             const data = Object.fromEntries(new FormData(createFormRef.current))
+            data.maKhoa = ""
+            console.log(data)
             if (mode === 'create') {
               await axios.post('http://localhost:5249/Khoa', data)
                 .then(() => success("Thêm khoa thành công!"))
@@ -127,12 +127,11 @@ function KhoaPage() {
             await updateData()
             setCreateForm(false)
             setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
-          }
-          }>
-          <div>
+          }}>
+          {/* <div>
             <label className="font-semibold">Mã khoa</label>
             <Input required name="maKhoa" className="pointer-events-none opacity-75" value={form.maKhoa} />
-          </div>
+          </div> */}
           <div>
             <label className="font-semibold">Tên khoa</label>
             <Input required name="tenKhoa" value={form.tenKhoa} onChange={e => setForm(d => ({ ...d, tenKhoa: e.target.value }))} />

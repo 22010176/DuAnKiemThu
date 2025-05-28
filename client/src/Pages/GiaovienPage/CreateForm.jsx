@@ -32,7 +32,7 @@ function CreateForm() {
   return (
     <>
       {contextHolder}
-      <form className="grid gap-5 grid-cols-[2fr_3fr]"
+      <form className="grid gap-5 grid-cols-2"
         onSubmit={async function (e) {
           e.preventDefault()
           // const data = Object.fromEntries(new FormData(e.target))
@@ -59,20 +59,20 @@ function CreateForm() {
           }
         }
         }>
-        <div>
+        {/* <div>
           <label className="font-semibold">Mã giáo viên</label>
           <Input required disabled name="maGiangVien" value={state.formValue.giangVien.maGiangVien} />
+        </div> */}
+        <div className="">
+          <label className="font-semibold">Họ tên</label>
+          <Input required name="tenGiangVien" value={state.formValue.giangVien.tenGiangVien}
+            onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: e.target.value } })} />
         </div>
         <div >
           <label className="font-semibold">Khoa</label>
           <br />
           <Select className="w-full" name="khoaId" onChange={e => dispatch({ type: "updateKhoaInput", payload: e })} value={state.formValue.khoaId}
             options={state.khoaData.map(i => ({ value: i.id, label: i.tenKhoa }))} />
-        </div>
-        <div className="col-span-2">
-          <label className="font-semibold">Họ tên</label>
-          <Input required name="tenGiangVien" value={state.formValue.giangVien.tenGiangVien}
-            onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: e.target.value } })} />
         </div>
 
         <div>
