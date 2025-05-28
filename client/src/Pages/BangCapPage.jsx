@@ -132,11 +132,7 @@ function BangCapPage() {
                 .then(() => updateData())
                 .then(success.bind({}, "Thêm bằng cấp thành công!"))
                 .then(() => {
-                  setForm({
-                    maBangCap: "",
-                    tenBangCap: "",
-                    tenVietTat: "",
-                  })
+                  setForm({ maBangCap: "", tenBangCap: "", tenVietTat: "", })
                   setCreateForm(false)
                 })
 
@@ -145,11 +141,7 @@ function BangCapPage() {
                 .then(() => updateData())
                 .then(success.bind({}, "Cập nhật bằng cấp thành công!"))
                 .then(() => {
-                  setForm({
-                    maBangCap: "",
-                    tenBangCap: "",
-                    tenVietTat: "",
-                  })
+                  setForm({ maBangCap: "", tenBangCap: "", tenVietTat: "", })
                   setCreateForm(false)
                 })
 
@@ -165,7 +157,7 @@ function BangCapPage() {
           </div>
           <div>
             <label className="font-semibold">Tên viết tắt</label>
-            <Input required name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
+            <Input maxLength={10} showCount required name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
           </div>
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành

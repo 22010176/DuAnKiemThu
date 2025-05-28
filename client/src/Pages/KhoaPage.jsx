@@ -105,18 +105,12 @@ function KhoaPage() {
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={data}
+        <Table columns={columns} dataSource={data}
           pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
       </div>
 
-      <Modal
+      <Modal centered open={createForm} onCancel={() => setCreateForm(false)} footer={[]}>
         title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}
-        centered
-        open={createForm}
-        onCancel={() => setCreateForm(false)}
-        footer={[]}>
         <form ref={createFormRef} className="flex flex-col gap-5"
           onSubmit={async function (e) {
             e.preventDefault()
@@ -125,7 +119,6 @@ function KhoaPage() {
               await axios.post('http://localhost:5249/Khoa', data)
                 .then(() => success("Thêm khoa thành công!"))
                 .catch(err => error(`Thêm khoa thất bại! ${err.response.data}`))
-
             }
             else if (mode === 'update') {
               await axios.put('http://localhost:5249/Khoa', form)
@@ -150,6 +143,10 @@ function KhoaPage() {
           </div>
           <div>
             <label className="font-semibold">Tên viết tắt</label>
+            <Input required maxLength={10} showCount name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
+          </div>
+          <div>
+            <label className="font-semibold">Mô tả</label>
             <Input required name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
           </div>
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>

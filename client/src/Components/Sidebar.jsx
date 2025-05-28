@@ -31,10 +31,7 @@ function SubLink2({ icon, to, content }) {
 const theme = {
   components: {
     Collapse: {
-      contentBg: "#2D3064",
-      colorText: "white",
-      colorTextHeading: "white",
-      headerPadding: "20px 15px"
+      contentBg: "#2D3064", colorText: "white", colorTextHeading: "white", headerPadding: "20px 15px"
     }
   },
 }
@@ -48,7 +45,7 @@ const items = [
 const links = items.map(i => i.to)
 
 const items2 = [
-  { content: "Thời khóa biểu", to: "", icon: faCalendar },
+  // { content: "Lớp học phần", to: "", icon: faCalendar },
   { content: "Báo cáo - Tra cứu", to: "", icon: faMagnifyingGlass },
   { content: "Quản trị hệ thống", to: "", icon: faGear },
 ]
@@ -56,35 +53,59 @@ const items2 = [
 function Sidebar() {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(true)
+  const [selected, setSelected] = useState('')
 
   // console.log(pathname)
-
+  //  (links.includes(pathname) || open) &&
   return (
     <div className="w-full h-full flex flex-col" style={{ backgroundColor: "#2D3064" }}>
       <img src={logo} />
 
       {/* Giang Vien */}
       <ConfigProvider theme={theme}>
-        <Collapse
-          accordion
-          expandIconPosition='end'
-          bordered={false}
-          activeKey={(links.includes(pathname) || open) && "2"}
+        <Collapse accordion expandIconPosition='end' bordered={false}
+          activeKey={selected}
+          onChange={a => setSelected(a[0])}
           expandIcon={({ isActive }) => <FontAwesomeIcon icon={faChevronRight} className='scale-130' rotation={isActive ? 90 : 0} />}
-          items={[{
-            key: "2",
-            label: (
-              <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
-                <Icon icon={faUser} />
-                <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
-              </div>
-            ),
-            children: (
-              <ul className='flex flex-col gap-2 ps-5 relative'>
-                {items.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
-              </ul>
-            ),
-          }]} />
+          items={[
+            {
+              key: "2",
+              label: (
+                <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
+                  <Icon icon={faUser} />
+                  <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
+                </div>
+              ), children: (
+                <ul className='flex flex-col gap-2 ps-5 relative'>
+                  {items.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                </ul>
+              ),
+            },
+            {
+              key: "3",
+              label: (
+                <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
+                  <Icon icon={faCalendar} />
+                  <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Lớp học phần</h1>
+                </div>
+              ),
+              children: (
+                <ul className='flex flex-col gap-2 ps-5 relative'>
+                  {[
+                    { content: "Học phần", to: "/hoc-phan" },
+                    { content: "Kì học", to: "/ki-hoc" },
+                    { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
+                    { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
+                  ].map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                </ul>
+              ),
+            }
+          ]} />
+        {/* <div className='border-t-1 border-white'>
+          <Collapse accordion expandIconPosition='end' bordered={false} activeKey={(links.includes(pathname) || open) && "2"}
+            expandIcon={({ isActive }) => <FontAwesomeIcon icon={faChevronRight} className='scale-130' rotation={isActive ? 90 : 0} />}
+            items={[]} />
+        </div> */}
       </ConfigProvider>
 
       {/* Con lai */}
