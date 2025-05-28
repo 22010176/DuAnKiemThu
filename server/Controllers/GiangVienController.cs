@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Npgsql;
-using server.Data;
 using server.Models;
 using server.Repositories;
 

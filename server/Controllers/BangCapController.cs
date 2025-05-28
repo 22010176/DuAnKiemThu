@@ -2,7 +2,6 @@ using System.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using server.Data;
 using server.Models;
 using server.Repositories;
 

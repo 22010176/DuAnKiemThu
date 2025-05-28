@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using server.Data;
+
 using server.Models;
 
 namespace server.Controllers;
@@ -119,11 +119,12 @@ public class TestController(AppDbContext context) : ControllerBase
     List<ChucVu> _ChucVu = await _ct.ChucVu.ToListAsync();
     List<Khoa> _Khoa = await _ct.Khoa.ToListAsync();
     var random = new Random();
+    int gv_ = await _ct.GiangVien.CountAsync();
     for (int i = 0; i < 1000; ++i)
     {
       try
       {
-        GiangVien giangVien = GiangVien.Generate(_bangCap[random.Next(_bangCap.Count)].Id);
+        GiangVien giangVien = GiangVien.Generate(_bangCap[random.Next(_bangCap.Count)].Id, i + 1 + gv_);
         Khoa_GiangVien kgv = new()
         {
           ChucVuId = _ChucVu[random.Next(_ChucVu.Count)].Id,

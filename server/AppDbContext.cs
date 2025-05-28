@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using server.Models;
 
-namespace server.Data;
+namespace server;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
@@ -11,14 +11,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<GiangVien> GiangVien { get; set; }
   public DbSet<Khoa> Khoa { get; set; }
   public DbSet<Khoa_GiangVien> Khoa_GiangVien { get; set; }
-
+  public DbSet<HocKi> HocKi { get; set; }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<BangCap>().HasIndex(b => b.MaBangCap).IsUnique();
+    modelBuilder.Entity<BangCap>().HasIndex(b => b.TenBangCap).IsUnique();
+    modelBuilder.Entity<BangCap>().HasIndex(b => b.TenVietTat).IsUnique();
+
     modelBuilder.Entity<ChucVu>().HasIndex(b => b.MaChucVu).IsUnique();
+    modelBuilder.Entity<ChucVu>().HasIndex(b => b.TenChucVu).IsUnique();
+    modelBuilder.Entity<ChucVu>().HasIndex(b => b.TenVietTat).IsUnique();
+
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.MaGiangVien).IsUnique();
+    modelBuilder.Entity<GiangVien>().HasIndex(b => b.SoDienThoai).IsUnique();
+
+
     modelBuilder.Entity<Khoa>().HasIndex(b => b.MaKhoa).IsUnique();
     modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.KhoaId, k.GiangVienId }).IsUnique();
+
+    modelBuilder.Entity<HocKi>().HasIndex(b => b.TenKi).IsUnique();
 
     modelBuilder.Entity<Khoa_GiangVien>()
       .HasOne(e => e.GiangVien)

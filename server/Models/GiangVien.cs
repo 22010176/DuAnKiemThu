@@ -1,16 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using server.Data;
 using server.Repositories;
 
 namespace server.Models;
 
 public class GiangVien : GiangVienDto, IEntityPostgre
 {
-  static DateTime GenerateRandomDate(DateTime from, DateTime to)
+  static DateTime GenerateRandomDate()
   {
-    var random = new Random();
-    var range = (to - from).Days;
-    return new DateTime();
+    Random rand = new();
+    return new DateTime(1950 + rand.Next() % 60, rand.Next() % 12 + 1, rand.Next() % 28 + 1, 0, 0, 0, DateTimeKind.Utc);
   }
   public static string GenerateRandomVietnamPhoneNumber()
   {
@@ -32,15 +30,15 @@ public class GiangVien : GiangVienDto, IEntityPostgre
 
     return $"{namePrefix}{number}{Guid.NewGuid()}@{domain}";
   }
-  public static GiangVien Generate(Guid bangCapId)
+  public static GiangVien Generate(Guid bangCapId, int count)
   {
     Random random = new();
     return new()
     {
-      MaGiangVien = Guid.NewGuid().ToString(),
+      MaGiangVien = $"GV-{count}",
       TenGiangVien = Guid.NewGuid().ToString(),
       GioiTinh = random.Next() % 2,
-      SinhNhat = GenerateRandomDate(new DateTime(1950, 1, 1), new DateTime(2000, 1, 1)),
+      SinhNhat = GenerateRandomDate(),
       SoDienThoai = GenerateRandomVietnamPhoneNumber(),
       Mail = GenerateRandomEmail(),
       BangCapId = bangCapId
