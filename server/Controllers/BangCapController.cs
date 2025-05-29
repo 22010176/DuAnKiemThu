@@ -28,12 +28,14 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
   public override async Task<IActionResult> Create(BangCapDto item)
   {
     // if (item.GetType() == typeof(BangCapD))
-    BangCap bc = BangCap.FormatInput(_ct, item);
     List<string> strings = [
-      item.MaBangCap,
+      // item.MaBangCap,
       item.TenBangCap,
       item.TenVietTat,
     ];
+    if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
+
+    BangCap bc = BangCap.FormatInput(_ct, item);
     if ((from c in _ct.BangCap
          where c.TenBangCap == item.TenBangCap
          select c).Any())
@@ -45,7 +47,6 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
       return BadRequest("Tên viết tắt đã tồn tại");
 
     if (item.TenVietTat.Length > 10) return BadRequest("Tên viết tắt dài quá 10 ký tự!");
-    if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
     try
     {
       await _context.CreateAsync([bc]);

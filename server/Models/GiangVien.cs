@@ -76,7 +76,7 @@ public class GiangVien : GiangVienDto, IEntityPostgre
     if (context.GiangVien.Any(i => i.SoDienThoai == input.GiangVien.SoDienThoai)) return "Số điện thoại không đúng định dạng";
     if (input.GiangVien.GioiTinh > 2) return "Giới tính không hợp lệ!";
     if (DateTime.Now.Year - input.GiangVien.SinhNhat.Year < 18) return "Giáo viên nhỏ hơn 18 tuổi";
-    if (new EmailAddressAttribute().IsValid(input.GiangVien.Mail)) return "Email không đúng định dạng";
+    if (!new EmailAddressAttribute().IsValid(input.GiangVien.Mail)) return "Email không đúng định dạng";
 
     ChucVu _cv = context.ChucVu.FirstOrDefault(i => i.Id == input.ChucVuId)!;
     if (_cv.MaChucVu != "DEG-3") return "";
