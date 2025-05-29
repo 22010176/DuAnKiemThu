@@ -15,6 +15,18 @@ public class Khoa : KhoaDto, IEntityPostgre
       ViTri = Guid.NewGuid().ToString()
     };
   }
+  public static Khoa FormatInput(AppDbContext context, KhoaDto input)
+  {
+    // Console.WriteLine($"FAC_{input.TenVietTat}");
+    return new()
+    {
+      MaKhoa = $"FAC_{input.TenVietTat}",
+      TenKhoa = input.TenKhoa,
+      TenVietTat = input.TenVietTat,
+      ViTri = input.ViTri
+    };
+  }
+
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
 

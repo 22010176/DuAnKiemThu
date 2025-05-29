@@ -192,32 +192,33 @@ FROM
     // Console.WriteLine(kgv.Id);
     // if (kgv is null) await _ct.Khoa_GiangVien.AddAsync(
     //   new() { ChucVuId = c.ChucVuId, GiangVienId = gv.Id, KhoaId = c.KhoaId });
-    var result = from g in _ct.GiangVien
-                 join b in _ct.BangCap on g.BangCapId equals b.Id
-                 join _kgv in _ct.Khoa_GiangVien on g.Id equals _kgv.GiangVienId
-                 join k in _ct.Khoa on _kgv.KhoaId equals k.Id
-                 join _c in _ct.ChucVu on _kgv.ChucVuId equals _c.Id
-                 where g.Id == gv.Id
-                 orderby g.MaGiangVien.Length, g.MaGiangVien
-                 select new
-                 {
-                   g.Id,
-                   g.MaGiangVien,
-                   g.TenGiangVien,
-                   GioiTinh = g.GioiTinh == 0 ? "Nam" : "Nữ",
-                   g.SinhNhat,
-                   g.SoDienThoai,
-                   g.Mail,
-                   b.MaBangCap,
-                   TenBangCap = b.TenVietTat,
-                   idBangCap = b.Id,
-                   k.MaKhoa,
-                   TenKhoa = k.TenVietTat,
-                   idKhoa = k.Id,
-                   _c.MaChucVu,
-                   _c.TenChucVu,
-                   IdChucVu = _c.Id
-                 };
+    var result =
+      from g in _ct.GiangVien
+      join b in _ct.BangCap on g.BangCapId equals b.Id
+      join _kgv in _ct.Khoa_GiangVien on g.Id equals _kgv.GiangVienId
+      join k in _ct.Khoa on _kgv.KhoaId equals k.Id
+      join _c in _ct.ChucVu on _kgv.ChucVuId equals _c.Id
+      where g.Id == gv.Id
+      orderby g.MaGiangVien.Length, g.MaGiangVien
+      select new
+      {
+        g.Id,
+        g.MaGiangVien,
+        g.TenGiangVien,
+        GioiTinh = g.GioiTinh == 0 ? "Nam" : "Nữ",
+        g.SinhNhat,
+        g.SoDienThoai,
+        g.Mail,
+        b.MaBangCap,
+        TenBangCap = b.TenVietTat,
+        idBangCap = b.Id,
+        k.MaKhoa,
+        TenKhoa = k.TenVietTat,
+        idKhoa = k.Id,
+        _c.MaChucVu,
+        _c.TenChucVu,
+        IdChucVu = _c.Id
+      };
     return Ok(await result.ToListAsync());
   }
 
@@ -251,16 +252,10 @@ FROM
     try
     {
       GiangVienDto _gv = d.GiangVien!;
-      GiangVien giangVien = new()
-      {
-        MaGiangVien = _gv.MaGiangVien,
-        BangCapId = _gv.BangCapId,
-        GioiTinh = _gv.GioiTinh,
-        Mail = _gv.Mail,
-        SinhNhat = _gv.SinhNhat,
-        SoDienThoai = _gv.SoDienThoai,
-        TenGiangVien = _gv.TenGiangVien
-      };
+      Khoa khoa = _ct.Khoa.FirstOrDefault(i => i.Id == d.KhoaId)!;
+      if (khoa is null) return BadRequest();
+
+      GiangVien giangVien = GiangVien.FormatInput(_ct, d);
       await _context.CreateAsync([giangVien]);
 
       Khoa_GiangVien kgv = new()

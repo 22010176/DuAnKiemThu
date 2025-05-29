@@ -13,10 +13,30 @@ public class BangCap : BangCapDto, IEntityPostgre
       TenVietTat = Guid.NewGuid().ToString()
     };
   }
+  public static BangCap FormatInput(AppDbContext context, BangCapDto input)
+  {
+    return new()
+    {
+      MaBangCap = $"DEG_{context.BangCap.Count() + 1}",
+      TenBangCap = input.TenBangCap,
+      TenVietTat = input.TenVietTat
+    };
+  }
+  public static BangCap FormatInput(int index, BangCapDto input)
+  {
+    return new()
+    {
+      MaBangCap = $"DEG_{index}",
+      TenBangCap = input.TenBangCap,
+      TenVietTat = input.TenVietTat
+    };
+  }
+
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
   public ICollection<GiangVien>? GiangViens { get; set; }
 }
+
 
 public class BangCapDto
 {

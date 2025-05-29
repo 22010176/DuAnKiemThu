@@ -16,9 +16,10 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()
   {
-    var result = from c in _ct.BangCap
-                 orderby c.MaBangCap.Length, c.MaBangCap
-                 select c;
+    var result =
+      from c in _ct.BangCap
+      orderby c.MaBangCap.Length, c.MaBangCap
+      select c;
 
     return Ok(await result.ToListAsync());
   }
@@ -27,12 +28,7 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
   public override async Task<IActionResult> Create(BangCapDto item)
   {
     // if (item.GetType() == typeof(BangCapD))
-    BangCap bc = new()
-    {
-      MaBangCap = item.MaBangCap,
-      TenBangCap = item.TenBangCap,
-      TenVietTat = item.TenVietTat
-    };
+    BangCap bc = BangCap.FormatInput(_ct, item);
     await _context.CreateAsync([bc]);
     return CreatedAtAction(nameof(Get), new { id = bc.Id }, item);
   }

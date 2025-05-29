@@ -30,18 +30,34 @@ public class GiangVien : GiangVienDto, IEntityPostgre
 
     return $"{namePrefix}{number}{Guid.NewGuid()}@{domain}";
   }
-  public static GiangVien Generate(Guid bangCapId, int count)
+  public static GiangVien Generate(Guid bangCapId, int count, string khoa)
   {
     Random random = new();
     return new()
     {
-      MaGiangVien = $"GV-{count}",
+      MaGiangVien = $"PU_{khoa}_{count}",
       TenGiangVien = Guid.NewGuid().ToString(),
       GioiTinh = random.Next() % 2,
       SinhNhat = GenerateRandomDate(),
       SoDienThoai = GenerateRandomVietnamPhoneNumber(),
       Mail = GenerateRandomEmail(),
       BangCapId = bangCapId
+    };
+  }
+
+  public static GiangVien FormatInput(AppDbContext context, CreateGiangVienDto input)
+  {
+    GiangVienDto _gv = input.GiangVien!;
+    Khoa khoa = context.Khoa.FirstOrDefault(i => i.Id == input.KhoaId)!;
+    return new()
+    {
+      MaGiangVien = $"PU_{khoa.TenVietTat}_{context.GiangVien.Count() + 1}",
+      BangCapId = _gv.BangCapId,
+      GioiTinh = _gv.GioiTinh,
+      Mail = _gv.Mail,
+      SinhNhat = _gv.SinhNhat,
+      SoDienThoai = _gv.SoDienThoai,
+      TenGiangVien = _gv.TenGiangVien
     };
   }
   [Key]

@@ -32,40 +32,48 @@ public class TestController(AppDbContext context) : ControllerBase
     await _ct.SaveChangesAsync();
 
     List<Khoa> _khoa = [
-        new () { MaKhoa = "K-1", TenKhoa = "Khoa Công nghệ thông tin", TenVietTat = "CNTT", ViTri="" },
-        new () { MaKhoa = "K-2", TenKhoa = "Khoa Kỹ thuật phần mềm", TenVietTat = "KTPM", ViTri="" },
-        new () { MaKhoa = "K-3", TenKhoa = "Khoa Hệ thống thông tin", TenVietTat = "HTTT", ViTri="" },
-        new () { MaKhoa = "K-4", TenKhoa = "Khoa An toàn thông tin", TenVietTat = "ATTT", ViTri="" },
-        new () { MaKhoa = "K-5", TenKhoa = "Khoa Khoa học máy tính", TenVietTat = "KHMT", ViTri="" },
-        new () { MaKhoa = "K-6", TenKhoa = "Khoa Kỹ thuật điện - điện tử", TenVietTat = "Đ-ĐT", ViTri="" },
-        new () { MaKhoa = "K-7", TenKhoa = "Khoa Cơ khí", TenVietTat = "CK", ViTri="" },
-        new () { MaKhoa = "K-8", TenKhoa = "Khoa Xây dựng", TenVietTat = "XD", ViTri="" },
-        new () { MaKhoa = "K-9", TenKhoa = "Khoa Kiến trúc", TenVietTat = "KT", ViTri="" },
-        new () { MaKhoa = "K-10", TenKhoa = "Khoa Toán - Tin học", TenVietTat = "TTH", ViTri="" },
-        new () { MaKhoa = "K-11", TenKhoa = "Khoa Vật lý kỹ thuật", TenVietTat = "VLKT", ViTri="" },
-        new () { MaKhoa = "K-12", TenKhoa = "Khoa Hóa học", TenVietTat = "HH", ViTri="" },
-        new () { MaKhoa = "K-13", TenKhoa = "Khoa Sinh học", TenVietTat = "SH", ViTri="" },
-        new () { MaKhoa = "K-14", TenKhoa = "Khoa Môi trường", TenVietTat = "MT", ViTri="" },
-        new () { MaKhoa = "K-15", TenKhoa = "Khoa Kinh tế", TenVietTat = "KT", ViTri="" },
-        new () { MaKhoa = "K-16", TenKhoa = "Khoa Tài chính - Ngân hàng", TenVietTat = "TCNH", ViTri="" },
-        new () { MaKhoa = "K-17", TenKhoa = "Khoa Quản trị kinh doanh", TenVietTat = "QTKD", ViTri="" },
-        new () { MaKhoa = "K-18", TenKhoa = "Khoa Marketing", TenVietTat = "MKT", ViTri="" },
-        new () { MaKhoa = "K-19", TenKhoa = "Khoa Kế toán - Kiểm toán", TenVietTat = "KTKT", ViTri="" },
-        new () { MaKhoa = "K-20", TenKhoa = "Khoa Luật", TenVietTat = "LUẬT", ViTri="" },
-        new () { MaKhoa = "K-21", TenKhoa = "Khoa Ngôn ngữ Anh", TenVietTat = "NNA", ViTri="" },
-        new () { MaKhoa = "K-22", TenKhoa = "Khoa Ngôn ngữ Trung", TenVietTat = "NNT", ViTri="" },
-        new () { MaKhoa = "K-23", TenKhoa = "Khoa Quốc tế học", TenVietTat = "QTH", ViTri="" },
-        new () { MaKhoa = "K-24", TenKhoa = "Khoa Sư phạm", TenVietTat = "SP", ViTri="" },
-        new () { MaKhoa = "K-25", TenKhoa = "Khoa Báo chí - Truyền thông", TenVietTat = "BC-TT", ViTri="" },
-        new () { MaKhoa = "K-26", TenKhoa = "Khoa Xã hội học", TenVietTat = "XHH", ViTri="" },
-        new () { MaKhoa = "K-27", TenKhoa = "Khoa Tâm lý học", TenVietTat = "TLH", ViTri="" },
-        new () { MaKhoa = "K-28", TenKhoa = "Khoa Du lịch", TenVietTat = "DL", ViTri="" },
-        new () { MaKhoa = "K-29", TenKhoa = "Khoa Giáo dục thể chất", TenVietTat = "TDTT", ViTri="" },
-        new () { MaKhoa = "K-30", TenKhoa = "Khoa Y", TenVietTat = "Y", ViTri="" },
-        new () { MaKhoa = "K-31", TenKhoa = "Khoa Dược", TenVietTat = "DƯỢC", ViTri="" },
-        new () { MaKhoa = "K-32", TenKhoa = "Khoa Điều dưỡng", TenVietTat = "DD", ViTri="" },
-        new () { MaKhoa = "K-33", TenKhoa = "Khoa Công nghệ thực phẩm", TenVietTat = "CNTP", ViTri="" }
+        new () { MaKhoa = "K-1", TenKhoa = "Khoa Công nghệ thông tin", TenVietTat = "CNTT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-2", TenKhoa = "Khoa Kỹ thuật phần mềm", TenVietTat = "KTPM", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-3", TenKhoa = "Khoa Hệ thống thông tin", TenVietTat = "HTTT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-4", TenKhoa = "Khoa An toàn thông tin", TenVietTat = "ATTT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-5", TenKhoa = "Khoa Khoa học máy tính", TenVietTat = "KHMT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-6", TenKhoa = "Khoa Kỹ thuật điện - điện tử", TenVietTat = "Đ-ĐT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-7", TenKhoa = "Khoa Cơ khí", TenVietTat = "CK", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-8", TenKhoa = "Khoa Xây dựng", TenVietTat = "XD", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-9", TenKhoa = "Khoa Kiến trúc", TenVietTat = "KTr", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-10", TenKhoa = "Khoa Toán - Tin học", TenVietTat = "TTH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-11", TenKhoa = "Khoa Vật lý kỹ thuật", TenVietTat = "VLKT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-12", TenKhoa = "Khoa Hóa học", TenVietTat = "HH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-13", TenKhoa = "Khoa Sinh học", TenVietTat = "SH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-14", TenKhoa = "Khoa Môi trường", TenVietTat = "MT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-15", TenKhoa = "Khoa Kinh tế", TenVietTat = "KT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-16", TenKhoa = "Khoa Tài chính - Ngân hàng", TenVietTat = "TCNH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-17", TenKhoa = "Khoa Quản trị kinh doanh", TenVietTat = "QTKD", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-18", TenKhoa = "Khoa Marketing", TenVietTat = "MKT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-19", TenKhoa = "Khoa Kế toán - Kiểm toán", TenVietTat = "KTKT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-20", TenKhoa = "Khoa Luật", TenVietTat = "LUẬT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-21", TenKhoa = "Khoa Ngôn ngữ Anh", TenVietTat = "NNA", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-22", TenKhoa = "Khoa Ngôn ngữ Trung", TenVietTat = "NNT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-23", TenKhoa = "Khoa Quốc tế học", TenVietTat = "QTH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-24", TenKhoa = "Khoa Sư phạm", TenVietTat = "SP", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-25", TenKhoa = "Khoa Báo chí - Truyền thông", TenVietTat = "BC-TT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-26", TenKhoa = "Khoa Xã hội học", TenVietTat = "XHH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-27", TenKhoa = "Khoa Tâm lý học", TenVietTat = "TLH", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-28", TenKhoa = "Khoa Du lịch", TenVietTat = "DL", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-29", TenKhoa = "Khoa Giáo dục thể chất", TenVietTat = "TDTT", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-30", TenKhoa = "Khoa Y", TenVietTat = "Y", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-31", TenKhoa = "Khoa Dược", TenVietTat = "DƯỢC", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-32", TenKhoa = "Khoa Điều dưỡng", TenVietTat = "DD", ViTri=Guid.NewGuid().ToString() },
+        new () { MaKhoa = "K-33", TenKhoa = "Khoa Công nghệ thực phẩm", TenVietTat = "CNTP", ViTri=Guid.NewGuid().ToString() }
     ];
+    var formatedKhoa = _khoa.Select((item, i) =>
+      Khoa.FormatInput(_ct, new()
+      {
+        TenKhoa = item.TenKhoa,
+        TenVietTat = item.TenVietTat,
+        ViTri = item.ViTri
+      }));
+    Console.WriteLine(string.Join('\n', formatedKhoa.Select(i => i.MaKhoa)));
 
     List<BangCap> _bangCap = [
         new (){ MaBangCap = "BC-1", TenBangCap = "Giáo sư", TenVietTat = "GS" },
@@ -79,36 +87,35 @@ public class TestController(AppDbContext context) : ControllerBase
         new (){ MaBangCap = "BC-9", TenBangCap = "Dược sĩ", TenVietTat = "DS" },
         new (){ MaBangCap = "BC-10", TenBangCap = "Giáo viên", TenVietTat = "GV" }
     ];
+    var formatedBangCap = _bangCap.Select((item, i) =>
+      BangCap.FormatInput(i + 1, new() { TenBangCap = item.TenBangCap, TenVietTat = item.TenVietTat }));
 
     List<ChucVu> _chucVu = [
-      new () { MaChucVu = "CV-1", TenChucVu = "Hiệu trưởng", TenVietTat = "HT" },
-        new () { MaChucVu = "CV-2", TenChucVu = "Phó Hiệu trưởng", TenVietTat = "PHT" },
-        new () { MaChucVu = "CV-3", TenChucVu = "Trưởng khoa", TenVietTat = "TK" },
-        new () { MaChucVu = "CV-4", TenChucVu = "Phó Trưởng khoa", TenVietTat = "PTK" },
-        new () { MaChucVu = "CV-5", TenChucVu = "Trưởng bộ môn", TenVietTat = "TBM" },
-        new () { MaChucVu = "CV-6", TenChucVu = "Phó Trưởng bộ môn", TenVietTat = "PTBM" },
-        new () { MaChucVu = "CV-7", TenChucVu = "Chủ nhiệm chương trình", TenVietTat = "CNCTr" },
-        new () { MaChucVu = "CV-8", TenChucVu = "Thư ký khoa", TenVietTat = "TKhK" },
-        new () { MaChucVu = "CV-9", TenChucVu = "Giảng viên chính", TenVietTat = "GVC" },
-        new () { MaChucVu = "CV-10", TenChucVu = "Giảng viên", TenVietTat = "GV" },
-        new () { MaChucVu = "CV-11", TenChucVu = "Trợ giảng", TenVietTat = "TG" },
-        new () { MaChucVu = "CV-12", TenChucVu = "Nghiên cứu viên", TenVietTat = "NCV" },
-        new () { MaChucVu = "CV-13", TenChucVu = "Thư ký khoa học", TenVietTat = "TKKH" },
-        new () { MaChucVu = "CV-14", TenChucVu = "Trưởng phòng đào tạo", TenVietTat = "TPĐT" },
-        new () { MaChucVu = "CV-15", TenChucVu = "Cán bộ quản lý đào tạo", TenVietTat = "CBQLĐT" }
+      new () { MaChucVu = "DEG-1", TenChucVu = "Hiệu trưởng", TenVietTat = "HT" },
+      new () { MaChucVu = "DEG-2", TenChucVu = "Phó Hiệu trưởng", TenVietTat = "PHT" },
+      new () { MaChucVu = "DEG-3", TenChucVu = "Trưởng khoa", TenVietTat = "TK" },
+      new () { MaChucVu = "DEG-4", TenChucVu = "Phó Trưởng khoa", TenVietTat = "PTK" },
+      new () { MaChucVu = "DEG-5", TenChucVu = "Trưởng bộ môn", TenVietTat = "TBM" },
+      new () { MaChucVu = "DEG-6", TenChucVu = "Phó Trưởng bộ môn", TenVietTat = "PTBM" },
+      new () { MaChucVu = "DEG-7", TenChucVu = "Chủ nhiệm chương trình", TenVietTat = "CNCTr" },
+      new () { MaChucVu = "DEG-8", TenChucVu = "Thư ký khoa", TenVietTat = "TKhK" },
+      new () { MaChucVu = "DEG-9", TenChucVu = "Giảng viên chính", TenVietTat = "GVC" },
+      new () { MaChucVu = "DEG-10", TenChucVu = "Giảng viên", TenVietTat = "GV" },
+      new () { MaChucVu = "DEG-11", TenChucVu = "Trợ giảng", TenVietTat = "TG" },
+      new () { MaChucVu = "DEG-12", TenChucVu = "Nghiên cứu viên", TenVietTat = "NCV" },
+      new () { MaChucVu = "DEG-13", TenChucVu = "Thư ký khoa học", TenVietTat = "TKKH" },
+      new () { MaChucVu = "DEG-14", TenChucVu = "Trưởng phòng đào tạo", TenVietTat = "TPĐT" },
+      new () { MaChucVu = "DEG-15", TenChucVu = "Cán bộ quản lý đào tạo", TenVietTat = "CBQLĐT" }
     ];
 
     try
     {
-      await _ct.Khoa.AddRangeAsync(_khoa);
-      await _ct.BangCap.AddRangeAsync(_bangCap);
+      await _ct.Khoa.AddRangeAsync(formatedKhoa);
+      await _ct.BangCap.AddRangeAsync(formatedBangCap);
       await _ct.ChucVu.AddRangeAsync(_chucVu);
       await _ct.SaveChangesAsync();
     }
-    catch (Exception)
-    {
-
-    }
+    catch (Exception) { throw; }
     return Ok();
   }
 
@@ -124,12 +131,13 @@ public class TestController(AppDbContext context) : ControllerBase
     {
       try
       {
-        GiangVien giangVien = GiangVien.Generate(_bangCap[random.Next(_bangCap.Count)].Id, i + 1 + gv_);
+        Khoa k = _Khoa[random.Next(_Khoa.Count)];
+        GiangVien giangVien = GiangVien.Generate(_bangCap[random.Next(_bangCap.Count)].Id, i + 1 + gv_, k.TenVietTat);
         Khoa_GiangVien kgv = new()
         {
           ChucVuId = _ChucVu[random.Next(_ChucVu.Count)].Id,
           GiangVienId = giangVien.Id,
-          KhoaId = _Khoa[random.Next(_Khoa.Count)].Id
+          KhoaId = k.Id
         };
 
         await _ct.GiangVien.AddAsync(giangVien);

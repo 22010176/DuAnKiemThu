@@ -14,9 +14,10 @@ public class ChucVuController(IRepository<ChucVu> repo, AppDbContext context) : 
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()
   {
-    var result = from c in _ct.ChucVu
-                 orderby c.MaChucVu.Length, c.MaChucVu
-                 select c;
+    var result =
+      from c in _ct.ChucVu
+      orderby c.MaChucVu.Length, c.MaChucVu
+      select c;
 
     return Ok(await result.ToListAsync());
   }

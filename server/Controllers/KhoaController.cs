@@ -17,9 +17,10 @@ public class KhoaController(IRepository<Khoa> repo, AppDbContext context) : Temp
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()
   {
-    var result = from c in _ct.Khoa
-                 orderby c.MaKhoa.Length, c.MaKhoa
-                 select c;
+    var result =
+      from c in _ct.Khoa
+      orderby c.MaKhoa.Length, c.MaKhoa
+      select c;
 
     return Ok(await result.ToListAsync());
   }
@@ -27,13 +28,7 @@ public class KhoaController(IRepository<Khoa> repo, AppDbContext context) : Temp
   [HttpPost]
   public override async Task<IActionResult> Create(KhoaDto _k)
   {
-    Khoa khoa = new()
-    {
-      MaKhoa = _k.MaKhoa,
-      TenKhoa = _k.TenKhoa,
-      TenVietTat = _k.TenVietTat,
-      ViTri = _k.ViTri
-    };
+    Khoa khoa = Khoa.FormatInput(_ct, _k);
     await _context.CreateAsync([khoa]);
 
     return CreatedAtAction(nameof(Get), new { id = khoa.Id }, _k);
