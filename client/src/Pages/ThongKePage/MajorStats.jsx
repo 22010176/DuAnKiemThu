@@ -28,11 +28,11 @@ function MajorStats() {
   const facultyDetails = state.gioiTinh.filter(i => i.maKhoa === selectedFaculty).map(i => ({ name: i.gioiTinhText, value: i.soGiangVien }))
 
   const columns = [
-    { title: <p className='text-center'>Tên khoa</p>, fixed: 'left', dataIndex: 'name', key: 'name', render: _ => <p className="text-blue-600 font-semibold">{_}</p>, width: 240 },
-    { title: <p className='text-center'>Tổng số</p>, dataIndex: 'totalLecturers', key: 'totalLecturers', width: 120, render: _ => <p className="text-center">{_}</p> },
-    { title: <p className='text-center'>Nam</p>, dataIndex: 'maleCount', key: 'maleCount', width: 120, render: _ => <p className="text-center">{_}</p> },
-    { title: <p className='text-center'>Nữ</p>, dataIndex: 'femaleCount', key: 'femaleCount', width: 120, render: _ => <p className="text-center">{_}</p> },
-    ...(state.bC?.map(i => ({ title: <p className='text-center'>{i.tenBangCap}</p>, dataIndex: i.tenVietTat, key: i.maBangCap, width: 120, render: _ => <p className="text-center">{_}</p> })) || [])
+    { title: <p className='text-center'>Tên khoa</p>, fixed: 'left', dataIndex: 'name', key: 'name', render: _ => <p className="text-blue-600 font-semibold">{_}</p>, width: 220 },
+    { title: <p className='text-center'>Tổng số</p>, dataIndex: 'totalLecturers', key: 'totalLecturers', width: 70, render: _ => <p className="text-center">{_}</p> },
+    { title: <p className='text-center'>Nam</p>, dataIndex: 'maleCount', key: 'maleCount', width: 50, render: _ => <p className="text-center">{_}</p> },
+    { title: <p className='text-center'>Nữ</p>, dataIndex: 'femaleCount', key: 'femaleCount', width: 50, render: _ => <p className="text-center">{_}</p> },
+    ...(state.bC?.map(i => ({ title: <p className='text-center'>{i.tenBangCap}</p>, dataIndex: i.tenVietTat, key: i.maBangCap, width: 100, render: _ => <p className="text-center">{_}</p> })) || [])
   ];
 
 

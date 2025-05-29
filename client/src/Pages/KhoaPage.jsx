@@ -146,7 +146,7 @@ function KhoaPage() {
           </div>
           <div>
             <label className="font-semibold">Mô tả</label>
-            <Input required name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
+            <Input required name="moTa" value={form.moTa} onChange={e => setForm(d => ({ ...d, moTa: e.target.value }))} />
           </div>
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành
