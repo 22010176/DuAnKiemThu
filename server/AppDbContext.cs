@@ -25,12 +25,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.MaGiangVien).IsUnique();
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.SoDienThoai).IsUnique();
 
-
     modelBuilder.Entity<Khoa>().HasIndex(b => b.MaKhoa).IsUnique();
-    modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.KhoaId, k.GiangVienId }).IsUnique();
+    modelBuilder.Entity<Khoa>().HasIndex(b => b.TenKhoa).IsUnique();
+    modelBuilder.Entity<Khoa>().HasIndex(b => b.TenVietTat).IsUnique();
 
     modelBuilder.Entity<HocKi>().HasIndex(b => b.TenKi).IsUnique();
 
+    modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.KhoaId, k.GiangVienId }).IsUnique();
     modelBuilder.Entity<Khoa_GiangVien>()
       .HasOne(e => e.GiangVien)
       .WithMany(s => s.Khoa_GiangViens)

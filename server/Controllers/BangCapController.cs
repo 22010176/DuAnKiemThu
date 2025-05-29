@@ -29,7 +29,21 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
   {
     // if (item.GetType() == typeof(BangCapD))
     BangCap bc = BangCap.FormatInput(_ct, item);
-    await _context.CreateAsync([bc]);
+    List<string> strings = [
+      item.MaBangCap,
+      item.TenBangCap,
+      item.TenVietTat,
+    ];
+    if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
+    try
+    {
+      await _context.CreateAsync([bc]);
+
+    }
+    catch (System.Exception)
+    {
+      return BadRequest("Thông tin không hợp lệ!");
+    }
     return CreatedAtAction(nameof(Get), new { id = bc.Id }, item);
   }
 }

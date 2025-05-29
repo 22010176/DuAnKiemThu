@@ -139,6 +139,7 @@ function GiaoVienPage() {
           pagination={{ pageSize: 10 }}
           size="small"
           bordered
+          scroll={{ x: 'max-content' }}
           className="shadow-md" />
       </div>
 

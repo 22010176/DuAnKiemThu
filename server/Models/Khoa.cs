@@ -12,7 +12,8 @@ public class Khoa : KhoaDto, IEntityPostgre
       MaKhoa = Guid.NewGuid().ToString(),
       TenKhoa = Guid.NewGuid().ToString(),
       TenVietTat = Guid.NewGuid().ToString(),
-      ViTri = Guid.NewGuid().ToString()
+      ViTri = Guid.NewGuid().ToString(),
+      MoTa = Guid.NewGuid().ToString()
     };
   }
   public static Khoa FormatInput(AppDbContext context, KhoaDto input)
@@ -23,7 +24,8 @@ public class Khoa : KhoaDto, IEntityPostgre
       MaKhoa = $"FAC_{input.TenVietTat}",
       TenKhoa = input.TenKhoa,
       TenVietTat = input.TenVietTat,
-      ViTri = input.ViTri
+      ViTri = input.ViTri,
+      MoTa = input.MoTa
     };
   }
 
@@ -39,4 +41,5 @@ public class KhoaDto
   public string TenKhoa { get; set; } = null!;
   public string TenVietTat { get; set; } = null!;
   public string ViTri { get; set; } = null!;
+  public string MoTa { get; set; } = null!;
 }

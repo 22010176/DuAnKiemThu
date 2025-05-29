@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using server.Repositories;
 
 namespace server.Models;
@@ -10,6 +11,14 @@ public class GiangVien : GiangVienDto, IEntityPostgre
     Random rand = new();
     return new DateTime(1950 + rand.Next() % 60, rand.Next() % 12 + 1, rand.Next() % 28 + 1, 0, 0, 0, DateTimeKind.Utc);
   }
+  static string GenerateRandomName(int length)
+  {
+    Random _random = new();
+    const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+    return new string(Enumerable.Repeat(chars, length)
+    .Select(s => s[_random.Next(s.Length)]).ToArray());
+
+  }
   public static string GenerateRandomVietnamPhoneNumber()
   {
     var prefixes = new[] { "09", "03", "07", "08", "05" };
@@ -20,29 +29,64 @@ public class GiangVien : GiangVienDto, IEntityPostgre
 
     return prefix + number;
   }
-  public static string GenerateRandomEmail()
+  public static string GenerateRandomEmail(string name)
   {
     var random = new Random();
     var domains = new[] { "gmail.com", "yahoo.com", "outlook.com", "example.com" };
     var namePrefix = "user";
-    int number = random.Next(0, int.MaxValue);
     string domain = domains[random.Next(domains.Length)];
 
-    return $"{namePrefix}{number}{Guid.NewGuid()}@{domain}";
+    return $"{namePrefix}_{name}@{domain}";
   }
   public static GiangVien Generate(Guid bangCapId, int count, string khoa)
   {
     Random random = new();
+    string name = GenerateRandomName(random.Next() % 20);
     return new()
     {
       MaGiangVien = $"PU_{khoa}_{count}",
-      TenGiangVien = Guid.NewGuid().ToString(),
+      TenGiangVien = name,
       GioiTinh = random.Next() % 2,
       SinhNhat = GenerateRandomDate(),
       SoDienThoai = GenerateRandomVietnamPhoneNumber(),
-      Mail = GenerateRandomEmail(),
+      Mail = GenerateRandomEmail(name),
       BangCapId = bangCapId
     };
+  }
+
+  public static bool IsValid(AppDbContext context, CreateGiangVienDto input)
+  {
+    if (input.GiangVien is null) return false;
+    List<string> values = [
+      input.ChucVuId.ToString(),
+      input.KhoaId.ToString(),
+      input.GiangVien.BangCapId.ToString(),
+      input.GiangVien.Mail.ToString(),
+      input.GiangVien.SoDienThoai.ToString(),
+      input.GiangVien.TenGiangVien.ToString(),
+      input.GiangVien.SinhNhat.ToString()
+    ];
+    if (values.Any(string.IsNullOrEmpty)) return false;
+
+    if (input.GiangVien.TenGiangVien.Any(i => i != ' ' && !char.IsLetter(i))) return false;
+    if (input.GiangVien.SoDienThoai.Length > 12 || input.GiangVien.SoDienThoai.Any(i => i != ' ' && !char.IsDigit(i))) return false;
+    if (input.GiangVien.GioiTinh > 2) return false;
+    if (context.GiangVien.Any(i => i.SoDienThoai == input.GiangVien.SoDienThoai)) return false;
+    if (DateTime.Now.Year - input.GiangVien.SinhNhat.Year < 18) return false;
+
+
+    ChucVu _cv = context.ChucVu.FirstOrDefault(i => i.Id == input.ChucVuId)!;
+    if (_cv.MaChucVu != "DEG-3") return true;
+
+    var result =
+      (from kgv in context.Khoa_GiangVien
+       join k in context.Khoa on kgv.KhoaId equals k.Id
+       join c in context.ChucVu on kgv.ChucVuId equals c.Id
+       where c.MaChucVu == "DEG-3" && kgv.KhoaId == input.KhoaId
+       select new { }).ToList().Count;
+    if (result > 0) return false;
+
+    return true;
   }
 
   public static GiangVien FormatInput(AppDbContext context, CreateGiangVienDto input)

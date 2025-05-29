@@ -222,11 +222,11 @@ FROM
     return Ok(await result.ToListAsync());
   }
 
-
   [HttpPost]
   public override async Task<IActionResult> Create(GiangVienDto _gv)
   {
     var bangCap = await _bangCapRepository.FindAsync(i => i.Id == _gv.BangCapId);
+
     if (bangCap.Count == 0) return BadRequest(new { Message = "BangCap is invalid!" });
 
     GiangVien giangVien = new()
@@ -253,7 +253,7 @@ FROM
     {
       GiangVienDto _gv = d.GiangVien!;
       Khoa khoa = _ct.Khoa.FirstOrDefault(i => i.Id == d.KhoaId)!;
-      if (khoa is null) return BadRequest();
+      if (!GiangVien.IsValid(_ct, d)) return BadRequest("Thông tin không hợp lệ");
 
       GiangVien giangVien = GiangVien.FormatInput(_ct, d);
       await _context.CreateAsync([giangVien]);

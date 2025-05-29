@@ -30,6 +30,12 @@ public class ChucVuController(IRepository<ChucVu> repo, AppDbContext context) : 
       TenChucVu = _cv.TenChucVu,
       TenVietTat = _cv.TenVietTat
     };
+    List<string> strings = [
+      _cv.MaChucVu,
+      _cv.TenChucVu,
+      _cv.TenVietTat,
+    ];
+    if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
     await _context.CreateAsync([chucVu]);
     return CreatedAtAction(nameof(Get), new { id = chucVu.Id }, _cv);
   }

@@ -11,22 +11,12 @@ function KhoaPage() {
   const createFormRef = useRef();
   const [search, setSearch] = useState("")
   const [createForm, setCreateForm] = useState(false)
-  const [form, setForm] = useState({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
+  const [form, setForm] = useState({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "", moTa: "" })
   const [mode, setMode] = useState("create")
   const [data, setData] = useState([]);
 
-  const success = m => {
-    messageApi.open({
-      type: 'success',
-      content: m,
-    });
-  };
-  const error = m => {
-    messageApi.open({
-      type: 'error',
-      content: m,
-    });
-  };
+  const success = m => messageApi.open({ type: 'success', content: m, });
+  const error = m => messageApi.open({ type: 'error', content: m, });
 
   // const warning = () => {
   //   messageApi.open({
@@ -40,7 +30,7 @@ function KhoaPage() {
     { title: <TableHeader>Mã khoa</TableHeader>, dataIndex: 'maKhoa', key: 'maKhoa', width: 70, render: i => <div className="text-lg text-center">{i}</div> },
     { title: <TableHeader>Tên khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, render: i => <div className="text-lg">{i}</div> },
     { title: <TableHeader>Vị trí</TableHeader>, dataIndex: 'viTri', key: 'viTri', width: 150, render: i => <div className="text-lg">{i}</div> },
-    { title: <TableHeader>Mô tả</TableHeader>, dataIndex: 'truongKhoa', key: 'truongKhoa', width: 100, render: i => <div className="text-lg">{i}</div> },
+    { title: <TableHeader>Mô tả</TableHeader>, dataIndex: 'moTa', key: 'moTa', width: 100, render: i => <div className="text-lg">{i}</div> },
     { title: <TableHeader>Tên viết tắt</TableHeader>, dataIndex: 'tenVietTat', key: 'tenVietTat', width: 80, render: i => <div className="text-lg text-center">{i}</div> },
     {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 20,
