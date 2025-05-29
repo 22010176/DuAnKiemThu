@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mail;
 using Microsoft.EntityFrameworkCore;
 using server.Repositories;
 
@@ -54,9 +55,9 @@ public class GiangVien : GiangVienDto, IEntityPostgre
     };
   }
 
-  public static bool IsValid(AppDbContext context, CreateGiangVienDto input)
+  public static string IsValid(AppDbContext context, CreateGiangVienDto input)
   {
-    if (input.GiangVien is null) return false;
+    if (input.GiangVien is null) return "Nhập thiếu thông tin";
     List<string> values = [
       input.ChucVuId.ToString(),
       input.KhoaId.ToString(),
@@ -66,17 +67,17 @@ public class GiangVien : GiangVienDto, IEntityPostgre
       input.GiangVien.TenGiangVien.ToString(),
       input.GiangVien.SinhNhat.ToString()
     ];
-    if (values.Any(string.IsNullOrEmpty)) return false;
+    if (values.Any(string.IsNullOrEmpty)) return "Nhập thiếu thông tin";
 
-    if (input.GiangVien.TenGiangVien.Any(i => i != ' ' && !char.IsLetter(i))) return false;
-    if (input.GiangVien.SoDienThoai.Length > 12 || input.GiangVien.SoDienThoai.Any(i => i != ' ' && !char.IsDigit(i))) return false;
-    if (input.GiangVien.GioiTinh > 2) return false;
-    if (context.GiangVien.Any(i => i.SoDienThoai == input.GiangVien.SoDienThoai)) return false;
-    if (DateTime.Now.Year - input.GiangVien.SinhNhat.Year < 18) return false;
-
+    if (input.GiangVien.TenGiangVien.Any(i => i != ' ' && !char.IsLetter(i))) return "Tên giáo viên không được chứa số hoặc ký tự đặc biệt!";
+    if (input.GiangVien.SoDienThoai.Length > 12 || input.GiangVien.SoDienThoai.Any(i => i != ' ' && !char.IsDigit(i))) return "Số điện thoại không đúng định dạng";
+    if (context.GiangVien.Any(i => i.SoDienThoai == input.GiangVien.SoDienThoai)) return "Số điện thoại không đúng định dạng";
+    if (input.GiangVien.GioiTinh > 2) return "Giới tính không hợp lệ!";
+    if (DateTime.Now.Year - input.GiangVien.SinhNhat.Year < 18) return "Giáo viên nhỏ hơn 18 tuổi";
+    if (new EmailAddressAttribute().IsValid(input.GiangVien.Mail)) return "Email không đúng định dạng";
 
     ChucVu _cv = context.ChucVu.FirstOrDefault(i => i.Id == input.ChucVuId)!;
-    if (_cv.MaChucVu != "DEG-3") return true;
+    if (_cv.MaChucVu != "DEG-3") return "";
 
     var result =
       (from kgv in context.Khoa_GiangVien
@@ -84,9 +85,9 @@ public class GiangVien : GiangVienDto, IEntityPostgre
        join c in context.ChucVu on kgv.ChucVuId equals c.Id
        where c.MaChucVu == "DEG-3" && kgv.KhoaId == input.KhoaId
        select new { }).ToList().Count;
-    if (result > 0) return false;
+    if (result > 0) return "";
 
-    return true;
+    return "";
   }
 
   public static GiangVien FormatInput(AppDbContext context, CreateGiangVienDto input)

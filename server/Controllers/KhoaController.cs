@@ -37,6 +37,12 @@ public class KhoaController(IRepository<Khoa> repo, AppDbContext context) : Temp
     ];
     if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
 
+    if ((from c in _ct.Khoa where c.TenKhoa == _k.TenKhoa select c).Any())
+      return BadRequest("Tên khoa đã tồn tại");
+
+    if ((from c in _ct.Khoa where c.TenVietTat == _k.TenVietTat select c).Any())
+      return BadRequest("Tên viết tắt đã tồn tại");
+
     try
     {
       await _context.CreateAsync([khoa]);

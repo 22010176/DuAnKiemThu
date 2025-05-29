@@ -107,16 +107,23 @@ function KhoaPage() {
             console.log(data)
             if (mode === 'create') {
               await axios.post('http://localhost:5249/Khoa', data)
-                .then(() => success("Thêm khoa thành công!"))
+                .then(async () => {
+                  success("Thêm khoa thành công!")
+                  await updateData()
+                  setCreateForm(false)
+                  setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
+                })
                 .catch(err => error(`Thêm khoa thất bại! ${err.response.data}`))
             }
             else if (mode === 'update') {
               await axios.put('http://localhost:5249/Khoa', form)
-              success("Sửa thông tin của Khoa thành công!")
+                .then(async () => {
+                  success("Sửa thông tin của Khoa thành công!")
+                  await updateData()
+                  setCreateForm(false)
+                  setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
+                }).catch(err => error(`Sửa khoa thất bại! ${err.response.data}`))
             }
-            await updateData()
-            setCreateForm(false)
-            setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })
           }}>
           {/* <div>
             <label className="font-semibold">Mã khoa</label>

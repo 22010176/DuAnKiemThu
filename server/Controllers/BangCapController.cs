@@ -34,13 +34,24 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
       item.TenBangCap,
       item.TenVietTat,
     ];
+    if ((from c in _ct.BangCap
+         where c.TenBangCap == item.TenBangCap
+         select c).Any())
+      return BadRequest("Tên bằng cấp đã tồn tại");
+
+    if ((from c in _ct.BangCap
+         where c.TenVietTat == item.TenVietTat
+         select c).Any())
+      return BadRequest("Tên viết tắt đã tồn tại");
+
+    if (item.TenVietTat.Length > 10) return BadRequest("Tên viết tắt dài quá 10 ký tự!");
     if (strings.Any(string.IsNullOrEmpty)) return BadRequest("Nhập thiếu thông tin");
     try
     {
       await _context.CreateAsync([bc]);
 
     }
-    catch (System.Exception)
+    catch (Exception)
     {
       return BadRequest("Thông tin không hợp lệ!");
     }

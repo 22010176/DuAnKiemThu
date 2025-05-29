@@ -253,7 +253,9 @@ FROM
     {
       GiangVienDto _gv = d.GiangVien!;
       Khoa khoa = _ct.Khoa.FirstOrDefault(i => i.Id == d.KhoaId)!;
-      if (!GiangVien.IsValid(_ct, d)) return BadRequest("Thông tin không hợp lệ");
+
+      string err = GiangVien.IsValid(_ct, d);
+      if (!string.IsNullOrWhiteSpace(err)) return BadRequest(err);
 
       GiangVien giangVien = GiangVien.FormatInput(_ct, d);
       await _context.CreateAsync([giangVien]);

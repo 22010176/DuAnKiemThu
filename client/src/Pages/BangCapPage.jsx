@@ -128,13 +128,13 @@ function BangCapPage() {
             data.maBangCap = ""
             if (mode === 'create')
               await axios.post('http://localhost:5249/BangCap', data)
-                .catch(res => error(res.response.data))
                 .then(() => updateData())
                 .then(success.bind({}, "Thêm bằng cấp thành công!"))
                 .then(() => {
                   setForm({ maBangCap: "", tenBangCap: "", tenVietTat: "", })
                   setCreateForm(false)
                 })
+                .catch(res => error(res.response.data))
 
             else if (mode === 'edit') {
               await axios.put('http://localhost:5249/BangCap', form)
@@ -144,7 +144,7 @@ function BangCapPage() {
                   setForm({ maBangCap: "", tenBangCap: "", tenVietTat: "", })
                   setCreateForm(false)
                 })
-
+                .catch(res => error(res.response.data))
             }
           }}>
           {/* <div>
