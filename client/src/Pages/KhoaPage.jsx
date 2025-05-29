@@ -45,7 +45,8 @@ function KhoaPage() {
                 tenKhoa: entry.tenKhoa,
                 viTri: entry.viTri,
                 tenVietTat: entry.tenVietTat,
-                id: entry.id
+                id: entry.id,
+                moTa: entry.moTa
               })
             }} />
           <Popconfirm title="Bạn có chắc chắn muốn xóa khoa này không?" description="Khoa này sẽ bị xóa vĩnh viễn!"
@@ -81,7 +82,7 @@ function KhoaPage() {
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
             const response = await axios.get("http://localhost:5249/Khoa")
             const result = response.data.filter(i => JSON.stringify(i).includes(search.toLowerCase()))
-            if (result.length === 0) error("Không tìm thấy khoa nào!")
+            if (result.length === 0) error("Không tìm thấy kết quả!!")
             setData(result)
           }} />
           <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
@@ -97,7 +98,11 @@ function KhoaPage() {
           pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
       </div>
 
-      <Modal centered open={createForm} onCancel={() => setCreateForm(false)} footer={[]}
+      <Modal centered open={createForm}
+        onCancel={() => {
+          setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "", moTa: "" })
+          setCreateForm(false)
+        }} footer={[]}
         title={<h1 className="text-xl font-bold text-blue-900">THÊM KHOA MỚI</h1>}>
         <form ref={createFormRef} className="flex flex-col gap-5"
           onSubmit={async function (e) {
@@ -118,7 +123,7 @@ function KhoaPage() {
             else if (mode === 'update') {
               await axios.put('http://localhost:5249/Khoa', form)
                 .then(async () => {
-                  success("Sửa thông tin của Khoa thành công!")
+                  success("Cập nhật thông tin Khoa thành công!")
                   await updateData()
                   setCreateForm(false)
                   setForm({ maKhoa: "", tenKhoa: "", viTri: "", tenVietTat: "" })

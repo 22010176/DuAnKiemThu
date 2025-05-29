@@ -119,7 +119,7 @@ function GiaoVienPage() {
             <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
               const response = await axios.get('http://localhost:5249/GiangVien')
               const result = response.data.filter(i => JSON.stringify(i).includes(search.toLowerCase()))
-              if (result.length === 0) error("Không tìm thấy giảng viên nào!")
+              if (result.length === 0) error("Không tìm thấy kết quả!")
               dispatch({ type: "updateGiangVienData", payload: result })
 
             }} />
