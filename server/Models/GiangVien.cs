@@ -16,9 +16,11 @@ public class GiangVien : GiangVienDto, IEntityPostgre
   {
     Random _random = new();
     const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
-    return new string(Enumerable.Repeat(chars, length)
-    .Select(s => s[_random.Next(s.Length)]).ToArray());
-
+    return new string([..
+      Enumerable
+        .Repeat(chars, length)
+        .Select(s => s[_random.Next(s.Length)])
+    ]);
   }
   public static string GenerateRandomVietnamPhoneNumber()
   {
