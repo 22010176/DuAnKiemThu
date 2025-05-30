@@ -14,7 +14,7 @@ public class HocKi : HocKiDto, IEntityPostgre
   }
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
-  // public ICollection<LopHocPhan>? LopHocPhans { get; set; }
+  public ICollection<LopHocPhan>? LopHocPhans { get; set; }
 }
 
 public class HocKiDto

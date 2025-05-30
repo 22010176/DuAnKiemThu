@@ -33,6 +33,7 @@ public class Khoa : KhoaDto, IEntityPostgre
   public Guid Id { get; set; } = Guid.NewGuid();
 
   public ICollection<Khoa_GiangVien>? Khoa_GiangViens { get; set; }
+  public ICollection<HocPhan>? HocPhans { get; set; }
 }
 
 public class KhoaDto
