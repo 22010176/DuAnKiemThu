@@ -12,6 +12,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<Khoa> Khoa { get; set; }
   public DbSet<Khoa_GiangVien> Khoa_GiangVien { get; set; }
   public DbSet<HocKi> HocKi { get; set; }
+  public DbSet<HocPhan> HocPhan { get; set; }
+  public DbSet<TinChi> TinChi { get; set; }
+  public DbSet<LopHocPhan> LopHocPhan { get; set; }
+  public DbSet<HocPhan_TinChi> HocPhan_TinChi { get; set; }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<BangCap>().HasIndex(b => b.MaBangCap).IsUnique();
