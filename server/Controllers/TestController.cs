@@ -18,6 +18,8 @@ public class TestController(AppDbContext context) : ControllerBase
     _ct.BangCap.RemoveRange(await _ct.BangCap.ToListAsync());
     _ct.ChucVu.RemoveRange(await _ct.ChucVu.ToListAsync());
     _ct.Khoa.RemoveRange(await _ct.Khoa.ToListAsync());
+    _ct.HocKi.RemoveRange(await _ct.HocKi.ToListAsync());
+  
     await _ct.SaveChangesAsync();
 
     return Ok();

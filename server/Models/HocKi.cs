@@ -10,11 +10,11 @@ public class HocKi : HocKiDto, IEntityPostgre
     return new HocKi()
     {
       TenKi = Guid.NewGuid().ToString()
-      // TenVietTat = Guid.NewGuid().ToString()
     };
   }
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
+  // public ICollection<LopHocPhan>? LopHocPhans { get; set; }
 }
 
 public class HocKiDto
