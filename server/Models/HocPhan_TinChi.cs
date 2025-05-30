@@ -7,9 +7,9 @@ public class HocPhan_TinChi : HocPhan_TinChiDto, IEntityPostgre
 {
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
-  public int soTiet { get; set; } = 0!;
+  public int SoTiet { get; set; } = 0!;
 
-  public TinChi? loaiTinChi { get; set; }
+  public TinChi? LoaiTinChi { get; set; }
   public HocPhan? HocPhan { get; set; }
 }
 
