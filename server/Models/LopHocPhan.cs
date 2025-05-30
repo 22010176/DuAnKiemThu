@@ -41,6 +41,8 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
     }
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
+    public HocPhan? HocPhan { get; set; }
+    public HocKi? HocKi { get; set; }
 }
 
 public class LopHocPhanDto
@@ -48,8 +50,8 @@ public class LopHocPhanDto
     public string maLop { get; set; } = null!;
     public string tenLop { get; set; } = null!;
     public long soLuongSinhVien { get; set; } = 0!;
-    public HocPhan? HocPhan { get; set; }
-    public HocKi? HocKi { get; set; }
+    public Guid HocPhanId { get; set; }
+    public Guid HocKiId { get; set; }
 }
 
 public class CreateLopHocPhanDto
