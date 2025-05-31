@@ -17,17 +17,21 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
         .Select(s => s[_random.Next(s.Length)])
         ]);
     }
-    public static LopHocPhan Generate(string hocKi, string hocPhan, string namBd)
+    public static LopHocPhan Generate(string hocKi, string hocPhan, string namBd, Guid hocPhanId, Guid hocKiId, Guid giangVienId)
     {
         Random random = new();
-        string name = GenerateRandomName(random.Next() % 20);
-        return new()
+        string name = GenerateRandomName(random.Next(5, 20));
+        return new LopHocPhan()
         {
-            maLop = $"{hocPhan}_{hocKi}_{namBd}", //HP_KI_Năm bd
+            maLop = $"{hocPhan}_{hocKi}_{namBd}", // HP_KI_Năm bd
             tenLop = name,
-            soLuongSinhVien = random.NextInt64(20, 200)
+            soLuongSinhVien = random.NextInt64(20, 200),
+            HocPhanId = hocPhanId,
+            HocKiId = hocKiId,
+            GiangVienId = giangVienId
         };
     }
+
     public static string IsValid(AppDbContext context, CreateLopHocPhanDto input)
     {
         if (string.IsNullOrWhiteSpace(input.maLop))
@@ -61,7 +65,23 @@ public class LopHocPhanDto
         KetThuc
     }
     public TrangThaiLop TrangThai { get; set; }
+    public static LopHocPhanDto.TrangThaiLop XacDinhTrangThai(LopHocPhan lop)
+    {
+        var now = DateTime.Now;
+        if (lop.HocKi == null)
+            return LopHocPhanDto.TrangThaiLop.DangMo;
+
+        if (now > lop.HocKi.ThoiGianKetThuc)
+            return LopHocPhanDto.TrangThaiLop.KetThuc;
+        if (lop.GiangVienId != Guid.Empty)
+            return LopHocPhanDto.TrangThaiLop.DaDong;
+        if (now >= lop.HocKi.ThoiGianBatDau && now <= lop.HocKi.ThoiGianKetThuc)
+            return LopHocPhanDto.TrangThaiLop.DangMo;
+
+        return LopHocPhanDto.TrangThaiLop.DangMo;
+    }
 }
+
 
 public class CreateLopHocPhanDto : LopHocPhanDto
 {
@@ -71,6 +91,7 @@ public class CreateLopHocPhanDto : LopHocPhanDto
 public class UpdateLopHocPhanDto
 {
     public LopHocPhanDto? LopHocPhan { get; set; }
+    public Guid LopHocPhanId { get; set; }
 }
 
 public class PhanCongGiangVienDto
