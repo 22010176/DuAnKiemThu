@@ -110,6 +110,7 @@ public class GiangVien : GiangVienDto, IEntityPostgre
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
   public BangCap? BangCap { get; set; }
+  public ICollection<LopHocPhan>? LopHocPhans { get; set; }
   public ICollection<Khoa_GiangVien>? Khoa_GiangViens { get; set; }
 }
 

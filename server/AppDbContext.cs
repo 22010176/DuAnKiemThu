@@ -57,6 +57,24 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       .HasForeignKey(e => e.BangCapId);
 
     base.OnModelCreating(modelBuilder);
+
+    //UC 2
+    modelBuilder.Entity<HocKi>().HasIndex(b => b.TenKi).IsUnique();
+    modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianBatDau).IsUnique();
+    modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianKetThuc).IsUnique();
+
+    modelBuilder.Entity<TinChi>().HasIndex(b => b.LoaiTinChi).IsUnique();
+
+    modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHP).IsUnique();
+    modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHP).IsUnique();
+
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.maLop).IsUnique();
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.tenLop).IsUnique();
+    
+    modelBuilder.Entity<HocPhan_TinChi>()
+      .HasOne(e => e.HocPhan)
+      .WithMany(hp => hp.HocPhan_TinChis)
+      .HasForeignKey(e => e.HocPhanId);
   }
 
 }

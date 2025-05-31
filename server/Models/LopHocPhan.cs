@@ -30,11 +30,11 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
     }
     public static string IsValid(AppDbContext context, CreateLopHocPhanDto input)
     {
-        if (string.IsNullOrWhiteSpace(input.LopHocPhan?.maLop))
+        if (string.IsNullOrWhiteSpace(input.maLop))
             return "Mã lớp không được để trống";
-        if (string.IsNullOrWhiteSpace(input.LopHocPhan?.tenLop))
+        if (string.IsNullOrWhiteSpace(input.tenLop))
             return "Tên lớp không được để trống";
-        if (input.LopHocPhan?.soLuongSinhVien <= 0)
+        if (input.soLuongSinhVien <= 0)
             return "Số lượng sinh viên phải lớn hơn 0";
 
         return string.Empty;
@@ -43,6 +43,7 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
     public Guid Id { get; set; } = Guid.NewGuid();
     public HocPhan? HocPhan { get; set; }
     public HocKi? HocKi { get; set; }
+    public GiangVien? GiangVien { get; set; }
 }
 
 public class LopHocPhanDto
@@ -52,11 +53,28 @@ public class LopHocPhanDto
     public long soLuongSinhVien { get; set; } = 0!;
     public Guid HocPhanId { get; set; }
     public Guid HocKiId { get; set; }
+    public Guid GiangVienId { get; set; }
+    public enum TrangThaiLop
+    {
+        DangMo,
+        DaDong,
+        KetThuc
+    }
+    public TrangThaiLop TrangThai { get; set; }
 }
 
-public class CreateLopHocPhanDto
+public class CreateLopHocPhanDto : LopHocPhanDto
 {
-  public LopHocPhanDto? LopHocPhan { get; set; }
-  public Guid HocPhanId { get; set; }
-  public Guid HocKiId { get; set; }
+    public LopHocPhanDto? LopHocPhan { get; set; }
+}
+
+public class UpdateLopHocPhanDto
+{
+    public LopHocPhanDto? LopHocPhan { get; set; }
+}
+
+public class PhanCongGiangVienDto
+{
+    public Guid LopHocPhanId { get; set; }
+    public Guid GiangVienId { get; set; }
 }
