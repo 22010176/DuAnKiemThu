@@ -41,7 +41,6 @@ public class HocPhanController(IRepository<HocPhan> repo, AppDbContext context) 
 
     hocPhan.TenHP = input.TenHP;
     hocPhan.HeSoHP = input.HeSoHP;
-    hocPhan.KhoaId = input.KhoaId;
     await _context.UpdateAsync([hocPhan]);
     return Ok();
   }

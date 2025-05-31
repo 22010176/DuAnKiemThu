@@ -6,15 +6,17 @@ namespace server.Models;
 
 public class HocPhan : HocPhanDto, IEntityPostgre
 {
-  public static HocPhan Generate()
+  public static HocPhan GenerateSample(string tenHP, float heSoHP, Khoa khoa)
   {
-    return new()
-    {
-      MaHP = Guid.NewGuid().ToString(),
-      TenHP = Guid.NewGuid().ToString(),
-      //   heSoHP = Guid.NewGuid().ToString()
-    };
+      return new()
+      {
+          MaHP = $"{khoa.MaKhoa}_{DateTime.Now.Ticks}",
+          TenHP = tenHP,
+          HeSoHP = heSoHP,
+          Khoa = khoa
+      };
   }
+
   public static HocPhan FormatInput(AppDbContext context, HocPhanDto input)
   {
     if (string.IsNullOrWhiteSpace(input.TenHP))
@@ -23,7 +25,7 @@ public class HocPhan : HocPhanDto, IEntityPostgre
       throw new Exception("Hệ số học phần phải lớn hơn 0");
 
     var khoa = context.Khoa.FirstOrDefault(k => k.Id == input.KhoaId);
-    //if (khoa == null) throw new Exception("Không tìm thấy Khoa");
+    if (khoa == null) throw new Exception("Không tìm thấy Khoa");
     var maKhoa = khoa!.MaKhoa.Length > 4 ? khoa.MaKhoa[4..] : khoa.MaKhoa;
 
     var count = context.HocPhan.Count(hp => hp.Khoa!.Id == input.KhoaId);
