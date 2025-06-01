@@ -12,21 +12,22 @@ import HocPhanPage from './Pages/HocPhanPage';
 import LopHocPhanPage from './Pages/LopHocPhanPage';
 import PhanCongGVPage from './Pages/PhanCongGVPage';
 import ThongKeLopPage from './Pages/ThongKeLopPage';
+import HKP from './Pages/HKP';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route path="khoa" element={<KhoaPage />} />
-          <Route path="bang-cap" element={<BangCapPage />} />
-          <Route path="giao-vien" element={<GiaoVienPage />} />
-          <Route path="thong-ke" element={<ThongKePage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
-  // return <ThongKeLopPage/>
+  // return (
+  //   <BrowserRouter>
+  //     <Routes>
+  //       <Route path="/" element={<MainLayout />}>
+  //         <Route path="khoa" element={<KhoaPage />} />
+  //         <Route path="bang-cap" element={<BangCapPage />} />
+  //         <Route path="giao-vien" element={<GiaoVienPage />} />
+  //         <Route path="thong-ke" element={<ThongKePage />} />
+  //       </Route>
+  //     </Routes>
+  //   </BrowserRouter>
+  // )
+  return <HocKiPage/>
 }
 
 export default App

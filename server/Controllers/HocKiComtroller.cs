@@ -13,15 +13,15 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
 {
   readonly AppDbContext _ct = context;
 
-  // [HttpGet]
-  // public override async Task<ActionResult<ICollection>> Get()
-  // {
-  //   var result = from c in _ct.HocKi
-  //                orderby c.MaHocKi.Length, c.MaHocKi
-  //                select c;
+  [HttpGet]
+  public override async Task<ActionResult<ICollection>> Get()
+  {
+    var result = from c in _ct.HocKi
+                 orderby c.Id.ToString().Length, c.Id
+                 select c;
 
-  //   return Ok(await result.ToListAsync());
-  // }
+    return Ok(await result.ToListAsync());
+  }
 
   [HttpPost]
   public override async Task<IActionResult> Create(HocKiDto item)

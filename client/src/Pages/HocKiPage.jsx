@@ -1,557 +1,334 @@
 import React, { useState } from 'react';
+import { 
+  Card, 
+  Table, 
+  Button, 
+  Modal, 
+  Form, 
+  Input, 
+  DatePicker, 
+  Select,
+  Space,
+  Popconfirm,
+  message,
+  Tag
+} from 'antd';
+import { 
+  PlusOutlined, 
+  EditOutlined, 
+  DeleteOutlined, 
+  CalendarOutlined,
+  SearchOutlined 
+} from '@ant-design/icons';
+import dayjs from 'dayjs';
+
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const HocKiPage = () => {
-  const [selectedNamHoc, setSelectedNamHoc] = useState('2023-2024');
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingItem, setEditingItem] = useState(null);
-  const [formData, setFormData] = useState({
-    tenKi: '',
-    namHoc: '2023-2024',
-    ngayBatDau: '',
-    ngayKetThuc: ''
-  });
+  const [form] = Form.useForm();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [selectedNamHoc, setSelectedNamHoc] = useState('');
 
-  // Dữ liệu mẫu
-  const [namHocList] = useState(['2021-2022', '2022-2023', '2023-2024', '2024-2025']);
-  const [hocKiData, setHocKiData] = useState([
+  const [hocKyData, setHocKyData] = useState([
     {
-      id: 1,
-      tenKi: 'Học kì 1',
-      namHoc: '2023-2024',
-      ngayBatDau: '2023-09-01',
-      ngayKetThuc: '2024-01-15',
+      key: '1',
+      id: 'HK1_2024',
+      tenKy: 'Học kỳ 1',
+      namHoc: '2024-2025',
+      ngayBatDau: '2024-09-01',
+      ngayKetThuc: '2024-12-30',
       trangThai: 'Đang diễn ra'
     },
     {
-      id: 2,
-      tenKi: 'Học kì 2',
-      namHoc: '2023-2024',
-      ngayBatDau: '2024-02-01',
-      ngayKetThuc: '2024-06-30',
-      trangThai: 'Chưa bắt đầu'
+      key: '2',
+      id: 'HK2_2024',
+      tenKy: 'Học kỳ 2',
+      namHoc: '2024-2025',
+      ngayBatDau: '2025-01-15',
+      ngayKetThuc: '2025-05-30',
+      trangThai: 'Sắp diễn ra'
     },
     {
-      id: 3,
-      tenKi: 'Học kì hè',
-      namHoc: '2023-2024',
-      ngayBatDau: '2024-07-01',
-      ngayKetThuc: '2024-08-31',
+      key: '3',
+      id: 'HK3_2024',
+      tenKy: 'Học kỳ hè',
+      namHoc: '2024-2025',
+      ngayBatDau: '2025-06-15',
+      ngayKetThuc: '2025-08-15',
       trangThai: 'Chưa bắt đầu'
     }
   ]);
 
-  const filteredHocKi = hocKiData.filter(item => item.namHoc === selectedNamHoc);
+  const namHocList = ['2023-2024', '2024-2025', '2025-2026'];
 
-  const handleAdd = () => {
-    setFormData({
-      tenKi: '',
-      namHoc: selectedNamHoc,
-      ngayBatDau: '',
-      ngayKetThuc: ''
+  const columns = [
+    {
+      title: 'Mã học kỳ',
+      dataIndex: 'id',
+      key: 'id',
+      width: 120,
+    },
+    {
+      title: 'Tên học kỳ',
+      dataIndex: 'tenKy',
+      key: 'tenKy',
+      width: 150,
+    },
+    {
+      title: 'Năm học',
+      dataIndex: 'namHoc',
+      key: 'namHoc',
+      width: 120,
+      align: 'center',
+    },
+    {
+      title: 'Ngày bắt đầu',
+      dataIndex: 'ngayBatDau',
+      key: 'ngayBatDau',
+      width: 120,
+      align: 'center',
+      render: (date) => dayjs(date).format('DD/MM/YYYY')
+    },
+    {
+      title: 'Ngày kết thúc',
+      dataIndex: 'ngayKetThuc',
+      key: 'ngayKetThuc',
+      width: 120,
+      align: 'center',
+      render: (date) => dayjs(date).format('DD/MM/YYYY')
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'trangThai',
+      key: 'trangThai',
+      width: 120,
+      align: 'center',
+      render: (status) => {
+        let color = 'default';
+        if (status === 'Đang diễn ra') color = 'green';
+        else if (status === 'Sắp diễn ra') color = 'blue';
+        else if (status === 'Đã kết thúc') color = 'red';
+        return <Tag color={color}>{status}</Tag>;
+      }
+    },
+    {
+      title: 'Thao tác',
+      key: 'action',
+      width: 120,
+      align: 'center',
+      render: (_, record) => (
+        <Space size="small">
+          <Button
+            type="primary"
+            size="small"
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(record)}
+          />
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa?"
+            onConfirm={() => handleDelete(record.key)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button
+              type="primary"
+              danger
+              size="small"
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ];
+
+  const filteredData = hocKyData.filter(item => 
+    !selectedNamHoc || item.namHoc === selectedNamHoc
+  );
+
+  const showModal = () => {
+    setIsModalVisible(true);
+    setEditingId(null);
+    form.resetFields();
+  };
+
+  const handleEdit = (record) => {
+    setIsModalVisible(true);
+    setEditingId(record.key);
+    form.setFieldsValue({
+      ...record,
+      thoiGian: [dayjs(record.ngayBatDau), dayjs(record.ngayKetThuc)]
     });
-    setShowAddModal(true);
   };
 
-  const handleEdit = (item) => {
-    setEditingItem(item);
-    setFormData(item);
-    setShowEditModal(true);
+  const handleDelete = (key) => {
+    setHocKyData(hocKyData.filter(item => item.key !== key));
+    message.success('Xóa học kỳ thành công!');
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa học kì này?')) {
-      setHocKiData(prev => prev.filter(item => item.id !== id));
-    }
-  };
-
-  const handleSubmit = () => {
-    if (!formData.tenKi || !formData.ngayBatDau || !formData.ngayKetThuc) return;
-    
-    if (showAddModal) {
-      const newItem = {
-        ...formData,
-        id: Date.now(),
-        trangThai: 'Chưa bắt đầu'
+  const handleOk = () => {
+    form.validateFields().then(values => {
+      const newData = {
+        key: editingId || Date.now().toString(),
+        id: values.id,
+        tenKy: values.tenKy,
+        namHoc: values.namHoc,
+        ngayBatDau: values.thoiGian[0].format('YYYY-MM-DD'),
+        ngayKetThuc: values.thoiGian[1].format('YYYY-MM-DD'),
+        trangThai: values.trangThai
       };
-      setHocKiData(prev => [...prev, newItem]);
-      setShowAddModal(false);
-    } else {
-      setHocKiData(prev => prev.map(item => 
-        item.id === editingItem.id ? { ...formData, id: item.id } : item
-      ));
-      setShowEditModal(false);
-    }
-    setFormData({ tenKi: '', namHoc: selectedNamHoc, ngayBatDau: '', ngayKetThuc: '' });
+
+      if (editingId) {
+        setHocKyData(hocKyData.map(item => 
+          item.key === editingId ? newData : item
+        ));
+        message.success('Cập nhật học kỳ thành công!');
+      } else {
+        setHocKyData([...hocKyData, newData]);
+        message.success('Thêm học kỳ thành công!');
+      }
+
+      setIsModalVisible(false);
+      form.resetFields();
+    });
   };
 
-  const Modal = ({ show, onClose, title, children }) => {
-    if (!show) return null;
-    
-    return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000
-      }}>
-        <div style={{
-          backgroundColor: 'white',
-          borderRadius: '8px',
-          padding: '24px',
-          width: '480px',
-          maxWidth: '90vw',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px',
-            borderBottom: '1px solid #e8e8e8',
-            paddingBottom: '16px'
-          }}>
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>{title}</h3>
-            <button 
-              onClick={onClose}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '24px',
-                cursor: 'pointer',
-                color: '#999',
-                padding: '0',
-                width: '24px',
-                height: '24px'
-              }}
-            >
-              ×
-            </button>
-          </div>
-          {children}
-        </div>
-      </div>
-    );
-  };
-
-  const buttonStyle = {
-    padding: '6px 12px',
-    border: '1px solid #d9d9d9',
-    borderRadius: '4px',
-    backgroundColor: 'white',
-    cursor: 'pointer',
-    fontSize: '14px'
-  };
-
-  const primaryButtonStyle = {
-    ...buttonStyle,
-    backgroundColor: '#1890ff',
-    borderColor: '#1890ff',
-    color: 'white'
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '8px 12px',
-    border: '1px solid #d9d9d9',
-    borderRadius: '4px',
-    fontSize: '14px',
-    outline: 'none'
-  };
-
-  const selectStyle = {
-    ...inputStyle,
-    height: '36px'
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f0f2f5' }}>
-      {/* Sidebar */}
-      <div style={{ 
-        width: '240px', 
-        backgroundColor: '#001529', 
-        color: 'white',
-        padding: '16px 0'
-      }}>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          padding: '0 16px',
-          marginBottom: '32px'
-        }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            backgroundColor: 'white',
-            borderRadius: '4px',
-            marginRight: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <span style={{ color: '#001529', fontWeight: 'bold', fontSize: '14px' }}>MTM</span>
-          </div>
-          <span style={{ fontWeight: 'bold' }}>UNIVERSITY</span>
-        </div>
-        
-        <div style={{ padding: '0 16px' }}>
-          <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '8px' }}>Quản lý lớp học</div>
-          <div style={{
-            backgroundColor: '#1890ff',
-            color: 'white',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            marginBottom: '4px',
-            cursor: 'pointer'
-          }}>
-            Học kì
-          </div>
-          <div style={{
-            color: '#8c8c8c',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            marginBottom: '4px',
-            cursor: 'pointer'
-          }}>
-            Học phần
-          </div>
-          <div style={{
-            color: '#8c8c8c',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            marginBottom: '4px',
-            cursor: 'pointer'
-          }}>
-            Lớp học phần
-          </div>
-          <div style={{
-            color: '#8c8c8c',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}>
-            Thống kê
-          </div>
-        </div>
+    <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
+      <div style={{ marginBottom: '24px' }}>
+        <h2 style={{ margin: 0, color: '#1890ff' }}>
+          <CalendarOutlined style={{ marginRight: '8px' }} />
+          Quản lý học kỳ
+        </h2>
       </div>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: '24px' }}>
-        <div style={{ backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>
-          {/* Header */}
-          <div style={{
-            padding: '16px 24px',
-            borderBottom: '1px solid #e8e8e8',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
+      {/* Bộ lọc và nút thêm */}
+      <Card style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
             <div>
-              <h1 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', color: '#262626' }}>Quản lý Học kì</h1>
-              <p style={{ margin: '4px 0 0 0', color: '#8c8c8c', fontSize: '14px' }}>Quản lý các học kì trong năm học</p>
-            </div>
-            <button 
-              onClick={handleAdd}
-              style={primaryButtonStyle}
-            >
-              + Thêm học kì
-            </button>
-          </div>
-
-          {/* Filters */}
-          <div style={{
-            padding: '16px 24px',
-            borderBottom: '1px solid #e8e8e8',
-            backgroundColor: '#fafafa'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <label style={{ fontSize: '14px', fontWeight: '500', color: '#262626' }}>Năm học:</label>
-                <select 
-                  value={selectedNamHoc}
-                  onChange={(e) => setSelectedNamHoc(e.target.value)}
-                  style={selectStyle}
-                >
-                  {namHocList.map(nam => (
-                    <option key={nam} value={nam}>{nam}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Table */}
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#fafafa' }}>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>STT</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Tên học kì</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Năm học</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Ngày bắt đầu</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Ngày kết thúc</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Trạng thái</th>
-                  <th style={{ 
-                    padding: '12px 16px', 
-                    textAlign: 'left', 
-                    fontSize: '14px', 
-                    fontWeight: '500', 
-                    color: '#8c8c8c',
-                    borderBottom: '1px solid #e8e8e8'
-                  }}>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredHocKi.map((item, index) => (
-                  <tr key={item.id} style={{ borderBottom: '1px solid #e8e8e8' }}>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#262626' }}>{index + 1}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#262626', fontWeight: '500' }}>{item.tenKi}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#262626' }}>{item.namHoc}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#262626' }}>{item.ngayBatDau}</td>
-                    <td style={{ padding: '12px 16px', fontSize: '14px', color: '#262626' }}>{item.ngayKetThuc}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <span style={{
-                        padding: '4px 8px',
-                        fontSize: '12px',
-                        borderRadius: '4px',
-                        backgroundColor: item.trangThai === 'Đang diễn ra' ? '#f6ffed' : item.trangThai === 'Chưa bắt đầu' ? '#e6f7ff' : '#f5f5f5',
-                        color: item.trangThai === 'Đang diễn ra' ? '#52c41a' : item.trangThai === 'Chưa bắt đầu' ? '#1890ff' : '#8c8c8c',
-                        border: `1px solid ${item.trangThai === 'Đang diễn ra' ? '#b7eb8f' : item.trangThai === 'Chưa bắt đầu' ? '#91d5ff' : '#d9d9d9'}`
-                      }}>
-                        {item.trangThai}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <button 
-                        onClick={() => handleEdit(item)}
-                        style={{
-                          ...buttonStyle,
-                          marginRight: '8px',
-                          color: '#1890ff',
-                          borderColor: '#1890ff'
-                        }}
-                      >
-                        ✏️
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(item.id)}
-                        style={{
-                          ...buttonStyle,
-                          color: '#ff4d4f',
-                          borderColor: '#ff4d4f'
-                        }}
-                      >
-                        🗑️
-                      </button>
-                    </td>
-                  </tr>
+              <span style={{ marginRight: '8px', fontWeight: 'bold' }}>Năm học:</span>
+              <Select
+                placeholder="Chọn năm học"
+                style={{ width: '150px' }}
+                value={selectedNamHoc}
+                onChange={setSelectedNamHoc}
+                allowClear
+              >
+                {namHocList.map(nam => (
+                  <Option key={nam} value={nam}>{nam}</Option>
                 ))}
-              </tbody>
-            </table>
-          </div>
-
-          {filteredHocKi.length === 0 && (
-            <div style={{
-              textAlign: 'center',
-              padding: '40px',
-              color: '#8c8c8c',
-              fontSize: '14px'
-            }}>
-              Không có dữ liệu học kì cho năm học {selectedNamHoc}
+              </Select>
             </div>
-          )}
+          </div>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={showModal}
+          >
+            Thêm học kỳ
+          </Button>
         </div>
-      </div>
+      </Card>
 
-      {/* Add Modal */}
-      <Modal 
-        show={showAddModal} 
-        onClose={() => setShowAddModal(false)}
-        title="Thêm học kì mới"
+      {/* Bảng dữ liệu */}
+      <Card
+        title={
+          <span>
+            <CalendarOutlined style={{ marginRight: '8px' }} />
+            Danh sách học kỳ
+          </span>
+        }
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Tên học kì <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.tenKi}
-              onChange={(e) => setFormData({...formData, tenKi: e.target.value})}
-              style={inputStyle}
-              placeholder="Ví dụ: Học kì 1"
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Năm học <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <select
-              value={formData.namHoc}
-              onChange={(e) => setFormData({...formData, namHoc: e.target.value})}
-              style={selectStyle}
-            >
-              {namHocList.map(nam => (
-                <option key={nam} value={nam}>{nam}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Ngày bắt đầu <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="date"
-              value={formData.ngayBatDau}
-              onChange={(e) => setFormData({...formData, ngayBatDau: e.target.value})}
-              style={inputStyle}
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Ngày kết thúc <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="date"
-              value={formData.ngayKetThuc}
-              onChange={(e) => setFormData({...formData, ngayKetThuc: e.target.value})}
-              style={inputStyle}
-            />
-          </div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
-          <button
-            onClick={() => setShowAddModal(false)}
-            style={buttonStyle}
-          >
-            Hủy
-          </button>
-          <button
-            onClick={handleSubmit}
-            style={primaryButtonStyle}
-          >
-            Thêm
-          </button>
-        </div>
-      </Modal>
+        <Table
+          columns={columns}
+          dataSource={filteredData}
+          pagination={{
+            showSizeChanger: true,
+            showQuickJumper: true,
+            showTotal: (total, range) => 
+              `${range[0]}-${range[1]} của ${total} học kỳ`,
+          }}
+          scroll={{ x: 800 }}
+          size="middle"
+        />
+      </Card>
 
-      {/* Edit Modal */}
-      <Modal 
-        show={showEditModal} 
-        onClose={() => setShowEditModal(false)}
-        title="Chỉnh sửa học kì"
+      {/* Modal thêm/sửa */}
+      <Modal
+        title={editingId ? "Sửa học kỳ" : "Thêm học kỳ"}
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={600}
+        okText="Lưu"
+        cancelText="Hủy"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Tên học kì <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.tenKi}
-              onChange={(e) => setFormData({...formData, tenKi: e.target.value})}
-              style={inputStyle}
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Năm học <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <select
-              value={formData.namHoc}
-              onChange={(e) => setFormData({...formData, namHoc: e.target.value})}
-              style={selectStyle}
-            >
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={{ trangThai: 'Chưa bắt đầu' }}
+        >
+          <Form.Item
+            name="id"
+            label="Mã học kỳ"
+            rules={[{ required: true, message: 'Vui lòng nhập mã học kỳ!' }]}
+          >
+            <Input placeholder="Ví dụ: HK1_2024" />
+          </Form.Item>
+
+          <Form.Item
+            name="tenKy"
+            label="Tên học kỳ"
+            rules={[{ required: true, message: 'Vui lòng nhập tên học kỳ!' }]}
+          >
+            <Input placeholder="Ví dụ: Học kỳ 1" />
+          </Form.Item>
+
+          <Form.Item
+            name="namHoc"
+            label="Năm học"
+            rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}
+          >
+            <Select placeholder="Chọn năm học">
               {namHocList.map(nam => (
-                <option key={nam} value={nam}>{nam}</option>
+                <Option key={nam} value={nam}>{nam}</Option>
               ))}
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Ngày bắt đầu <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="date"
-              value={formData.ngayBatDau}
-              onChange={(e) => setFormData({...formData, ngayBatDau: e.target.value})}
-              style={inputStyle}
-            />
-          </div>
-          <div>
-            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#262626', marginBottom: '8px' }}>
-              Ngày kết thúc <span style={{ color: '#ff4d4f' }}>*</span>
-            </label>
-            <input
-              type="date"
-              value={formData.ngayKetThuc}
-              onChange={(e) => setFormData({...formData, ngayKetThuc: e.target.value})}
-              style={inputStyle}
-            />
-          </div>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
-          <button
-            onClick={() => setShowEditModal(false)}
-            style={buttonStyle}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="thoiGian"
+            label="Thời gian"
+            rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}
           >
-            Hủy
-          </button>
-          <button
-            onClick={handleSubmit}
-            style={primaryButtonStyle}
+            <RangePicker 
+              style={{ width: '100%' }}
+              format="DD/MM/YYYY"
+              placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="trangThai"
+            label="Trạng thái"
+            rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
           >
-            Cập nhật
-          </button>
-        </div>
+            <Select placeholder="Chọn trạng thái">
+              <Option value="Chưa bắt đầu">Chưa bắt đầu</Option>
+              <Option value="Sắp diễn ra">Sắp diễn ra</Option>
+              <Option value="Đang diễn ra">Đang diễn ra</Option>
+              <Option value="Đã kết thúc">Đã kết thúc</Option>
+            </Select>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );
