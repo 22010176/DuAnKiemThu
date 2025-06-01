@@ -16,11 +16,19 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()
   {
-    var result = from c in _ct.HocKi
-                 orderby c.Id.ToString().Length, c.Id
-                 select c;
+    var result = new
+    {
+      ky = (
+        from c in _ct.HocKi
+        orderby c.Id.ToString().Length, c.Id
+        select c).ToList(),
+      nam = (
+        from c in _ct.HocKi
+        group c by c.ThoiGianBatDau.Year into g
+        select new { nam = g.Key, count = g.Count() }).ToList()
+    };
 
-    return Ok(await result.ToListAsync());
+    return Ok(result);
   }
 
   [HttpPost]
@@ -30,8 +38,8 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
     HocKi hk = new()
     {
       TenKi = item.TenKi,
-      ThoiGianBatDau = item.ThoiGianBatDau,
-      ThoiGianKetThuc = item.ThoiGianKetThuc,
+      ThoiGianBatDau = DateTime.SpecifyKind(item.ThoiGianBatDau, DateTimeKind.Utc),
+      ThoiGianKetThuc = DateTime.SpecifyKind(item.ThoiGianKetThuc, DateTimeKind.Utc),
     };
     await _context.CreateAsync([hk]);
     return CreatedAtAction(nameof(Get), new { id = hk.Id }, item);

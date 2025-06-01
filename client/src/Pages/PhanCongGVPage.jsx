@@ -1,31 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Table, 
-  Button, 
-  Modal, 
-  Select, 
-  Space, 
-  Card, 
-  Row, 
-  Col, 
-  Tag, 
-  message,
-  AutoComplete,
-  Input,
-  Divider,
-  Typography,
-  Alert
-} from 'antd';
-import { 
-  UserAddOutlined, 
-  SearchOutlined,
-  CheckOutlined,
-  CloseOutlined,
-  ReloadOutlined
-} from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, ReloadOutlined, SearchOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Alert, AutoComplete, Button, Card, Col, Divider, Input, Modal, Row, Select, Space, Table, Tag, Typography, message } from 'antd';
+import { useState } from 'react';
 
 const { Option } = Select;
 const { Title, Text } = Typography;
+
 
 const PhanCongGVPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -33,59 +12,13 @@ const PhanCongGVPage = () => {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [teacherSearchValue, setTeacherSearchValue] = useState('');
   const [teacherOptions, setTeacherOptions] = useState([]);
-  const [filters, setFilters] = useState({
-    khoa: '',
-    namHoc: '2024-2025',
-    ky: 'Kỳ 1'
-  });
+  const [filters, setFilters] = useState({ khoa: '', namHoc: '2024-2025', ky: 'Kỳ 1' });
 
   // Mock data for classes
   const [classData, setClassData] = useState([
-    {
-      id: 1,
-      maLop: 'CNTT01_01',
-      tenLop: 'Lập trình Java - Lớp 1',
-      hocPhan: 'Lập trình Java',
-      maHocPhan: 'CNTT01',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 45,
-      soTinChi: 3,
-      trangThai: 'Đang mở',
-      giangVien: null,
-      maGiangVien: null
-    },
-    {
-      id: 2,
-      maLop: 'CNTT02_01',
-      tenLop: 'Cơ sở dữ liệu - Lớp 1',
-      hocPhan: 'Cơ sở dữ liệu',
-      maHocPhan: 'CNTT02',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 40,
-      soTinChi: 3,
-      trangThai: 'Đang mở',
-      giangVien: 'Nguyễn Văn A',
-      maGiangVien: 'GV001'
-    },
-    {
-      id: 3,
-      maLop: 'CNTT01_02',
-      tenLop: 'Lập trình Java - Lớp 2',
-      hocPhan: 'Lập trình Java',
-      maHocPhan: 'CNTT01',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 42,
-      soTinChi: 3,
-      trangThai: 'Đang mở',
-      giangVien: null,
-      maGiangVien: null
-    }
+    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đang mở', giangVien: null, maGiangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Đang mở', giangVien: 'Nguyễn Văn A', maGiangVien: 'GV001' },
+    { id: 3, maLop: 'CNTT01_02', tenLop: 'Lập trình Java - Lớp 2', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 42, soTinChi: 3, trangThai: 'Đang mở', giangVien: null, maGiangVien: null }
   ]);
 
   // Mock teacher data
@@ -102,30 +35,10 @@ const PhanCongGVPage = () => {
   const kyOptions = ['Kỳ 1', 'Kỳ 2', 'Kỳ hè'];
 
   const columns = [
-    {
-      title: 'Mã lớp',
-      dataIndex: 'maLop',
-      key: 'maLop',
-      width: 120,
-    },
-    {
-      title: 'Tên lớp',
-      dataIndex: 'tenLop',
-      key: 'tenLop',
-      width: 200,
-    },
-    {
-      title: 'Học phần',
-      dataIndex: 'hocPhan',
-      key: 'hocPhan',
-      width: 150,
-    },
-    {
-      title: 'Khoa',
-      dataIndex: 'khoa',
-      key: 'khoa',
-      width: 150,
-    },
+    { title: 'Mã lớp', dataIndex: 'maLop', key: 'maLop', width: 120, },
+    { title: 'Tên lớp', dataIndex: 'tenLop', key: 'tenLop', width: 200, },
+    { title: 'Học phần', dataIndex: 'hocPhan', key: 'hocPhan', width: 150, },
+    { title: 'Khoa', dataIndex: 'khoa', key: 'khoa', width: 150, },
     {
       title: 'Kỳ/Năm',
       key: 'kyNam',
@@ -152,8 +65,8 @@ const PhanCongGVPage = () => {
       key: 'trangThai',
       width: 120,
       render: (trangThai) => {
-        let color = trangThai === 'Đang mở' ? 'green' : 
-                   trangThai === 'Chưa phân công' ? 'orange' : 'red';
+        let color = trangThai === 'Đang mở' ? 'green' :
+          trangThai === 'Chưa phân công' ? 'orange' : 'red';
         return <Tag color={color}>{trangThai}</Tag>;
       }
     },
@@ -177,9 +90,9 @@ const PhanCongGVPage = () => {
   // Filter data based on current filters
   const filteredData = classData.filter(item => {
     return item.trangThai === 'Đang mở' &&
-           (!filters.khoa || item.khoa === filters.khoa) &&
-           item.namHoc === filters.namHoc &&
-           item.ky === filters.ky;
+      (!filters.khoa || item.khoa === filters.khoa) &&
+      item.namHoc === filters.namHoc &&
+      item.ky === filters.ky;
   });
 
   const rowSelection = {
@@ -198,7 +111,7 @@ const PhanCongGVPage = () => {
   const handleTeacherSearch = (value) => {
     setTeacherSearchValue(value);
     if (value) {
-      const filtered = teacherList.filter(teacher => 
+      const filtered = teacherList.filter(teacher =>
         teacher.id.toLowerCase().includes(value.toLowerCase()) ||
         teacher.name.toLowerCase().includes(value.toLowerCase())
       );
@@ -280,15 +193,15 @@ const PhanCongGVPage = () => {
       <Card>
         <div style={{ marginBottom: '16px' }}>
           <Row justify="space-between" align="middle">
-            <Col>
-              <Title level={2} style={{ margin: 0, color: '#001529' }}>
+            {/* <Col> */}
+            {/* <Title level={2} style={{ margin: 0, color: '#001529' }}>
                 Phân Công Giảng Viên
-              </Title>
-            </Col>
+              </Title> */}
+            {/* </Col> */}
             <Col>
               <Space>
-                <Button 
-                  icon={<ReloadOutlined />} 
+                <Button
+                  icon={<ReloadOutlined />}
                   onClick={() => {
                     setSelectedRowKeys([]);
                     message.info('Đã làm mới dữ liệu');
@@ -296,7 +209,7 @@ const PhanCongGVPage = () => {
                 >
                   Làm mới
                 </Button>
-                <Button 
+                <Button
                   type="primary"
                   icon={<UserAddOutlined />}
                   disabled={selectedRowKeys.length === 0}
@@ -350,10 +263,10 @@ const PhanCongGVPage = () => {
               </Select>
             </Col>
             <Col span={6}>
-              <Alert 
-                message={`Hiển thị ${filteredData.length} lớp đang mở`} 
-                type="info" 
-                showIcon 
+              <Alert
+                message={`Hiển thị ${filteredData.length} lớp đang mở`}
+                type="info"
+                showIcon
                 style={{ textAlign: 'center' }}
               />
             </Col>
@@ -371,7 +284,7 @@ const PhanCongGVPage = () => {
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => 
+            showTotal: (total, range) =>
               `${range[0]}-${range[1]} của ${total} lớp học phần`
           }}
           expandable={{
@@ -390,9 +303,9 @@ const PhanCongGVPage = () => {
                     <Space direction="vertical" size="small">
                       <Text><strong>Thao tác:</strong></Text>
                       {record.giangVien ? (
-                        <Button 
-                          type="link" 
-                          danger 
+                        <Button
+                          type="link"
+                          danger
                           icon={<CloseOutlined />}
                           onClick={() => handleRemoveAssignment(record.id)}
                         >
@@ -474,7 +387,7 @@ const PhanCongGVPage = () => {
         )}
 
         <Divider />
-        
+
         <Row justify="end" gutter={8}>
           <Col>
             <Button onClick={() => {
@@ -486,8 +399,8 @@ const PhanCongGVPage = () => {
             </Button>
           </Col>
           <Col>
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               icon={<CheckOutlined />}
               onClick={handleConfirmAssign}
               disabled={!selectedTeacher}

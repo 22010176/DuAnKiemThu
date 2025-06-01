@@ -1,33 +1,10 @@
-import React, { useState } from 'react';
-import { 
-  Table, 
-  Button, 
-  Modal, 
-  Form, 
-  Input, 
-  Select, 
-  InputNumber, 
-  Space, 
-  Card, 
-  Row, 
-  Col, 
-  Tag, 
-  Tooltip,
-  message,
-  Divider,
-  Checkbox
-} from 'antd';
-import { 
-  PlusOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
-  UserAddOutlined,
-  CopyOutlined,
-  FilterOutlined
-} from '@ant-design/icons';
+import { CheckOutlined, CopyOutlined, DeleteOutlined, EditOutlined, FilterOutlined, PlusOutlined, SearchOutlined, UserAddOutlined } from '@ant-design/icons';
+import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
+import { useState } from 'react';
 
 const { Option } = Select;
-const { Search } = Input;
+const { Search, } = Input;
+const { Title, Text } = Typography;
 
 const LopHocPhanPage = () => {
   const [form] = Form.useForm();
@@ -36,12 +13,7 @@ const LopHocPhanPage = () => {
   const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [filters, setFilters] = useState({
-    khoa: '',
-    namHoc: '',
-    ky: '',
-    trangThai: ''
-  });
+  const [filters, setFilters] = useState({ khoa: '', namHoc: '', ky: '', trangThai: '' });
 
   // Mock data
   const [data, setData] = useState([
@@ -87,18 +59,8 @@ const LopHocPhanPage = () => {
   ];
 
   const columns = [
-    {
-      title: 'Mã lớp',
-      dataIndex: 'maLop',
-      key: 'maLop',
-      width: 120,
-    },
-    {
-      title: 'Tên lớp',
-      dataIndex: 'tenLop',
-      key: 'tenLop',
-      width: 200,
-    },
+    { title: 'Mã lớp', dataIndex: 'maLop', key: 'maLop', width: 120, },
+    { title: 'Tên lớp', dataIndex: 'tenLop', key: 'tenLop', width: 200, },
     {
       title: 'Học phần',
       dataIndex: 'hocPhan',
@@ -137,8 +99,8 @@ const LopHocPhanPage = () => {
       key: 'trangThai',
       width: 120,
       render: (trangThai) => {
-        let color = trangThai === 'Đang mở' ? 'green' : 
-                   trangThai === 'Chưa phân công' ? 'orange' : 'red';
+        let color = trangThai === 'Đang mở' ? 'green' :
+          trangThai === 'Chưa phân công' ? 'orange' : 'red';
         return <Tag color={color}>{trangThai}</Tag>;
       }
     },
@@ -157,18 +119,18 @@ const LopHocPhanPage = () => {
       render: (_, record) => (
         <Space size="small">
           <Tooltip title="Sửa">
-            <Button 
-              type="text" 
-              icon={<EditOutlined />} 
+            <Button
+              type="text"
+              icon={<EditOutlined />}
               size="small"
               onClick={() => handleEdit(record)}
             />
           </Tooltip>
           <Tooltip title="Xóa">
-            <Button 
-              type="text" 
-              danger 
-              icon={<DeleteOutlined />} 
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
               size="small"
               onClick={() => handleDelete(record.id)}
             />
@@ -210,16 +172,16 @@ const LopHocPhanPage = () => {
 
   const handleSubmit = (values) => {
     const selectedHocPhan = hocPhanOptions.find(hp => hp.ma === values.maHocPhan);
-    
+
     if (editingRecord) {
-      setData(data.map(item => 
-        item.id === editingRecord.id 
-          ? { 
-              ...item, 
-              ...values,
-              hocPhan: selectedHocPhan?.ten,
-              soTinChi: selectedHocPhan?.tinChi
-            }
+      setData(data.map(item =>
+        item.id === editingRecord.id
+          ? {
+            ...item,
+            ...values,
+            hocPhan: selectedHocPhan?.ten,
+            soTinChi: selectedHocPhan?.tinChi
+          }
           : item
       ));
       message.success('Cập nhật thành công!');
@@ -240,7 +202,7 @@ const LopHocPhanPage = () => {
   const handleBulkSubmit = (values) => {
     const selectedHocPhan = hocPhanOptions.find(hp => hp.ma === values.maHocPhan);
     const newRecords = [];
-    
+
     for (let i = 1; i <= values.soLop; i++) {
       newRecords.push({
         id: Date.now() + i,
@@ -257,7 +219,7 @@ const LopHocPhanPage = () => {
         giangVien: null
       });
     }
-    
+
     setData([...data, ...newRecords]);
     message.success(`Tạo thành công ${values.soLop} lớp học phần!`);
     setIsBulkModalVisible(false);
@@ -269,9 +231,9 @@ const LopHocPhanPage = () => {
 
   const filteredData = data.filter(item => {
     return (!filters.khoa || item.khoa === filters.khoa) &&
-           (!filters.namHoc || item.namHoc === filters.namHoc) &&
-           (!filters.ky || item.ky === filters.ky) &&
-           (!filters.trangThai || item.trangThai === filters.trangThai);
+      (!filters.namHoc || item.namHoc === filters.namHoc) &&
+      (!filters.ky || item.ky === filters.ky) &&
+      (!filters.trangThai || item.trangThai === filters.trangThai);
   });
 
   const rowSelection = {
@@ -281,134 +243,139 @@ const LopHocPhanPage = () => {
       disabled: record.trangThai !== 'Đang mở'
     }),
   };
-
+  const selectedTeacher = {};
+  const selectedClasses = []
   return (
-    <div style={{ padding: '24px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-      <Card>
-        <div style={{ marginBottom: '16px' }}>
-          <Row justify="space-between" align="middle">
-            <Col>
-              <h2 style={{ margin: 0, color: '#001529' }}>Quản lý Lớp Học Phần</h2>
-            </Col>
-            <Col>
-              <Space>
-                <Button 
-                  type="default" 
-                  icon={<CopyOutlined />}
-                  onClick={handleBulkAdd}
-                >
-                  Tạo hàng loạt
-                </Button>
-                <Button 
-                  type="primary" 
-                  icon={<PlusOutlined />}
-                  onClick={handleAdd}
-                >
-                  Thêm lớp
-                </Button>
-                <Button 
-                  type="primary"
-                  icon={<UserAddOutlined />}
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={() => {
-                    // Navigate to PhanCongGVPage with selected classes
-                    message.info('Chuyển đến trang phân công giảng viên...');
-                  }}
-                >
-                  Phân công GV ({selectedRowKeys.length})
-                </Button>
-              </Space>
-            </Col>
-          </Row>
-        </div>
+    <>
 
-        {/* Filters */}
-        <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
-          <Row gutter={16} align="middle">
-            <Col span={4}>
-              <Select
-                placeholder="Chọn khoa"
-                allowClear
-                style={{ width: '100%' }}
-                value={filters.khoa}
-                onChange={(value) => handleFilterChange('khoa', value)}
-              >
-                {khoaOptions.map(khoa => (
-                  <Option key={khoa} value={khoa}>{khoa}</Option>
-                ))}
-              </Select>
-            </Col>
-            <Col span={4}>
-              <Select
-                placeholder="Chọn năm học"
-                allowClear
-                style={{ width: '100%' }}
-                value={filters.namHoc}
-                onChange={(value) => handleFilterChange('namHoc', value)}
-              >
-                {namHocOptions.map(nam => (
-                  <Option key={nam} value={nam}>{nam}</Option>
-                ))}
-              </Select>
-            </Col>
-            <Col span={4}>
-              <Select
-                placeholder="Chọn kỳ"
-                allowClear
-                style={{ width: '100%' }}
-                value={filters.ky}
-                onChange={(value) => handleFilterChange('ky', value)}
-              >
-                {kyOptions.map(ky => (
-                  <Option key={ky} value={ky}>{ky}</Option>
-                ))}
-              </Select>
-            </Col>
-            <Col span={4}>
-              <Select
-                placeholder="Trạng thái"
-                allowClear
-                style={{ width: '100%' }}
-                value={filters.trangThai}
-                onChange={(value) => handleFilterChange('trangThai', value)}
-              >
-                {trangThaiOptions.map(tt => (
-                  <Option key={tt} value={tt}>{tt}</Option>
-                ))}
-              </Select>
-            </Col>
-            <Col span={6}>
-              <Search 
-                placeholder="Tìm kiếm theo tên lớp, mã lớp..." 
-                allowClear
-                style={{ width: '100%' }}
-              />
-            </Col>
-            <Col span={2}>
-              <Button icon={<FilterOutlined />} type="text">
-                Lọc
-              </Button>
-            </Col>
-          </Row>
+      <div style={{ padding: '24px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+        <Card>
+          <div style={{ marginBottom: '16px' }}>
+            <Row justify="space-between" align="middle">
+              {/* <Col>
+              <h2 style={{ margin: 0, color: '#001529' }}>Quản lý Lớp Học Phần</h2>
+            </Col> */}
+              <Col>
+                <Space>
+                  <Button
+                    type="default"
+                    icon={<CopyOutlined />}
+                    onClick={handleBulkAdd}
+                  >
+                    Tạo hàng loạt
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={handleAdd}
+                  >
+                    Thêm lớp
+                  </Button>
+                  <Button
+                    type="primary"
+                    icon={<UserAddOutlined />}
+                    disabled={selectedRowKeys.length === 0}
+                    onClick={() => {
+                      // Navigate to PhanCongGVPage with selected classes
+                      message.info('Chuyển đến trang phân công giảng viên...');
+                    }}
+                  >
+                    Phân công GV ({selectedRowKeys.length})
+                  </Button>
+                </Space>
+              </Col>
+            </Row>
+          </div>
+
+          {/* Filters */}
+          <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
+            <Row gutter={16} align="middle">
+              <Col span={4}>
+                <Select
+                  placeholder="Chọn khoa"
+                  allowClear
+                  style={{ width: '100%' }}
+                  value={filters.khoa}
+                  onChange={(value) => handleFilterChange('khoa', value)}
+                >
+                  {khoaOptions.map(khoa => (
+                    <Option key={khoa} value={khoa}>{khoa}</Option>
+                  ))}
+                </Select>
+              </Col>
+              <Col span={4}>
+                <Select
+                  placeholder="Chọn năm học"
+                  allowClear
+                  style={{ width: '100%' }}
+                  value={filters.namHoc}
+                  onChange={(value) => handleFilterChange('namHoc', value)}
+                >
+                  {namHocOptions.map(nam => (
+                    <Option key={nam} value={nam}>{nam}</Option>
+                  ))}
+                </Select>
+              </Col>
+              <Col span={4}>
+                <Select
+                  placeholder="Chọn kỳ"
+                  allowClear
+                  style={{ width: '100%' }}
+                  value={filters.ky}
+                  onChange={(value) => handleFilterChange('ky', value)}
+                >
+                  {kyOptions.map(ky => (
+                    <Option key={ky} value={ky}>{ky}</Option>
+                  ))}
+                </Select>
+              </Col>
+              {/* <Col span={4}>
+                <Select
+                  placeholder="Trạng thái"
+                  allowClear
+                  style={{ width: '100%' }}
+                  value={filters.trangThai}
+                  onChange={(value) => handleFilterChange('trangThai', value)}
+                >
+                  {trangThaiOptions.map(tt => (
+                    <Option key={tt} value={tt}>{tt}</Option>
+                  ))}
+                </Select>
+              </Col> */}
+              <Col span={6}>
+                <Search
+                  placeholder="Tìm kiếm theo tên lớp, mã lớp..."
+                  allowClear
+                  style={{ width: '100%' }}
+                />
+              </Col>
+              <Col span={2}>
+                <Button icon={<FilterOutlined />} type="text">
+                  Lọc
+                </Button>
+              </Col>
+            </Row>
+          </Card>
+
+          <Table
+            columns={columns}
+            dataSource={filteredData}
+            rowKey="id"
+            scroll={{ x: 1200 }}
+            rowSelection={rowSelection}
+            pagination={{
+              total: filteredData.length,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total, range) =>
+                `${range[0]}-${range[1]} của ${total} lớp học phần`
+            }}
+          />
         </Card>
 
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          scroll={{ x: 1200 }}
-          rowSelection={rowSelection}
-          pagination={{
-            total: filteredData.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => 
-              `${range[0]}-${range[1]} của ${total} lớp học phần`
-          }}
-        />
-      </Card>
 
+      </div>
       {/* Add/Edit Modal */}
       <Modal
         title={editingRecord ? 'Sửa lớp học phần' : 'Thêm lớp học phần'}
@@ -477,19 +444,6 @@ const LopHocPhanPage = () => {
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                name="ky"
-                label="Kỳ học"
-                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
-              >
-                <Select placeholder="Chọn kỳ">
-                  {kyOptions.map(ky => (
-                    <Option key={ky} value={ky}>{ky}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
                 name="namHoc"
                 label="Năm học"
                 rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}
@@ -503,13 +457,27 @@ const LopHocPhanPage = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                name="ky"
+                label="Kỳ học"
+                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
+              >
+                <Select placeholder="Chọn kỳ">
+                  {kyOptions.map(ky => (
+                    <Option key={ky} value={ky}>{ky}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item
                 name="soSinhVien"
                 label="Số sinh viên"
                 rules={[{ required: true, message: 'Vui lòng nhập số sinh viên!' }]}
               >
-                <InputNumber 
-                  min={1} 
-                  max={100} 
+                <InputNumber
+                  min={1}
+                  max={100}
                   placeholder="45"
                   style={{ width: '100%' }}
                 />
@@ -530,7 +498,7 @@ const LopHocPhanPage = () => {
           </Form.Item>
 
           <Divider />
-          
+
           <Row justify="end" gutter={8}>
             <Col>
               <Button onClick={() => setIsModalVisible(false)}>
@@ -593,19 +561,6 @@ const LopHocPhanPage = () => {
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                name="ky"
-                label="Kỳ học"
-                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
-              >
-                <Select placeholder="Chọn kỳ">
-                  {kyOptions.map(ky => (
-                    <Option key={ky} value={ky}>{ky}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
                 name="namHoc"
                 label="Năm học"
                 rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}
@@ -619,13 +574,27 @@ const LopHocPhanPage = () => {
             </Col>
             <Col span={8}>
               <Form.Item
+                name="ky"
+                label="Kỳ học"
+                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
+              >
+                <Select placeholder="Chọn kỳ">
+                  {kyOptions.map(ky => (
+                    <Option key={ky} value={ky}>{ky}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col span={8}>
+              <Form.Item
                 name="soLop"
                 label="Số lớp cần tạo"
                 rules={[{ required: true, message: 'Vui lòng nhập số lớp!' }]}
               >
-                <InputNumber 
-                  min={1} 
-                  max={10} 
+                <InputNumber
+                  min={1}
+                  max={10}
                   placeholder="3"
                   style={{ width: '100%' }}
                 />
@@ -638,16 +607,16 @@ const LopHocPhanPage = () => {
             label="Số sinh viên mỗi lớp"
             rules={[{ required: true, message: 'Vui lòng nhập số sinh viên!' }]}
           >
-            <InputNumber 
-              min={1} 
-              max={100} 
+            <InputNumber
+              min={1}
+              max={100}
               placeholder="45"
               style={{ width: '100%' }}
             />
           </Form.Item>
 
           <Divider />
-          
+
           <Row justify="end" gutter={8}>
             <Col>
               <Button onClick={() => setIsBulkModalVisible(false)}>
@@ -662,7 +631,94 @@ const LopHocPhanPage = () => {
           </Row>
         </Form>
       </Modal>
-    </div>
+
+      {/* Assignment Modal */}
+      <Modal
+        title="Phân công giảng viên"
+        open={false}
+        onCancel={() => {
+          // setIsModalVisible(false);
+          // setSelectedTeacher(null);
+          // setTeacherSearchValue('');
+        }}
+        footer={[]}
+        width={700}
+      >
+        <div style={{ marginBottom: '16px' }}>
+          <Title level={4}>Danh sách lớp được chọn:</Title>
+          <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
+            {selectedClasses?.map(cls => (
+              <div key={cls?.id} style={{ padding: '4px 0', borderBottom: '1px solid #f0f0f0' }}>
+                <Space>
+                  <Tag color="blue">{cls?.maLop}</Tag>
+                  <Text>{cls?.tenLop}</Text>
+                  <Text type="secondary">({cls?.soSinhVien} SV)</Text>
+                </Space>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Divider />
+
+        <div style={{ marginBottom: '16px' }}>
+          <Title level={4}>Chọn giảng viên:</Title>
+          <AutoComplete
+            style={{ width: '100%' }}
+            options={[]}
+            // onSearch={handleTeacherSearch}
+            // onSelect={handleTeacherSelect}
+            // value={teacherSearchValue}
+            placeholder="Nhập mã GV hoặc tên giảng viên để tìm kiếm..."
+          >
+            <Input suffix={<SearchOutlined />} />
+          </AutoComplete>
+        </div>
+
+        {selectedTeacher && (
+          <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#f6ffed', border: '1px solid #b7eb8f' }}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Space direction="vertical" size="small">
+                  <Text><strong>Mã GV:</strong> {selectedTeacher?.id}</Text>
+                  <Text><strong>Tên:</strong> {selectedTeacher?.name}</Text>
+                </Space>
+              </Col>
+              <Col span={12}>
+                <Space direction="vertical" size="small">
+                  <Text><strong>Khoa:</strong> {selectedTeacher?.khoa}</Text>
+                  <Text><strong>Email:</strong> {selectedTeacher?.email}</Text>
+                </Space>
+              </Col>
+            </Row>
+          </Card>
+        )}
+
+        <Divider />
+
+        <Row justify="end" gutter={8}>
+          <Col>
+            <Button onClick={() => {
+              // setIsModalVisible(false);
+              // setSelectedTeacher(null);
+              // setTeacherSearchValue('');
+            }}>
+              Hủy
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+            // onClick={handleConfirmAssign}
+            // disabled={!selectedTeacher}
+            >
+              Xác nhận phân công
+            </Button>
+          </Col>
+        </Row>
+      </Modal>
+    </>
   );
 };
 
