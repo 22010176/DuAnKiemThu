@@ -92,8 +92,8 @@ function Sidebar() {
               children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
                   {[
+                    { content: "Học kì", to: "/hoc-ki" },
                     { content: "Học phần", to: "/hoc-phan" },
-                    { content: "Kì học", to: "/ki-hoc" },
                     { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
                     { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
                   ].map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}

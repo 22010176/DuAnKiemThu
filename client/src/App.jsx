@@ -26,9 +26,9 @@ function App() {
           {/* <Route path="hoc-ki" element={<HKP />} /> */}
           <Route path="hoc-ki" element={<HocKiPage />} />
           <Route path="hoc-phan" element={<HocPhanPage />} />
-          <Route path="lop-hoc-phan" element={<LopHocPhanPage />} />
+          <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />
           <Route path="phan-cong-gv" element={<PhanCongGVPage />} />
-
+          <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

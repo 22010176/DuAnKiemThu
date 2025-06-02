@@ -56,46 +56,12 @@ const ThongKeLopPage = () => {
   ];
 
   const columns = [
-    {
-      title: 'Mã học phần',
-      dataIndex: 'maHocPhan',
-      key: 'maHocPhan',
-      width: 120,
-    },
-    {
-      title: 'Tên học phần',
-      dataIndex: 'hocPhan',
-      key: 'hocPhan',
-      width: 200,
-    },
-    {
-      title: 'Số lớp mở',
-      dataIndex: 'soLop',
-      key: 'soLop',
-      width: 100,
-      align: 'center',
-    },
-    {
-      title: 'Tổng sinh viên',
-      dataIndex: 'tongSinhVien',
-      key: 'tongSinhVien',
-      width: 120,
-      align: 'center',
-    },
-    {
-      title: 'SV trung bình/lớp',
-      dataIndex: 'sinhVienTrungBinh',
-      key: 'sinhVienTrungBinh',
-      width: 150,
-      align: 'center',
-    },
-    {
-      title: 'Khoa',
-      dataIndex: 'khoa',
-      key: 'khoa',
-      width: 100,
-      align: 'center',
-    }
+    { title: 'Mã học phần', dataIndex: 'maHocPhan', key: 'maHocPhan', width: 120, },
+    { title: 'Tên học phần', dataIndex: 'hocPhan', key: 'hocPhan', width: 200, },
+    { title: 'Số lớp mở', dataIndex: 'soLop', key: 'soLop', width: 100, align: 'center', },
+    { title: 'Tổng sinh viên', dataIndex: 'tongSinhVien', key: 'tongSinhVien', width: 120, align: 'center', },
+    { title: 'SV trung bình/lớp', dataIndex: 'sinhVienTrungBinh', key: 'sinhVienTrungBinh', width: 150, align: 'center', },
+    { title: 'Khoa', dataIndex: 'khoa', key: 'khoa', width: 100, align: 'center', }
   ];
 
   const filteredData = thongKeData.filter(item => {
@@ -109,13 +75,6 @@ const ThongKeLopPage = () => {
 
   return (
     <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
-      <div style={{ marginBottom: '24px' }}>
-        <h2 style={{ margin: 0, color: '#1890ff' }}>
-          <BarChartOutlined style={{ marginRight: '8px' }} />
-          Thống kê lớp học phần
-        </h2>
-      </div>
-
       {/* Bộ lọc */}
       <Card style={{ marginBottom: '24px' }}>
         <Row gutter={16}>
@@ -124,7 +83,7 @@ const ThongKeLopPage = () => {
             <Select
               placeholder="Chọn khoa"
               style={{ width: '100%' }}
-              value={selectedKhoa}
+              value={selectedKhoa || undefined}
               onChange={setSelectedKhoa}
               allowClear
             >
@@ -138,7 +97,7 @@ const ThongKeLopPage = () => {
             <Select
               placeholder="Chọn năm học"
               style={{ width: '100%' }}
-              value={selectedNamHoc}
+              value={selectedNamHoc || undefined}
               onChange={setSelectedNamHoc}
               allowClear
             >
@@ -152,7 +111,7 @@ const ThongKeLopPage = () => {
             <Select
               placeholder="Chọn kỳ học"
               style={{ width: '100%' }}
-              value={selectedKy}
+              value={selectedKy || undefined}
               onChange={setSelectedKy}
               allowClear
             >

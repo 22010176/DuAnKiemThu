@@ -1,6 +1,12 @@
 import { CheckOutlined, CopyOutlined, DeleteOutlined, EditOutlined, FilterOutlined, PlusOutlined, SearchOutlined, UserAddOutlined } from '@ant-design/icons';
 import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
 import { useState } from 'react';
+import axios from "axios";
+import { faArrowRotateRight, faCheck, faFilter, faPen, faPlus, faTrash, faUpload, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from '@fortawesome/fontawesome-svg-core';
+import { faCopy } from '@fortawesome/free-regular-svg-icons';
+// import { u } from 'react-router/dist/development/route-data-B9_30zbP';
 
 const { Option } = Select;
 const { Search, } = Input;
@@ -17,40 +23,14 @@ const LopHocPhanPage = () => {
 
   // Mock data
   const [data, setData] = useState([
-    {
-      id: 1,
-      maLop: 'CNTT01_01',
-      tenLop: 'Lập trình Java - Lớp 1',
-      hocPhan: 'Lập trình Java',
-      maHocPhan: 'CNTT01',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 45,
-      soTinChi: 3,
-      trangThai: 'Đang mở',
-      giangVien: 'Nguyễn Văn A'
-    },
-    {
-      id: 2,
-      maLop: 'CNTT02_01',
-      tenLop: 'Cơ sở dữ liệu - Lớp 1',
-      hocPhan: 'Cơ sở dữ liệu',
-      maHocPhan: 'CNTT02',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 40,
-      soTinChi: 3,
-      trangThai: 'Chưa phân công',
-      giangVien: null
-    }
+    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A'}, 
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null}
   ]);
 
   const khoaOptions = ['Công nghệ thông tin', 'Kinh tế', 'Ngoại ngữ', 'Cơ khí'];
   const namHocOptions = ['2024-2025', '2023-2024', '2022-2023'];
   const kyOptions = ['Kỳ 1', 'Kỳ 2', 'Kỳ hè'];
-  const trangThaiOptions = ['Đang mở', 'Chưa phân công', 'Đã đóng'];
+  const trangThaiOptions = ['Đã phân công', 'Chưa phân công'];
   const hocPhanOptions = [
     { ma: 'CNTT01', ten: 'Lập trình Java', tinChi: 3 },
     { ma: 'CNTT02', ten: 'Cơ sở dữ liệu', tinChi: 3 },
@@ -59,79 +39,45 @@ const LopHocPhanPage = () => {
   ];
 
   const columns = [
-    { title: 'Mã lớp', dataIndex: 'maLop', key: 'maLop', width: 120, },
-    { title: 'Tên lớp', dataIndex: 'tenLop', key: 'tenLop', width: 200, },
+    { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
+    { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
+    { title: <p className='text-lg font-semibold'>Tên lớp</p>, dataIndex: 'tenLop', key: 'tenLop', width: 200, },
+    { title: <p className='text-lg font-semibold'>Học phần</p>, dataIndex: 'hocPhan', key: 'hocPhan', width: 150, }, 
+    { title: <p className='text-lg font-semibold'>Khoa</p>, dataIndex: 'khoa', key: 'khoa', width: 150, }, 
+    { title: <p className='text-lg font-semibold'>Học kì</p>, key: 'hocKi', width: 120, render: (record) => `${record.ky} (${record.namHoc})` }, 
+    { title: <p className='text-lg font-semibold'>Sinh viên</p>, dataIndex: 'soSinhVien', key: 'soSinhVien', width: 90, align: 'center' }, 
+    { title: <p className='text-lg font-semibold'>Tín chỉ</p>, dataIndex: 'soTinChi', key: 'soTinChi', width: 70, align: 'center'}, 
     {
-      title: 'Học phần',
-      dataIndex: 'hocPhan',
-      key: 'hocPhan',
-      width: 150,
-    },
-    {
-      title: 'Khoa',
-      dataIndex: 'khoa',
-      key: 'khoa',
-      width: 150,
-    },
-    {
-      title: 'Kỳ/Năm',
-      key: 'kyNam',
-      width: 120,
-      render: (record) => `${record.ky} - ${record.namHoc}`
-    },
-    {
-      title: 'SV',
-      dataIndex: 'soSinhVien',
-      key: 'soSinhVien',
-      width: 60,
-      align: 'center'
-    },
-    {
-      title: 'Tín chỉ',
-      dataIndex: 'soTinChi',
-      key: 'soTinChi',
-      width: 70,
-      align: 'center'
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'trangThai',
-      key: 'trangThai',
-      width: 120,
-      render: (trangThai) => {
-        let color = trangThai === 'Đang mở' ? 'green' :
+      title: <p className='text-lg font-semibold'>Trạng thái</p>, dataIndex: 'trangThai', key: 'trangThai', width: 120, render: (trangThai) => {
+        let color = trangThai === 'Đã phân công' ? 'green' :
           trangThai === 'Chưa phân công' ? 'orange' : 'red';
         return <Tag color={color}>{trangThai}</Tag>;
       }
-    },
-    {
-      title: 'Giảng viên',
-      dataIndex: 'giangVien',
-      key: 'giangVien',
-      width: 150,
-      render: (giangVien) => giangVien || <Tag color="orange">Chưa phân công</Tag>
-    },
-    {
-      title: 'Thao tác',
+    }, {
+      title: <p className='text-lg font-semibold'>Giáo viên</p>, dataIndex: 'giangVien', key: 'giangVien', width: 150, render: (giangVien) => giangVien || <Tag color="orange">Chưa phân công</Tag>
+    }, {
+      title: <p className='text-lg font-semibold'>Thao tác</p>,
       key: 'action',
       width: 120,
       fixed: 'right',
       render: (_, record) => (
-        <Space size="small">
+        <Space>
           <Tooltip title="Sửa">
             <Button
+              variant='outlined'
+              color='blue'
               type="text"
-              icon={<EditOutlined />}
-              size="small"
+              icon={<FontAwesomeIcon icon={faPen} />}
               onClick={() => handleEdit(record)}
             />
           </Tooltip>
           <Tooltip title="Xóa">
             <Button
+              variant='outlined'
+              color='red'
               type="text"
               danger
-              icon={<DeleteOutlined />}
-              size="small"
+              icon={<FontAwesomeIcon icon={faTrash} />}
               onClick={() => handleDelete(record.id)}
             />
           </Tooltip>
@@ -215,7 +161,7 @@ const LopHocPhanPage = () => {
         namHoc: values.namHoc,
         soSinhVien: values.soSinhVien,
         soTinChi: selectedHocPhan?.tinChi,
-        trangThai: 'Đang mở',
+        trangThai: 'Chưa phân công',
         giangVien: null
       });
     }
@@ -240,7 +186,7 @@ const LopHocPhanPage = () => {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
     getCheckboxProps: (record) => ({
-      disabled: record.trangThai !== 'Đang mở'
+      disabled: record.trangThai !== 'Chưa phân công', 
     }),
   };
   const selectedTeacher = {};
@@ -252,35 +198,17 @@ const LopHocPhanPage = () => {
         <Card>
           <div style={{ marginBottom: '16px' }}>
             <Row justify="space-between" align="middle">
-              {/* <Col>
-              <h2 style={{ margin: 0, color: '#001529' }}>Quản lý Lớp Học Phần</h2>
-            </Col> */}
               <Col>
                 <Space>
-                  <Button
-                    type="default"
-                    icon={<CopyOutlined />}
-                    onClick={handleBulkAdd}
-                  >
+                  <Button type="default" icon={<FontAwesomeIcon icon={faCopy} />} onClick={handleBulkAdd}>
                     Tạo hàng loạt
                   </Button>
-                  <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={handleAdd}
-                  >
+                  <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={handleAdd}>
                     Thêm lớp
                   </Button>
-                  <Button
-                    type="primary"
-                    icon={<UserAddOutlined />}
-                    disabled={selectedRowKeys.length === 0}
-                    onClick={() => {
-                      // Navigate to PhanCongGVPage with selected classes
-                      message.info('Chuyển đến trang phân công giảng viên...');
-                    }}
-                  >
-                    Phân công GV ({selectedRowKeys.length})
+                  <Button type="primary" icon={<FontAwesomeIcon icon={faUserPlus} />}
+                    disabled={selectedRowKeys.length === 0} onClick={() => {}}>
+                    Phân công giảng viên ({selectedRowKeys.length})
                   </Button>
                 </Space>
               </Col>
@@ -292,10 +220,12 @@ const LopHocPhanPage = () => {
             <Row gutter={16} align="middle">
               <Col span={4}>
                 <Select
+            
                   placeholder="Chọn khoa"
                   allowClear
                   style={{ width: '100%' }}
-                  value={filters.khoa}
+                  // value={filters.khoa}
+                  value={undefined}
                   onChange={(value) => handleFilterChange('khoa', value)}
                 >
                   {khoaOptions.map(khoa => (
@@ -308,7 +238,8 @@ const LopHocPhanPage = () => {
                   placeholder="Chọn năm học"
                   allowClear
                   style={{ width: '100%' }}
-                  value={filters.namHoc}
+                  // value={filters.namHoc}
+                  value={undefined}
                   onChange={(value) => handleFilterChange('namHoc', value)}
                 >
                   {namHocOptions.map(nam => (
@@ -321,7 +252,8 @@ const LopHocPhanPage = () => {
                   placeholder="Chọn kỳ"
                   allowClear
                   style={{ width: '100%' }}
-                  value={filters.ky}
+                  // value={filters.ky}
+                  value={undefined}
                   onChange={(value) => handleFilterChange('ky', value)}
                 >
                   {kyOptions.map(ky => (
@@ -329,19 +261,20 @@ const LopHocPhanPage = () => {
                   ))}
                 </Select>
               </Col>
-              {/* <Col span={4}>
+              <Col span={4}>
                 <Select
-                  placeholder="Trạng thái"
+                  placeholder="Chọn trạng thái"
                   allowClear
                   style={{ width: '100%' }}
-                  value={filters.trangThai}
+                  // value={filters.trangThai}
+                  value={undefined}
                   onChange={(value) => handleFilterChange('trangThai', value)}
                 >
                   {trangThaiOptions.map(tt => (
                     <Option key={tt} value={tt}>{tt}</Option>
                   ))}
                 </Select>
-              </Col> */}
+              </Col>
               <Col span={6}>
                 <Search
                   placeholder="Tìm kiếm theo tên lớp, mã lớp..."
@@ -350,7 +283,7 @@ const LopHocPhanPage = () => {
                 />
               </Col>
               <Col span={2}>
-                <Button icon={<FilterOutlined />} type="text">
+                <Button icon={<FontAwesomeIcon icon={faFilter} />} type="text">
                   Lọc
                 </Button>
               </Col>
@@ -374,14 +307,19 @@ const LopHocPhanPage = () => {
           />
         </Card>
 
-
       </div>
       {/* Add/Edit Modal */}
       <Modal
-        title={editingRecord ? 'Sửa lớp học phần' : 'Thêm lớp học phần'}
+        title={<h1 className="text-xl font-bold text-blue-900 uppercase">{editingRecord ? 'Sửa lớp học phần' : 'Thêm lớp học phần mới'}</h1>}
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
-        footer={null}
+        footer={[
+                  <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" 
+                    onClick={handleSubmit} key="submit">
+                    Hoàn thành
+                    {<FontAwesomeIcon icon={faCheck} />}
+                  </Button>
+                ]}
         width={600}
       >
         <Form
@@ -394,18 +332,18 @@ const LopHocPhanPage = () => {
               <Form.Item
                 name="maLop"
                 label="Mã lớp"
-                rules={[{ required: true, message: 'Vui lòng nhập mã lớp!' }]}
+                rules={[{ required: true }]}
               >
-                <Input placeholder="VD: CNTT01_01" />
+                <Input disabled placeholder="VD: CNTT01_01" />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="tenLop"
                 label="Tên lớp"
-                rules={[{ required: true, message: 'Vui lòng nhập tên lớp!' }]}
+                rules={[{ required: true}]}
               >
-                <Input placeholder="VD: Lập trình Java - Lớp 1" />
+                <Input disabled placeholder="VD: Lập trình Java - Lớp 1" />
               </Form.Item>
             </Col>
           </Row>
@@ -413,9 +351,22 @@ const LopHocPhanPage = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
+                name="khoa"
+                label="Khoa"
+                rules={[{ required: true }]}
+              >
+                <Select placeholder="Chọn khoa">
+                  {khoaOptions.map(khoa => (
+                    <Option key={khoa} value={khoa}>{khoa}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
                 name="maHocPhan"
                 label="Học phần"
-                rules={[{ required: true, message: 'Vui lòng chọn học phần!' }]}
+                rules={[{ required: true }]}
               >
                 <Select placeholder="Chọn học phần">
                   {hocPhanOptions.map(hp => (
@@ -426,19 +377,7 @@ const LopHocPhanPage = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                name="khoa"
-                label="Khoa"
-                rules={[{ required: true, message: 'Vui lòng chọn khoa!' }]}
-              >
-                <Select placeholder="Chọn khoa">
-                  {khoaOptions.map(khoa => (
-                    <Option key={khoa} value={khoa}>{khoa}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+            
           </Row>
 
           <Row gutter={16}>
@@ -446,7 +385,7 @@ const LopHocPhanPage = () => {
               <Form.Item
                 name="namHoc"
                 label="Năm học"
-                rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}
+                rules={[{ required: true }]}
               >
                 <Select placeholder="Chọn năm học">
                   {namHocOptions.map(nam => (
@@ -459,7 +398,7 @@ const LopHocPhanPage = () => {
               <Form.Item
                 name="ky"
                 label="Kỳ học"
-                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
+                rules={[{ required: true}]}
               >
                 <Select placeholder="Chọn kỳ">
                   {kyOptions.map(ky => (
@@ -473,7 +412,7 @@ const LopHocPhanPage = () => {
               <Form.Item
                 name="soSinhVien"
                 label="Số sinh viên"
-                rules={[{ required: true, message: 'Vui lòng nhập số sinh viên!' }]}
+                rules={[{ required: true}]}
               >
                 <InputNumber
                   min={1}
@@ -484,21 +423,7 @@ const LopHocPhanPage = () => {
               </Form.Item>
             </Col>
           </Row>
-
-          <Form.Item
-            name="trangThai"
-            label="Trạng thái"
-            rules={[{ required: true, message: 'Vui lòng chọn trạng thái!' }]}
-          >
-            <Select placeholder="Chọn trạng thái">
-              {trangThaiOptions.map(tt => (
-                <Option key={tt} value={tt}>{tt}</Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Divider />
-
+{/* 
           <Row justify="end" gutter={8}>
             <Col>
               <Button onClick={() => setIsModalVisible(false)}>
@@ -507,19 +432,25 @@ const LopHocPhanPage = () => {
             </Col>
             <Col>
               <Button type="primary" htmlType="submit">
-                {editingRecord ? 'Cập nhật' : 'Thêm mới'}
+                {editingRecord ? 'Cập nhật' : 'Hoàn thành'}
               </Button>
             </Col>
-          </Row>
+          </Row> */}
         </Form>
       </Modal>
 
       {/* Bulk Add Modal */}
       <Modal
-        title="Tạo hàng loạt lớp học phần"
+        title={<h1 className="text-xl font-bold text-blue-900 uppercase">Tạo hàng loạt lớp học phần</h1>}
         open={isBulkModalVisible}
         onCancel={() => setIsBulkModalVisible(false)}
-        footer={null}
+        footer={[
+                  <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" 
+                    onClick={handleSubmit} key="submit">
+                    Hoàn thành
+                    {<FontAwesomeIcon icon={faCheck} />}
+                  </Button>
+                ]}
         width={600}
       >
         <Form
@@ -530,9 +461,22 @@ const LopHocPhanPage = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
+                name="khoa"
+                label="Khoa"
+                rules={[{ required: true}]}
+              >
+                <Select placeholder="Chọn khoa">
+                  {khoaOptions.map(khoa => (
+                    <Option key={khoa} value={khoa}>{khoa}</Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
                 name="maHocPhan"
                 label="Học phần"
-                rules={[{ required: true, message: 'Vui lòng chọn học phần!' }]}
+                rules={[{ required: true}]}
               >
                 <Select placeholder="Chọn học phần">
                   {hocPhanOptions.map(hp => (
@@ -543,27 +487,15 @@ const LopHocPhanPage = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                name="khoa"
-                label="Khoa"
-                rules={[{ required: true, message: 'Vui lòng chọn khoa!' }]}
-              >
-                <Select placeholder="Chọn khoa">
-                  {khoaOptions.map(khoa => (
-                    <Option key={khoa} value={khoa}>{khoa}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
+            
           </Row>
 
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
                 name="namHoc"
                 label="Năm học"
-                rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}
+                rules={[{ required: true}]}
               >
                 <Select placeholder="Chọn năm học">
                   {namHocOptions.map(nam => (
@@ -572,11 +504,11 @@ const LopHocPhanPage = () => {
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
                 name="ky"
                 label="Kỳ học"
-                rules={[{ required: true, message: 'Vui lòng chọn kỳ!' }]}
+                rules={[{ required: true }]}
               >
                 <Select placeholder="Chọn kỳ">
                   {kyOptions.map(ky => (
@@ -586,11 +518,14 @@ const LopHocPhanPage = () => {
               </Form.Item>
             </Col>
 
-            <Col span={8}>
+          </Row>
+          
+          <Row gutter={16}>
+            <Col span={12}>
               <Form.Item
                 name="soLop"
                 label="Số lớp cần tạo"
-                rules={[{ required: true, message: 'Vui lòng nhập số lớp!' }]}
+                rules={[{ required: true}]}
               >
                 <InputNumber
                   min={1}
@@ -600,35 +535,23 @@ const LopHocPhanPage = () => {
                 />
               </Form.Item>
             </Col>
+
+            <Col span={12}> 
+              <Form.Item
+                name="soSinhVien"
+                label="Số sinh viên mỗi lớp"
+                rules={[{ required: true}]}
+              >
+                <InputNumber
+                  min={1}
+                  max={100}
+                  placeholder="45"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>            
           </Row>
 
-          <Form.Item
-            name="soSinhVien"
-            label="Số sinh viên mỗi lớp"
-            rules={[{ required: true, message: 'Vui lòng nhập số sinh viên!' }]}
-          >
-            <InputNumber
-              min={1}
-              max={100}
-              placeholder="45"
-              style={{ width: '100%' }}
-            />
-          </Form.Item>
-
-          <Divider />
-
-          <Row justify="end" gutter={8}>
-            <Col>
-              <Button onClick={() => setIsBulkModalVisible(false)}>
-                Hủy
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" htmlType="submit">
-                Tạo lớp
-              </Button>
-            </Col>
-          </Row>
         </Form>
       </Modal>
 
