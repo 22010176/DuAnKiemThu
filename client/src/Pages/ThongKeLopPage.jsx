@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Select, Table, Row, Col, Statistic, DatePicker, Button, Space } from 'antd';
-import { BarChartOutlined, TeamOutlined, BookOutlined, CalendarOutlined } from '@ant-design/icons';
+import { BarChartOutlined, TeamOutlined, BookOutlined, CalendarOutlined, AccountBookOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -75,6 +75,12 @@ const ThongKeLopPage = () => {
 
   return (
     <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
+      <Card>
+        <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2A7ED7' }}>
+          <BarChartOutlined style={{ marginRight: '8px' }} />
+          Chi tiết thống kê theo học phần
+        </span>
+      </Card>
       {/* Bộ lọc */}
       <Card style={{ marginBottom: '24px' }}>
         <Row gutter={16}>
@@ -123,10 +129,11 @@ const ThongKeLopPage = () => {
           <Col span={6}>
             <div style={{ marginBottom: '8px' }}>&nbsp;</div>
             <Space>
-              <Button type="primary" icon={<BarChartOutlined />}>
+              <Button type="primary" icon={<BarChartOutlined />} >
                 Thống kê
               </Button>
-              <Button>Xuất báo cáo</Button>
+              <Button type='primary'>Xuất báo cáo</Button>  
+              {/* Đổi màu nút Xuất báo cáo thành màu #19A10A */}
             </Space>
           </Col>
         </Row>
@@ -159,7 +166,7 @@ const ThongKeLopPage = () => {
             <Statistic
               title="SV trung bình/lớp"
               value={sinhVienTrungBinhTong}
-              prefix={<CalendarOutlined />}
+              prefix={<AccountBookOutlined />} //đổi thành icon có hình người (2 - 3 người)
               valueStyle={{ color: '#722ed1' }}
             />
           </Card>
@@ -179,7 +186,7 @@ const ThongKeLopPage = () => {
       {/* Bảng chi tiết */}
       <Card
         title={
-          <span>
+          <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2A7ED7' }}>
             <BarChartOutlined style={{ marginRight: '8px' }} />
             Chi tiết thống kê theo học phần
           </span>

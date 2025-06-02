@@ -12,7 +12,6 @@ import HocPhanPage from './Pages/HocPhanPage';
 import LopHocPhanPage from './Pages/LopHocPhanPage';
 import PhanCongGVPage from './Pages/PhanCongGVPage';
 import ThongKeLopPage from './Pages/ThongKeLopPage';
-import HKP from './Pages/HKP';
 
 function App() {
   return (

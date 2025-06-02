@@ -151,11 +151,11 @@ const HocKiPage = () => {
 
       {/* Modal thêm/sửa */}
       <Modal
-        title={editingId ? "Sửa học kỳ" : "Thêm học kỳ"}
+        title={<h1 className="text-xl font-bold text-blue-900 uppercase">{editingId ? 'Sửa học kì' : 'Thêm học kì mới'}</h1>}
         open={createForm}
         // onOk={handleOk}
         // onCancel={handleCancel}
-        footer={[
+        footer = {[
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}
             onClick={handleOk}>
             Hoàn thành
