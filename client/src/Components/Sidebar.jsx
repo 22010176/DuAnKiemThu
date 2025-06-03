@@ -36,13 +36,21 @@ const theme = {
   },
 }
 
-const items = [
+const items1 = [
   { content: "Bằng cấp", to: "/bang-cap" },
   { content: "Khoa", to: "/khoa" },
   { content: "Giáo viên", to: "/giao-vien" },
   { content: "Thống kê", to: "/thong-ke" },
 ]
-const links = items.map(i => i.to)
+const links1 = items1.map(i => i.to)
+
+const items3 = [
+  { content: "Học kì", to: "/hoc-ki" },
+  { content: "Học phần", to: "/hoc-phan" },
+  { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
+  { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
+]
+const links3 = items3.map(i => i.to)
 
 const items2 = [
   // { content: "Lớp học phần", to: "", icon: faCalendar },
@@ -71,32 +79,27 @@ function Sidebar() {
             {
               key: "2",
               label: (
-                <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
+                <div className='flex gap-5 items-center' style={{ color: links1.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
                   <Icon icon={faUser} />
-                  <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
+                  <h1 className='font-bold text-lg' style={{ color: links1.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
                 </div>
               ), children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
-                  {items.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                  {items1.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
                 </ul>
               ),
             },
             {
               key: "3",
               label: (
-                <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
+                <div className='flex gap-5 items-center' style={{ color: links3.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
                   <Icon icon={faCalendar} />
-                  <h1 className='font-bold text-lg' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Lớp học phần</h1>
+                  <h1 className='font-bold text-lg' style={{ color: links3.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Lớp học phần</h1>
                 </div>
               ),
               children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
-                  {[
-                    { content: "Học kì", to: "/hoc-ki" },
-                    { content: "Học phần", to: "/hoc-phan" },
-                    { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
-                    { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
-                  ].map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                  {items3.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
                 </ul>
               ),
             }

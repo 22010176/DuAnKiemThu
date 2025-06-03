@@ -1,11 +1,9 @@
-import { CheckOutlined, CopyOutlined, DeleteOutlined, EditOutlined, FilterOutlined, PlusOutlined, SearchOutlined, UserAddOutlined } from '@ant-design/icons';
+import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
+import { faCopy } from '@fortawesome/free-regular-svg-icons';
+import { faCheck, faFilter, faPen, faPlus, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
 import { useState } from 'react';
-import axios from "axios";
-import { faArrowRotateRight, faCheck, faFilter, faPen, faPlus, faTrash, faUpload, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { faCopy } from '@fortawesome/free-regular-svg-icons';
 // import { u } from 'react-router/dist/development/route-data-B9_30zbP';
 
 const { Option } = Select;
@@ -23,8 +21,8 @@ const LopHocPhanPage = () => {
 
   // Mock data
   const [data, setData] = useState([
-    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A'}, 
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null}
+    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A' },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null }
   ]);
 
   const khoaOptions = ['Công nghệ thông tin', 'Kinh tế', 'Ngoại ngữ', 'Cơ khí'];
@@ -42,44 +40,27 @@ const LopHocPhanPage = () => {
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
     { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
     { title: <p className='text-lg font-semibold'>Tên lớp</p>, dataIndex: 'tenLop', key: 'tenLop', width: 200, },
-    { title: <p className='text-lg font-semibold'>Học phần</p>, dataIndex: 'hocPhan', key: 'hocPhan', width: 150, }, 
-    { title: <p className='text-lg font-semibold'>Khoa</p>, dataIndex: 'khoa', key: 'khoa', width: 150, }, 
-    { title: <p className='text-lg font-semibold'>Học kì</p>, key: 'hocKi', width: 120, render: (record) => `${record.ky} (${record.namHoc})` }, 
-    { title: <p className='text-lg font-semibold'>Sinh viên</p>, dataIndex: 'soSinhVien', key: 'soSinhVien', width: 90, align: 'center' }, 
-    { title: <p className='text-lg font-semibold'>Tín chỉ</p>, dataIndex: 'soTinChi', key: 'soTinChi', width: 70, align: 'center'}, 
+    { title: <p className='text-lg font-semibold'>Học phần</p>, dataIndex: 'hocPhan', key: 'hocPhan', width: 150, },
+    { title: <p className='text-lg font-semibold'>Khoa</p>, dataIndex: 'khoa', key: 'khoa', width: 150, },
+    { title: <p className='text-lg font-semibold'>Học kì</p>, key: 'hocKi', width: 120, render: (record) => `${record.ky} (${record.namHoc})` },
+    { title: <p className='text-lg font-semibold'>Sinh viên</p>, dataIndex: 'soSinhVien', key: 'soSinhVien', width: 90, align: 'center' },
+    { title: <p className='text-lg font-semibold'>Tín chỉ</p>, dataIndex: 'soTinChi', key: 'soTinChi', width: 70, align: 'center' },
     {
       title: <p className='text-lg font-semibold'>Trạng thái</p>, dataIndex: 'trangThai', key: 'trangThai', width: 120, render: (trangThai) => {
-        let color = trangThai === 'Đã phân công' ? 'green' :
-          trangThai === 'Chưa phân công' ? 'orange' : 'red';
+        let color = trangThai === 'Đã phân công' ? 'green' : (trangThai === 'Chưa phân công' ? 'orange' : 'red');
         return <Tag color={color}>{trangThai}</Tag>;
       }
     }, {
       title: <p className='text-lg font-semibold'>Giáo viên</p>, dataIndex: 'giangVien', key: 'giangVien', width: 150, render: (giangVien) => giangVien || <Tag color="orange">Chưa phân công</Tag>
     }, {
-      title: <p className='text-lg font-semibold'>Thao tác</p>,
-      key: 'action',
-      width: 120,
-      fixed: 'right',
+      title: <p className='text-lg font-semibold'>Thao tác</p>, key: 'action', width: 120, fixed: 'right',
       render: (_, record) => (
         <Space>
           <Tooltip title="Sửa">
-            <Button
-              variant='outlined'
-              color='blue'
-              type="text"
-              icon={<FontAwesomeIcon icon={faPen} />}
-              onClick={() => handleEdit(record)}
-            />
+            <Button variant='outlined' color='blue' type="text" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => handleEdit(record)} />
           </Tooltip>
           <Tooltip title="Xóa">
-            <Button
-              variant='outlined'
-              color='red'
-              type="text"
-              danger
-              icon={<FontAwesomeIcon icon={faTrash} />}
-              onClick={() => handleDelete(record.id)}
-            />
+            <Button variant='outlined' color='red' type="text" danger icon={<FontAwesomeIcon icon={faTrash} />} onClick={() => handleDelete(record.id)} />
           </Tooltip>
         </Space>
       ),
@@ -186,14 +167,13 @@ const LopHocPhanPage = () => {
     selectedRowKeys,
     onChange: setSelectedRowKeys,
     getCheckboxProps: (record) => ({
-      disabled: record.trangThai !== 'Chưa phân công', 
+      disabled: record.trangThai !== 'Chưa phân công',
     }),
   };
   const selectedTeacher = {};
   const selectedClasses = []
   return (
     <>
-
       <div style={{ padding: '24px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
         <Card>
           <div style={{ marginBottom: '16px' }}>
@@ -207,7 +187,7 @@ const LopHocPhanPage = () => {
                     Thêm lớp
                   </Button>
                   <Button type="primary" icon={<FontAwesomeIcon icon={faUserPlus} />}
-                    disabled={selectedRowKeys.length === 0} onClick={() => {}}>
+                    disabled={selectedRowKeys.length === 0} onClick={() => { }}>
                     Phân công giảng viên ({selectedRowKeys.length})
                   </Button>
                 </Space>
@@ -219,68 +199,27 @@ const LopHocPhanPage = () => {
           <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
             <Row gutter={16} align="middle">
               <Col span={4}>
-                <Select
-            
-                  placeholder="Chọn khoa"
-                  allowClear
-                  style={{ width: '100%' }}
-                  // value={filters.khoa}
-                  value={undefined}
-                  onChange={(value) => handleFilterChange('khoa', value)}
-                >
-                  {khoaOptions.map(khoa => (
-                    <Option key={khoa} value={khoa}>{khoa}</Option>
-                  ))}
+                <Select placeholder="Chọn khoa" allowClear style={{ width: '100%' }} value={undefined} onChange={(value) => handleFilterChange('khoa', value)}>
+                  {khoaOptions.map(khoa => <Option key={khoa} value={khoa}>{khoa}</Option>)}
                 </Select>
               </Col>
               <Col span={4}>
-                <Select
-                  placeholder="Chọn năm học"
-                  allowClear
-                  style={{ width: '100%' }}
-                  // value={filters.namHoc}
-                  value={undefined}
-                  onChange={(value) => handleFilterChange('namHoc', value)}
-                >
-                  {namHocOptions.map(nam => (
-                    <Option key={nam} value={nam}>{nam}</Option>
-                  ))}
+                <Select placeholder="Chọn năm học" allowClear style={{ width: '100%' }} value={undefined} onChange={(value) => handleFilterChange('namHoc', value)}>
+                  {namHocOptions.map(nam => <Option key={nam} value={nam}>{nam}</Option>)}
                 </Select>
               </Col>
               <Col span={4}>
-                <Select
-                  placeholder="Chọn kỳ"
-                  allowClear
-                  style={{ width: '100%' }}
-                  // value={filters.ky}
-                  value={undefined}
-                  onChange={(value) => handleFilterChange('ky', value)}
-                >
-                  {kyOptions.map(ky => (
-                    <Option key={ky} value={ky}>{ky}</Option>
-                  ))}
+                <Select placeholder="Chọn kỳ" allowClear style={{ width: '100%' }} value={undefined} onChange={(value) => handleFilterChange('ky', value)}>
+                  {kyOptions.map(ky => <Option key={ky} value={ky}>{ky}</Option>)}
                 </Select>
               </Col>
               <Col span={4}>
-                <Select
-                  placeholder="Chọn trạng thái"
-                  allowClear
-                  style={{ width: '100%' }}
-                  // value={filters.trangThai}
-                  value={undefined}
-                  onChange={(value) => handleFilterChange('trangThai', value)}
-                >
-                  {trangThaiOptions.map(tt => (
-                    <Option key={tt} value={tt}>{tt}</Option>
-                  ))}
+                <Select placeholder="Chọn trạng thái" allowClear style={{ width: '100%' }} value={undefined} onChange={(value) => handleFilterChange('trangThai', value)}>
+                  {trangThaiOptions.map(tt => <Option key={tt} value={tt}>{tt}</Option>)}
                 </Select>
               </Col>
               <Col span={6}>
-                <Search
-                  placeholder="Tìm kiếm theo tên lớp, mã lớp..."
-                  allowClear
-                  style={{ width: '100%' }}
-                />
+                <Search placeholder="Tìm kiếm theo tên lớp, mã lớp..." allowClear style={{ width: '100%' }} />
               </Col>
               <Col span={2}>
                 <Button icon={<FontAwesomeIcon icon={faFilter} />} type="text">
@@ -301,8 +240,7 @@ const LopHocPhanPage = () => {
               pageSize: 10,
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total, range) =>
-                `${range[0]}-${range[1]} của ${total} lớp học phần`
+              showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} lớp học phần`
             }}
           />
         </Card>
@@ -314,35 +252,22 @@ const LopHocPhanPage = () => {
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={[
-                  <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" 
-                    onClick={handleSubmit} key="submit">
-                    Hoàn thành
-                    {<FontAwesomeIcon icon={faCheck} />}
-                  </Button>
-                ]}
-        width={600}
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-        >
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange"
+            onClick={handleSubmit} key="submit">
+            Hoàn thành
+            {<FontAwesomeIcon icon={faCheck} />}
+          </Button>
+        ]}
+        width={600}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="maLop"
-                label="Mã lớp"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name="maLop" label="Mã lớp" rules={[{ required: true }]}>
                 <Input disabled placeholder="VD: CNTT01_01" />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="tenLop"
-                label="Tên lớp"
-                rules={[{ required: true}]}
-              >
+              <Form.Item name="tenLop" label="Tên lớp" rules={[{ required: true }]}>
                 <Input disabled placeholder="VD: Lập trình Java - Lớp 1" />
               </Form.Item>
             </Col>
@@ -350,11 +275,7 @@ const LopHocPhanPage = () => {
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="khoa"
-                label="Khoa"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name="khoa" label="Khoa" rules={[{ required: true }]}>
                 <Select placeholder="Chọn khoa">
                   {khoaOptions.map(khoa => (
                     <Option key={khoa} value={khoa}>{khoa}</Option>
@@ -363,79 +284,37 @@ const LopHocPhanPage = () => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="maHocPhan"
-                label="Học phần"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name="maHocPhan" label="Học phần" rules={[{ required: true }]}>
                 <Select placeholder="Chọn học phần">
-                  {hocPhanOptions.map(hp => (
-                    <Option key={hp.ma} value={hp.ma}>
-                      {hp.ma} - {hp.ten} ({hp.tinChi} TC)
-                    </Option>
-                  ))}
+                  {hocPhanOptions.map(hp => <Option key={hp.ma} value={hp.ma}>{hp.ma} - {hp.ten} ({hp.tinChi} TC)</Option>)}
                 </Select>
               </Form.Item>
             </Col>
-            
+
           </Row>
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item
-                name="namHoc"
-                label="Năm học"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name="namHoc" label="Năm học" rules={[{ required: true }]}>
                 <Select placeholder="Chọn năm học">
-                  {namHocOptions.map(nam => (
-                    <Option key={nam} value={nam}>{nam}</Option>
-                  ))}
+                  {namHocOptions.map(nam => <Option key={nam} value={nam}>{nam}</Option>)}
                 </Select>
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="ky"
-                label="Kỳ học"
-                rules={[{ required: true}]}
-              >
+              <Form.Item name="ky" label="Kỳ học" rules={[{ required: true }]}>
                 <Select placeholder="Chọn kỳ">
-                  {kyOptions.map(ky => (
-                    <Option key={ky} value={ky}>{ky}</Option>
-                  ))}
+                  {kyOptions.map(ky => <Option key={ky} value={ky}>{ky}</Option>)}
                 </Select>
               </Form.Item>
             </Col>
 
             <Col span={8}>
-              <Form.Item
-                name="soSinhVien"
-                label="Số sinh viên"
-                rules={[{ required: true}]}
-              >
-                <InputNumber
-                  min={1}
-                  max={100}
-                  placeholder="45"
-                  style={{ width: '100%' }}
-                />
+              <Form.Item name="soSinhVien" label="Số sinh viên" rules={[{ required: true }]}>
+                <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }} />
               </Form.Item>
             </Col>
           </Row>
-{/* 
-          <Row justify="end" gutter={8}>
-            <Col>
-              <Button onClick={() => setIsModalVisible(false)}>
-                Hủy
-              </Button>
-            </Col>
-            <Col>
-              <Button type="primary" htmlType="submit">
-                {editingRecord ? 'Cập nhật' : 'Hoàn thành'}
-              </Button>
-            </Col>
-          </Row> */}
         </Form>
       </Modal>
 
@@ -445,71 +324,41 @@ const LopHocPhanPage = () => {
         open={isBulkModalVisible}
         onCancel={() => setIsBulkModalVisible(false)}
         footer={[
-                  <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" 
-                    onClick={handleSubmit} key="submit">
-                    Hoàn thành
-                    {<FontAwesomeIcon icon={faCheck} />}
-                  </Button>
-                ]}
-        width={600}
-      >
-        <Form
-          form={bulkForm}
-          layout="vertical"
-          onFinish={handleBulkSubmit}
-        >
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" onClick={handleSubmit} key="submit">
+            Hoàn thành
+            {<FontAwesomeIcon icon={faCheck} />}
+          </Button>
+        ]}
+        width={600}>
+        <Form form={bulkForm} layout="vertical" onFinish={handleBulkSubmit}>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="khoa"
-                label="Khoa"
-                rules={[{ required: true}]}
-              >
+              <Form.Item name="khoa" label="Khoa" rules={[{ required: true }]}>
                 <Select placeholder="Chọn khoa">
-                  {khoaOptions.map(khoa => (
-                    <Option key={khoa} value={khoa}>{khoa}</Option>
-                  ))}
+                  {khoaOptions.map(khoa => <Option key={khoa} value={khoa}>{khoa}</Option>)}
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="maHocPhan"
-                label="Học phần"
-                rules={[{ required: true}]}
-              >
+              <Form.Item name="maHocPhan" label="Học phần" rules={[{ required: true }]}>
                 <Select placeholder="Chọn học phần">
-                  {hocPhanOptions.map(hp => (
-                    <Option key={hp.ma} value={hp.ma}>
-                      {hp.ma} - {hp.ten} ({hp.tinChi} TC)
-                    </Option>
-                  ))}
+                  {hocPhanOptions.map(hp => <Option key={hp.ma} value={hp.ma}>{hp.ma} - {hp.ten} ({hp.tinChi} TC)</Option>)}
                 </Select>
               </Form.Item>
             </Col>
-            
+
           </Row>
 
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="namHoc"
-                label="Năm học"
-                rules={[{ required: true}]}
-              >
+              <Form.Item name="namHoc" label="Năm học" rules={[{ required: true }]}>
                 <Select placeholder="Chọn năm học">
-                  {namHocOptions.map(nam => (
-                    <Option key={nam} value={nam}>{nam}</Option>
-                  ))}
+                  {namHocOptions.map(nam => <Option key={nam} value={nam}>{nam}</Option>)}
                 </Select>
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item
-                name="ky"
-                label="Kỳ học"
-                rules={[{ required: true }]}
-              >
+              <Form.Item name="ky" label="Kỳ học" rules={[{ required: true }]}>
                 <Select placeholder="Chọn kỳ">
                   {kyOptions.map(ky => (
                     <Option key={ky} value={ky}>{ky}</Option>
@@ -519,54 +368,26 @@ const LopHocPhanPage = () => {
             </Col>
 
           </Row>
-          
+
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name="soLop"
-                label="Số lớp cần tạo"
-                rules={[{ required: true}]}
-              >
-                <InputNumber
-                  min={1}
-                  max={10}
-                  placeholder="3"
-                  style={{ width: '100%' }}
-                />
+              <Form.Item name="soLop" label="Số lớp cần tạo" rules={[{ required: true }]}>
+                <InputNumber min={1} max={10} placeholder="3" style={{ width: '100%' }} />
               </Form.Item>
             </Col>
 
-            <Col span={12}> 
-              <Form.Item
-                name="soSinhVien"
-                label="Số sinh viên mỗi lớp"
-                rules={[{ required: true}]}
-              >
-                <InputNumber
-                  min={1}
-                  max={100}
-                  placeholder="45"
-                  style={{ width: '100%' }}
-                />
+            <Col span={12}>
+              <Form.Item name="soSinhVien" label="Số sinh viên mỗi lớp" rules={[{ required: true }]}>
+                <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }} />
               </Form.Item>
-            </Col>            
+            </Col>
           </Row>
 
         </Form>
       </Modal>
 
       {/* Assignment Modal */}
-      <Modal
-        title="Phân công giảng viên"
-        open={false}
-        onCancel={() => {
-          // setIsModalVisible(false);
-          // setSelectedTeacher(null);
-          // setTeacherSearchValue('');
-        }}
-        footer={[]}
-        width={700}
-      >
+      <Modal title="Phân công giảng viên" open={false} onCancel={() => { }} footer={[]} width={700}>
         <div style={{ marginBottom: '16px' }}>
           <Title level={4}>Danh sách lớp được chọn:</Title>
           <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
@@ -586,14 +407,7 @@ const LopHocPhanPage = () => {
 
         <div style={{ marginBottom: '16px' }}>
           <Title level={4}>Chọn giảng viên:</Title>
-          <AutoComplete
-            style={{ width: '100%' }}
-            options={[]}
-            // onSearch={handleTeacherSearch}
-            // onSelect={handleTeacherSelect}
-            // value={teacherSearchValue}
-            placeholder="Nhập mã GV hoặc tên giảng viên để tìm kiếm..."
-          >
+          <AutoComplete style={{ width: '100%' }} options={[]} placeholder="Nhập mã GV hoặc tên giảng viên để tìm kiếm...">
             <Input suffix={<SearchOutlined />} />
           </AutoComplete>
         </div>
@@ -621,21 +435,12 @@ const LopHocPhanPage = () => {
 
         <Row justify="end" gutter={8}>
           <Col>
-            <Button onClick={() => {
-              // setIsModalVisible(false);
-              // setSelectedTeacher(null);
-              // setTeacherSearchValue('');
-            }}>
+            <Button onClick={() => { }}>
               Hủy
             </Button>
           </Col>
           <Col>
-            <Button
-              type="primary"
-              icon={<CheckOutlined />}
-            // onClick={handleConfirmAssign}
-            // disabled={!selectedTeacher}
-            >
+            <Button type="primary" icon={<CheckOutlined />}>
               Xác nhận phân công
             </Button>
           </Col>

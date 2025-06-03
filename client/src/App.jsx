@@ -22,7 +22,7 @@ function App() {
           <Route path="bang-cap" element={<BangCapPage />} />
           <Route path="giao-vien" element={<GiaoVienPage />} />
           <Route path="thong-ke" element={<ThongKePage />} />
-          {/* <Route path="hoc-ki" element={<HKP />} /> */}
+
           <Route path="hoc-ki" element={<HocKiPage />} />
           <Route path="hoc-phan" element={<HocPhanPage />} />
           <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />

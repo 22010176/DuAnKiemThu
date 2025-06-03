@@ -1,10 +1,11 @@
-import { CreateHocKy, GetHocKyList } from '@/api/khoaApi';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { faArrowRotateRight, faCheck, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, DatePicker, Form, Input, message, Modal, Popconfirm, Select, Space, Table, Tag } from 'antd';
+import { Button, DatePicker, Form, message, Modal, Popconfirm, Select, Space, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+
+import { CreateHocKy, GetHocKyList } from '@/api/khoaApi';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -76,12 +77,7 @@ const HocKiPage = () => {
   const handleEdit = (record) => {
     setIsModalVisible(true);
     setEditingId(record.key);
-    form.setFieldsValue({
-      ...record,
-      thoiGian: [
-        dayjs(record.ngayBatDau), dayjs(record.ngayKetThuc())
-      ]
-    });
+    form.setFieldsValue({ ...record, thoiGian: [dayjs(record.ngayBatDau), dayjs(record.ngayKetThuc())] });
   };
 
   const handleDelete = (key) => {
@@ -103,19 +99,11 @@ const HocKiPage = () => {
     setIsModalVisible(false);
     form.resetFields();
   };
-  console.log(formData, kyData);
 
   return (
     <div className='p-6 bg-white min-h-screen'>
-      {/* <div style={{ marginBottom: '24px' }}>
-        <h2 style={{ margin: 0, color: '#1890ff' }}>
-          <CalendarOutlined style={{ marginRight: '8px' }} />
-          Quản lý học kỳ
-        </h2>
-      </div> */}
-
       {/* Bộ lọc và nút thêm */}
-      {/* <Card style={{ marginBottom: '24px' }}> */}
+
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <div>
@@ -126,19 +114,11 @@ const HocKiPage = () => {
           </div>
         </div>
         <div className="flex justify-end gap-2 items-center">
-          <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />}
-            onClick={() => {
-
-              setCreateForm(true)
-              // setMode('create')
-              // setForm(d => ({ ...d, maBangCap: `BC-${getNextIdNumber(data.map(i => i.maBangCap))}` }))
-            }} />
-          <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} onClick={() => {
-          }} />
+          <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => { setCreateForm(true) }} />
+          <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} onClick={() => { }} />
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} />
         </div>
       </div>
-      {/* </Card> */}
 
       {/* Bảng dữ liệu */}
       <Table className='mt-4' columns={columns} dataSource={filteredData}
@@ -147,7 +127,6 @@ const HocKiPage = () => {
           showQuickJumper: true,
           showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} học kỳ`,
         }} scroll={{ x: 800 }} size="small" />
-      {/* </Card> */}
 
       {/* Modal thêm/sửa */}
       <Modal
@@ -155,9 +134,8 @@ const HocKiPage = () => {
         open={createForm}
         // onOk={handleOk}
         // onCancel={handleCancel}
-        footer = {[
-          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}
-            onClick={handleOk}>
+        footer={[
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />} onClick={handleOk}>
             Hoàn thành
           </Button>
         ]}
@@ -167,10 +145,7 @@ const HocKiPage = () => {
             <Select placeholder="Chọn năm học"
               onChange={e => {
                 console.log(e)
-                setFormData(d => ({
-                  ...d,
-                  tenKi: e
-                }));
+                setFormData(d => ({ ...d, tenKi: e }));
               }}>
               {namHocList.map(nam => <Option key={nam} value={nam}>{`${nam}-${nam + 1}`}</Option>)}
             </Select>
@@ -187,8 +162,8 @@ const HocKiPage = () => {
             }} />
           </Form.Item>
           <Form.Item name="tenKy" label="Tên học kỳ" rules={[{ required: true, message: 'Vui lòng nhập tên học kỳ!' }]}>
-            <p className='border border-gray-400 py-1 px-2 bg-gray-100 opacity-50 rounded'>
-              {formData?.tenKi}_{formData?.tenKi + 1}_{((kyData?.nam?.find(i => i.nam == formData?.tenKi)?.count) || 0) + 1}
+            <p className='border border-gray-400 h-8 py-1 px-2 bg-gray-100 opacity-50 rounded'>
+              {/* {formData?.tenKi}_{formData?.tenKi + 1}_{((kyData?.nam?.find(i => i.nam == formData?.tenKi)?.count) || 0) + 1} */}
             </p>
           </Form.Item>
         </Form>
