@@ -5,7 +5,7 @@ import { Button, DatePicker, Form, message, Modal, Popconfirm, Select, Space, Ta
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 
-import { CreateHocKy, GetHocKyList } from '@/api/khoaApi';
+import { CreateHocKy, GetHocKyList } from '@/api/hocKiApi';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

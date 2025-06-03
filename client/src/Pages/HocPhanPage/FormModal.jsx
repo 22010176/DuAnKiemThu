@@ -7,16 +7,13 @@ import { Context, initialState } from './context';
 
 function FormModal() {
   const [{
-    showModal, modalMode,
-    form: {
-      maHocPhan, tenHocPhan, khoa, soTinChi, soTiet, heSoHocPhan
-    }
-
+    showModal, modalMode, selectedKhoa,
+    form: { maHocPhan, tenHocPhan, khoa, soTinChi, soTiet, heSoHocPhan }
   }, dispatch] = useContext(Context)
 
 
   function onFormSubmit(e) {
-
+    console.log({ maHocPhan, tenHocPhan, khoa, soTinChi, soTiet, heSoHocPhan })
   }
 
   return (
@@ -51,7 +48,7 @@ function FormModal() {
             <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, color: '#333' }}>
               Khoa <span style={{ color: 'red' }}>*</span>
             </label>
-            <Input disabled placeholder="Công nghệ thông tin" value={khoa} />
+            <Input disabled placeholder="Công nghệ thông tin" value={selectedKhoa?.tenKhoa} />
           </div>
         </div>
 

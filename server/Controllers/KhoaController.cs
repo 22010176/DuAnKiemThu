@@ -20,7 +20,16 @@ public class KhoaController(IRepository<Khoa> repo, AppDbContext context) : Temp
     var result =
       from c in _ct.Khoa
       orderby c.MaKhoa.Length, c.MaKhoa
-      select c;
+      select new
+      {
+        c.Id,
+        c.MaKhoa,
+        c.TenKhoa,
+        c.TenVietTat,
+        c.MoTa,
+        c.ViTri,
+        soLop = _ct.HocPhan.Count(i => i.KhoaId == c.Id)
+      };
 
     return Ok(await result.ToListAsync());
   }
