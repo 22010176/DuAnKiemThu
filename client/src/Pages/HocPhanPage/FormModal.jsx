@@ -3,17 +3,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, InputNumber, Modal } from 'antd';
 import { useContext } from 'react';
 
-import { Context, initialState } from './context';
+import { CreateHocPhan, GetHocPhan, UpdateHocPhan } from "@/api/hocphanApi";
+
+import { Context } from './context';
 
 function FormModal() {
   const [{
     showModal, modalMode, selectedKhoa,
-    form: { maHocPhan, tenHocPhan, khoa, soTinChi, soTiet, heSoHocPhan }
+    form: { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan }
   }, dispatch] = useContext(Context)
 
 
-  function onFormSubmit(e) {
-    console.log({ maHocPhan, tenHocPhan, khoa, soTinChi, soTiet, heSoHocPhan })
+  async function onFormSubmit(e) {
+    e.preventDefault()
+    if (modalMode == 'add')
+      await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    else if (modalMode == 'edit')
+      await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    const data = await GetHocPhan().then(data => data)
+    dispatch([
+      { type: "updateModal", payload: false },
+      { type: "resetForm" },
+      { type: "updateFormMode" },
+      { type: "updateHocPhanList", payload: data },
+      { type: "updateSelectedKhoa", payload: 'all' }
+    ])
   }
 
   return (
@@ -24,7 +38,6 @@ function FormModal() {
         { type: "resetForm" },
         { type: "updateFormMode" }
       ])}
-      onOk={() => { }}
       title={(
         <h1 className="text-xl font-bold text-blue-900 uppercase">
           {modalMode === "edit" ? 'Sửa học phần' : 'Thêm học phần mới'}

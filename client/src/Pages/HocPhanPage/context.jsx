@@ -13,7 +13,7 @@ export const initialState = {
   form: {
     maHocPhan: "",
     tenHocPhan: "",
-    khoa: null,
+    khoaId: null,
     soTinChi: 0,
     soTiet: 0,
     heSoHocPhan: 0
@@ -25,6 +25,18 @@ export const reducer = (state, action) => {
   const _actions = Array.isArray(action) ? action : [action]
 
   for (const { type, payload } of _actions) switch (type) {
+    // payload = []
+    case "updateHocPhanList":
+      _state.hocPhanList = payload
+      break;
+
+    // payload = {}
+    case "updateEditForm":
+      _state.form = { ...payload }
+      _state.selectedKhoaId = payload.khoaId
+      _state.selectedKhoa = { tenKhoa: payload.tenKhoa, id: payload.khoaId }
+      break
+
     // update khoa
     // payload = []
     case "updateKhoaList":
@@ -63,11 +75,10 @@ export const reducer = (state, action) => {
       _state.selectedKhoaId = payload
 
       const khoa = _state.selectedKhoa = _state.khoaList.find(khoa => khoa.id === payload)
-      if (khoa == null) break
-
-      _state.form = {
+      if (khoa == null) _state.form = { ...initialState }
+      else _state.form = {
         ..._state.form,
-        khoa: _state.selectedKhoa.id,
+        khoaId: _state.selectedKhoa.id,
         maHocPhan: `${khoa?.tenVietTat}_${khoa?.soLop + 1}`
       }
       break;

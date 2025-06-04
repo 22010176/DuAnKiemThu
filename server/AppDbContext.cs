@@ -13,9 +13,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<Khoa_GiangVien> Khoa_GiangVien { get; set; }
   public DbSet<HocKi> HocKi { get; set; }
   public DbSet<HocPhan> HocPhan { get; set; }
-  public DbSet<TinChi> TinChi { get; set; }
+  // public DbSet<TinChi> TinChi { get; set; }
   public DbSet<LopHocPhan> LopHocPhan { get; set; }
-  public DbSet<HocPhan_TinChi> HocPhan_TinChi { get; set; }
+  // public DbSet<HocPhan_TinChi> HocPhan_TinChi { get; set; }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<BangCap>().HasIndex(b => b.MaBangCap).IsUnique();
@@ -65,16 +65,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     modelBuilder.Entity<TinChi>().HasIndex(b => b.LoaiTinChi).IsUnique();
 
-    modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHP).IsUnique();
-    modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHP).IsUnique();
+    modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHocPhan).IsUnique();
+    modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHocPhan).IsUnique();
 
     modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.maLop).IsUnique();
     modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.tenLop).IsUnique();
-    
-    modelBuilder.Entity<HocPhan_TinChi>()
-      .HasOne(e => e.HocPhan)
-      .WithMany(hp => hp.HocPhan_TinChis)
-      .HasForeignKey(e => e.HocPhanId);
+
+    // modelBuilder.Entity<HocPhan_TinChi>()
+    //   .HasOne(e => e.HocPhan)
+    //   .WithMany(hp => hp.HocPhan_TinChis)
+    //   .HasForeignKey(e => e.HocPhanId);
   }
 
 }

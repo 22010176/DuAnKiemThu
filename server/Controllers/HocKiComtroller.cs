@@ -16,17 +16,19 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
   [HttpGet]
   public override async Task<ActionResult<ICollection>> Get()
   {
-    var result = new
-    {
-      ky = (
+    var result =
+
         from c in _ct.HocKi
         orderby c.Id.ToString().Length, c.Id
-        select c).ToList(),
-      nam = (
-        from c in _ct.HocKi
-        group c by c.ThoiGianBatDau.Year into g
-        select new { nam = g.Key, count = g.Count() }).ToList()
-    };
+        select new
+        {
+          c.TenKi,
+          c.ThoiGianBatDau,
+          c.ThoiGianKetThuc,
+          c.Id,
+          soLop = c.LopHocPhan!.Count()
+        };
+
 
     return Ok(result);
   }

@@ -44,7 +44,7 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
             l.HocPhanId,
             l.HocKiId,
             l.GiangVienId,
-            hp.TenHP,
+            hp.TenHocPhan,
             hk.TenKi,
             gv.TenGiangVien,
             l.TrangThai
@@ -60,7 +60,7 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
         if (lop == null)
             return NotFound();
 
-        lop.tenLop = dto.LopHocPhan.tenLop;
+        lop.tenLop = dto.LopHocPhan!.tenLop;
         lop.soLuongSinhVien = dto.LopHocPhan.soLuongSinhVien;
         lop.TrangThai = dto.LopHocPhan.TrangThai;
 
@@ -68,7 +68,7 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
 
         return Ok(lop);
     }
-    
+
     [HttpPost("cap-nhat-trang-thai/{id}")]
     public async Task<IActionResult> CapNhatTrangThai(Guid id)
     {

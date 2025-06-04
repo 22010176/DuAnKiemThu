@@ -4,14 +4,14 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "@/Layouts/MainLayout";
 
 import BangCapPage from "@/Pages/BangCapPage";
-import KhoaPage from "@/Pages/KhoaPage";
 import GiaoVienPage from "@/Pages/GiaovienPage";
+import HocKiPage from '@/Pages/HocKiPage';
+import HocPhanPage from '@/Pages/HocPhanPage';
+import KhoaPage from "@/Pages/KhoaPage";
+import LopHocPhanPage from '@/Pages/LopHocPhanPage';
+import PhanCongGVPage from '@/Pages/PhanCongGVPage';
+import ThongKeLopPage from '@/Pages/ThongKeLopPage';
 import ThongKePage from '@/Pages/ThongKePage';
-import HocKiPage from './Pages/HocKiPage';
-import HocPhanPage from './Pages/HocPhanPage';
-import LopHocPhanPage from './Pages/LopHocPhanPage';
-import PhanCongGVPage from './Pages/PhanCongGVPage';
-import ThongKeLopPage from './Pages/ThongKeLopPage';
 
 function App() {
   return (

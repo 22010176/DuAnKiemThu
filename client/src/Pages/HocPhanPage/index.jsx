@@ -13,7 +13,7 @@ function HocPhanPage() {
 
   return (
     <Context.Provider value={[state, dispatch]}>
-      <div style={{ padding: '16px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+      <div style={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
         {/* Header with filters and add button */}
         <FunctionBar />
 

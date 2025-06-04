@@ -1,9 +1,10 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Table } from "antd";
-import { useContext } from "react";
+import { Button, Popconfirm, Space, Table } from "antd";
+import { useContext, useEffect } from "react";
 
 import { Context } from "./context";
+import { DeleteHocPhan, GetHocPhan } from "@/api/hocphanApi";
 
 function TableHeader({ children }) {
   return (
@@ -12,7 +13,14 @@ function TableHeader({ children }) {
 }
 
 function DataTable() {
-  const [state, dispatch] = useContext(Context)
+  const [{
+    hocPhanList, selectedKhoaId, selectedKhoa
+  }, dispatch] = useContext(Context)
+
+  useEffect(function () {
+    GetHocPhan()
+      .then(data => dispatch({ type: 'updateHocPhanList', payload: data }))
+  }, [dispatch])
 
   const columns = [
     { title: <TableHeader>STT</TableHeader>, key: 'stt', width: 60, align: 'center', render: (_, __, index) => index + 1, },
@@ -21,24 +29,39 @@ function DataTable() {
     { title: <TableHeader>Số tín chỉ</TableHeader>, dataIndex: 'soTinChi', key: 'soTinChi', width: 100, align: 'center', },
     { title: <TableHeader>Hệ số</TableHeader>, dataIndex: 'heSoHocPhan', key: 'heSoHocPhan', width: 80, align: 'center', },
     { title: <TableHeader>Số tiết</TableHeader>, dataIndex: 'soTiet', key: 'soTiet', width: 80, align: 'center', },
-    { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'khoa', key: 'khoa', width: 120, },
+    { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, },
     {
       title: <TableHeader>Thao tác</TableHeader>, key: 'action', width: 100, align: 'center',
       render: (_, record) => (
         <Space>
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => { }} style={{ padding: 0 }} />
-          <Popconfirm title="Bạn có chắc chắn muốn xóa?" onConfirm={() => { }} okText="Có" cancelText="Không">
+          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
+            onClick={() => {
+              dispatch([
+                { type: "updateModal", payload: true },
+                { type: "updateModalMode", payload: "edit" },
+                { type: "updateEditForm", payload: record }
+              ])
+            }} />
+          <Popconfirm title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Không"
+            onConfirm={async () => {
+              await DeleteHocPhan(record.id)
+              const data = await GetHocPhan()
+
+              dispatch({ type: "updateHocPhanList", payload: data })
+            }}>
             <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </Space>
       ),
     },
   ];
+
+
   return (
     <div className='rounded bg-white shadow'>
       <Table
         columns={columns}
-        dataSource={[]}
+        dataSource={hocPhanList}
         rowKey="id"
         size="small"
         bordered
