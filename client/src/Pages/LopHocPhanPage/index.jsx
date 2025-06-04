@@ -22,7 +22,16 @@ const LopHocPhanPage = () => {
   // Mock data
   const [data, setData] = useState([
     { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A' },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null }
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
+    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
   ]);
 
   const khoaOptions = ['Công nghệ thông tin', 'Kinh tế', 'Ngoại ngữ', 'Cơ khí'];
@@ -174,26 +183,25 @@ const LopHocPhanPage = () => {
   const selectedClasses = []
   return (
     <>
-      <div style={{ padding: '24px', backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+      <div className='p-5 bg-gray-100 grow'>
         <Card>
-          <div style={{ marginBottom: '16px' }}>
-            <Row justify="space-between" align="middle">
-              <Col>
-                <Space>
-                  <Button type="default" icon={<FontAwesomeIcon icon={faCopy} />} onClick={handleBulkAdd}>
-                    Tạo hàng loạt
-                  </Button>
-                  <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={handleAdd}>
-                    Thêm lớp
-                  </Button>
-                  <Button type="primary" icon={<FontAwesomeIcon icon={faUserPlus} />}
-                    disabled={selectedRowKeys.length === 0} onClick={() => { }}>
-                    Phân công giảng viên ({selectedRowKeys.length})
-                  </Button>
-                </Space>
-              </Col>
-            </Row>
-          </div>
+          <Row className='mb-5' justify="space-between" align="middle">
+            <Col>
+              <Space>
+                <Button type="default" icon={<FontAwesomeIcon icon={faCopy} />} onClick={handleBulkAdd}>
+                  Tạo hàng loạt
+                </Button>
+                <Button type="primary" icon={<FontAwesomeIcon icon={faPlus} />} onClick={handleAdd}>
+                  Thêm lớp
+                </Button>
+                <Button type="primary" icon={<FontAwesomeIcon icon={faUserPlus} />}
+                  disabled={selectedRowKeys.length === 0} onClick={() => { }}>
+                  Phân công giảng viên ({selectedRowKeys.length})
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+
 
           {/* Filters */}
           <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
@@ -243,8 +251,8 @@ const LopHocPhanPage = () => {
               showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} lớp học phần`
             }}
           />
-        </Card>
 
+        </Card>
       </div>
       {/* Add/Edit Modal */}
       <Modal

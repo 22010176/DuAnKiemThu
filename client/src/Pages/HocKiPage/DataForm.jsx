@@ -13,10 +13,11 @@ function DataForm() {
     showModal,
     modelMode,
     yearList,
-    formData: {
-      tenKi, year, thoiGianBatDau, thoiGianKetThuc
-    }
+    formData
   }, dispatch] = useData();
+  const {
+    tenKi, year, thoiGianBatDau, thoiGianKetThuc
+  } = formData
 
   // const namHocList = [2023, 2024, 2025]
   async function onSubmit() {
