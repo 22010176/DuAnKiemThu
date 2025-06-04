@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
 import { useContext } from 'react';
 
-import { Context } from './context';
+import { useData } from './context';
 import { CreateHocKy, GetHocKyList } from '@/api/hocKiApi';
 
 const { RangePicker } = DatePicker;
@@ -16,7 +16,7 @@ function DataForm() {
     formData: {
       tenKi, year, thoiGianBatDau, thoiGianKetThuc
     }
-  }, dispatch] = useContext(Context);
+  }, dispatch] = useData();
 
   // const namHocList = [2023, 2024, 2025]
   async function onSubmit() {
@@ -33,16 +33,21 @@ function DataForm() {
       { type: "updateSelectedYear", payload: 'all' }
     ])
   }
+
+  console.log('ddddd', tenKi, year, thoiGianBatDau, thoiGianKetThuc)
   return (
     <Modal open={showModal} centered width={600} title={
       <h1 className="text-xl font-bold text-blue-900 uppercase">
         {modelMode == 'edit' ? 'Sửa học kì' : 'Thêm học kì mới'}
       </h1>}
-      onCancel={() => dispatch([
-        { type: "updateModel", payload: false },
-        { type: "resetFormData" },
-        { type: "updateModelMode" }
-      ])}
+      onCancel={() => {
+        console.log("Test");
+        dispatch([
+          { type: "updateModel", payload: false },
+          { type: "resetFormData" },
+          { type: "updateModelMode" }
+        ])
+      }}
       footer={[
         <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}
           onClick={onSubmit}>
@@ -53,8 +58,10 @@ function DataForm() {
         <Form.Item key="namHoc" name="namHoc" label="Năm học" rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}>
           <Select placeholder="Chọn năm học"
             value={year}
-            onChange={e => dispatch({ type: "updateFormData", payload: { name: "year", value: e } })}
-            options={yearList.map(i => ({ value: i, label: `${i}-${i + 1}` }))} />
+            options={yearList.map(i => ({ value: i, label: `${i}-${i + 1}` }))}
+            onChange={e => {
+              dispatch({ type: "updateFormData", payload: { name: "year", value: e } })
+            }} />
         </Form.Item>
         <Form.Item key="thoiGian" name="thoiGian" label="Thời gian" rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}>
           <RangePicker className="w-full" format="DD/MM/YYYY" placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
@@ -71,11 +78,12 @@ function DataForm() {
             }} />
         </Form.Item>
         <Form.Item key="tenKy" name="tenKy" label="Tên học kỳ" rules={[{ required: true, message: 'Vui lòng nhập tên học kỳ!' }]}>
-          <Input value={tenKi} placeholder="Nhập tên học kỳ"
-            onChange={e => dispatch({ type: "updateFormData", payload: { name: "tenKi", value: e.target.value } })} />
-          {/* <p className='border border-gray-400 h-8 py-1 px-2 bg-gray-100 opacity-50 rounded'>
-            {formData?.tenKi}_{formData?.tenKi + 1}_{((kyData?.nam?.find(i => i.nam == formData?.tenKi)?.count) || 0) + 1}
-          </p> */}
+          <Input
+            placeholder="Nhập tên học kỳ"
+            value={tenKi}
+            onChange={e => {
+              dispatch({ type: "updateFormData", payload: { name: "tenKi", value: e.target.value } })
+            }} />
         </Form.Item>
       </Form>
     </Modal>

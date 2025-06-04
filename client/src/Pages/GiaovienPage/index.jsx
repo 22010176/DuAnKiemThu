@@ -62,7 +62,7 @@ function GiaoVienPage() {
         <div className="flex gap-5 items-center justify-center" >
           <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
             onClick={function () {
-              console.log(entry)
+              // console.log(entry)
               dispatch({
                 type: "setEditForm", payload: {
                   giangVien: {

@@ -1,9 +1,10 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Popconfirm, Space, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
-import { useContext, useEffect } from 'react';
-import { Context } from './context';
+import { useEffect } from 'react';
+
 import { DeleteHocKy, GetHocKyList } from '@/api/hocKiApi';
+import { useData } from './context';
 
 
 function TableHeader({ children }) {
@@ -13,7 +14,7 @@ function TableHeader({ children }) {
 function DataTable() {
   const [{
     data, kyData
-  }, dispatch] = useContext(Context)
+  }, dispatch] = useData()
 
   useEffect(function () {
     GetHocKyList()
@@ -44,13 +45,10 @@ function DataTable() {
         <Space size="small">
           <Button type="primary" size="small" icon={<EditOutlined />}
             onClick={() => {
-              console.log(record)
               dispatch([
                 { type: "updateModelMode", payload: "edit" },
                 { type: "updateModel", payload: true },
-                // { type: "resetForm" },
-                { type: "setFormData", payload: record },
-
+                { type: "setFormData", payload: { ...record } },
               ])
             }} />
           <Popconfirm title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Không"

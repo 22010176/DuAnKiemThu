@@ -14,7 +14,7 @@ export const initialState = {
 export function reducer(state, action) {
   const _state = structuredClone(state)
   const { type, payload } = action
-  console.log({ type, payload })
+  // console.log({ type, payload })
   switch (type) {
     case 'updateData': {
       let totalLecturers = _state.gioiTinh.reduce((acc, item) => acc + item.soGiangVien, 0);

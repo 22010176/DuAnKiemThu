@@ -109,7 +109,6 @@ function KhoaPage() {
             e.preventDefault()
             const data = Object.fromEntries(new FormData(createFormRef.current))
             data.maKhoa = ""
-            console.log(data)
             if (mode === 'create') {
               await axios.post('http://localhost:5249/Khoa', data)
                 .then(async () => {

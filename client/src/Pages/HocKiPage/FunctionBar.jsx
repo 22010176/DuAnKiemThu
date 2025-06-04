@@ -1,6 +1,7 @@
 import { faArrowRotateRight, faPlus, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Select } from 'antd';
+
 import { useContext } from 'react';
 import { Context } from './context';
 
@@ -29,7 +30,7 @@ function FunctionBar() {
             dispatch([
               { type: "updateModelMode", payload: "add" },
               { type: "updateModel", payload: true },
-              { type: "resetForm" }
+              { type: "resetFormData" }
             ])
           }} />
         <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />}

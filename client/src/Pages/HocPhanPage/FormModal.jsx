@@ -1,18 +1,15 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, InputNumber, Modal } from 'antd';
-import { useContext } from 'react';
 
 import { CreateHocPhan, GetHocPhan, UpdateHocPhan } from "@/api/hocphanApi";
-
-import { Context } from './context';
+import { useData } from "../HocKiPage/context";
 
 function FormModal() {
   const [{
     showModal, modalMode, selectedKhoa,
     form: { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan }
-  }, dispatch] = useContext(Context)
-
+  }, dispatch] = useData()
 
   async function onFormSubmit(e) {
     e.preventDefault()
@@ -23,19 +20,19 @@ function FormModal() {
     const data = await GetHocPhan().then(data => data)
     dispatch([
       { type: "updateModal", payload: false },
-      { type: "resetForm" },
+      { type: "resetFormData" },
       { type: "updateFormMode" },
       { type: "updateHocPhanList", payload: data },
       { type: "updateSelectedKhoa", payload: 'all' }
     ])
   }
-
+  console.log({ id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
   return (
     <Modal
       okText="Hoàn thành" cancelText="Hủy" width={600} open={showModal}
       onCancel={() => dispatch([
         { type: "updateModal", payload: false },
-        { type: "resetForm" },
+        { type: "resetFormData" },
         { type: "updateFormMode" }
       ])}
       title={(

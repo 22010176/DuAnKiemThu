@@ -56,7 +56,7 @@ export const reducer = (state, action) => {
       break;
 
     // reset form state
-    case "resetForm":
+    case "resetFormData":
       _state.form = { ...initialState.form }
       break;
 
