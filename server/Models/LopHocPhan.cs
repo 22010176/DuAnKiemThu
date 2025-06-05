@@ -22,7 +22,7 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
         string name = GenerateRandomName(random.Next(5, 20));
         return new LopHocPhan()
         {
-            MaLop = $"{hocPhan}_{hocKi}_{namBd}_{DateTime.Now.Millisecond}", // HP_KI_Năm bd
+            MaLop = $"{hocPhan}_{hocKi}_{namBd}_{random.Next()}", // HP_KI_Năm bd
             TenLop = name,
             SoLuongSinhVien = (uint)random.Next(20, 200),
             HocPhanId = hocPhanId,

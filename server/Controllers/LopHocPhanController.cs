@@ -35,6 +35,7 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
         join hp in _ct.HocPhan on l.HocPhanId equals hp.Id
         join hk in _ct.HocKi on l.HocKiId equals hk.Id
         join gv in _ct.GiangVien on l.GiangVienId equals gv.Id
+        join khoa in _ct.Khoa on hp.KhoaId equals khoa.Id
         orderby l.MaLop.Length, l.MaLop
         select new
         {
@@ -42,10 +43,17 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
             l.TenLop,
             l.SoLuongSinhVien,
             l.HocPhanId,
-            l.HocKiId,
-            l.GiangVienId,
+            hp.SoTinChi,
+            hp.SoTiet,
             hp.TenHocPhan,
+
+            khoa.MaKhoa,
+            khoa.TenKhoa,
+            khoa.TenVietTat,
+
+            l.HocKiId,
             hk.TenKi,
+            l.GiangVienId,
             gv.TenGiangVien,
             l.TrangThai
         };
