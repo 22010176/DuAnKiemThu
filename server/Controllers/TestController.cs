@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using server.Models;
+using ZstdSharp.Unsafe;
 
 namespace server.Controllers;
 
@@ -17,9 +18,12 @@ public class TestController(AppDbContext context) : ControllerBase
     _ct.GiangVien.RemoveRange(await _ct.GiangVien.ToListAsync());
     _ct.BangCap.RemoveRange(await _ct.BangCap.ToListAsync());
     _ct.ChucVu.RemoveRange(await _ct.ChucVu.ToListAsync());
+    _ct.HocPhan.RemoveRange(await _ct.HocPhan.ToListAsync());
+    _ct.LopHocPhan.RemoveRange(await _ct.LopHocPhan.ToListAsync());
+    _ct.HocKi.RemoveRange(await _ct.HocKi.ToListAsync());
     _ct.Khoa.RemoveRange(await _ct.Khoa.ToListAsync());
     _ct.HocKi.RemoveRange(await _ct.HocKi.ToListAsync());
-  
+
     await _ct.SaveChangesAsync();
 
     return Ok();
@@ -122,7 +126,7 @@ public class TestController(AppDbContext context) : ControllerBase
     return Ok();
   }
 
-  [HttpGet("add2")]
+  [HttpGet("add-giang-vien")]
   public async Task<ActionResult> AddGV()
   {
     List<BangCap> _bangCap = await _ct.BangCap.ToListAsync();
@@ -154,6 +158,80 @@ public class TestController(AppDbContext context) : ControllerBase
       }
 
     }
+
+    return Ok();
+  }
+
+  [HttpPost("add-hoc-phan")]
+  public async Task<ActionResult> AddHocPhan()
+  {
+    List<Khoa> _Khoa = await _ct.Khoa.ToListAsync();
+    if (_Khoa.Count == 0) return BadRequest("Chưa có Khoa nào, hãy thêm Khoa trước");
+
+    var random = new Random();
+    int hp_ = await _ct.HocPhan.CountAsync();
+    for (int i = 0; i < 1000; ++i)
+    {
+      try
+      {
+        Khoa k = _Khoa[random.Next(_Khoa.Count)];
+        HocPhan hocPhan = HocPhan.Generate(k);
+        await _ct.HocPhan.AddAsync(hocPhan);
+        await _ct.SaveChangesAsync();
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return BadRequest();
+      }
+    }
+
+    return Ok();
+  }
+
+  [HttpPost("add-hoc-ki")]
+  public async Task<ActionResult> AddHocKi()
+  {
+    List<HocKi> hocKis = [];
+    for (int i = 0; i < 1000; ++i) hocKis.Add(HocKi.Generate());
+
+    await _ct.HocKi.AddRangeAsync(hocKis);
+    await _ct.SaveChangesAsync();
+    return Ok();
+  }
+
+  [HttpPost("add-lop-hoc-phan")]
+  public async Task<ActionResult> AddLopHocPhan()
+  {
+    List<HocPhan> hocPhans = await _ct.HocPhan.ToListAsync();
+    List<HocKi> hocKis = await _ct.HocKi.ToListAsync();
+    List<GiangVien> giangViens = await _ct.GiangVien.ToListAsync();
+
+    if (hocPhans.Count == 0 || hocKis.Count == 0 || giangViens.Count == 0)
+      return BadRequest("Chưa có Học phần, Học kỳ hoặc Giảng viên nào, hãy thêm chúng trước");
+
+    var random = new Random();
+    int lhp_ = await _ct.LopHocPhan.CountAsync();
+    List<LopHocPhan> lopHocPhans = [];
+    for (int i = 0; i < 1000; ++i)
+    {
+      try
+      {
+        HocPhan hp = hocPhans[random.Next(hocPhans.Count)];
+        HocKi hk = hocKis[random.Next(hocKis.Count)];
+        GiangVien? gv = random.NextDouble() > 0.5 ? giangViens[random.Next(giangViens.Count)] : null;
+
+        LopHocPhan lopHocPhan = LopHocPhan.Generate(hk.TenKi, hp.TenHocPhan, hk.ThoiGianBatDau.Year.ToString(), hp.Id, hk.Id, gv?.Id);
+        lopHocPhans.Add(lopHocPhan);
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+        return BadRequest();
+      }
+    }
+    await _ct.LopHocPhan.AddRangeAsync(lopHocPhans);
+    await _ct.SaveChangesAsync();
 
     return Ok();
   }

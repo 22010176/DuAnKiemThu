@@ -65,7 +65,7 @@ function DataTable() {
         bordered
         scroll={{ x: 800 }}
         pagination={{
-          pageSize: 15,
+          pageSize: 10,
           showSizeChanger: false,
           showQuickJumper: false,
           showTotal: (total, range) => `Hiển thị ${range[0]}-${range[1]} trong tổng số ${total} bản ghi`,

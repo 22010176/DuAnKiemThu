@@ -20,19 +20,7 @@ const PhanCongGVPage = () => {
   // Mock data for classes
   const [classData, setClassData] = useState([
     {
-      id: 1,
-      maLop: 'CNTT01_01',
-      tenLop: 'Lập trình Java - Lớp 1',
-      hocPhan: 'Lập trình Java',
-      maHocPhan: 'CNTT01',
-      khoa: 'Công nghệ thông tin',
-      ky: 'Kỳ 1',
-      namHoc: '2024-2025',
-      soSinhVien: 45,
-      soTinChi: 3,
-      trangThai: 'Đang mở',
-      giangVien: null,
-      maGiangVien: null
+      id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đang mở', giangVien: null, maGiangVien: null
     },
     {
       id: 2,

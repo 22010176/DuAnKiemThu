@@ -16,15 +16,15 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
             .Select(s => s[_random.Next(s.Length)])
         ]);
     }
-    public static LopHocPhan Generate(string hocKi, string hocPhan, string namBd, Guid hocPhanId, Guid hocKiId, Guid giangVienId)
+    public static LopHocPhan Generate(string hocKi, string hocPhan, string namBd, Guid hocPhanId, Guid hocKiId, Guid? giangVienId)
     {
         Random random = new();
         string name = GenerateRandomName(random.Next(5, 20));
         return new LopHocPhan()
         {
-            MaLop = $"{hocPhan}_{hocKi}_{namBd}", // HP_KI_Năm bd
+            MaLop = $"{hocPhan}_{hocKi}_{namBd}_{DateTime.Now.Millisecond}", // HP_KI_Năm bd
             TenLop = name,
-            SoLuongSinhVien = random.NextInt64(20, 200),
+            SoLuongSinhVien = (uint)random.Next(20, 200),
             HocPhanId = hocPhanId,
             HocKiId = hocKiId,
             GiangVienId = giangVienId
@@ -51,10 +51,10 @@ public class LopHocPhanDto
 {
     public string MaLop { get; set; } = null!;
     public string TenLop { get; set; } = null!;
-    public long SoLuongSinhVien { get; set; } = 0!;
+    public uint SoLuongSinhVien { get; set; } = 0!;
     public Guid HocPhanId { get; set; }
     public Guid HocKiId { get; set; }
-    public Guid GiangVienId { get; set; }
+    public Guid? GiangVienId { get; set; }
 
     public TrangThaiLop TrangThai { get; set; }
     public static TrangThaiLop XacDinhTrangThai(LopHocPhan lop)

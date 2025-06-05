@@ -5,11 +5,25 @@ namespace server.Models;
 
 public class HocKi : HocKiDto, IEntityPostgre
 {
+  static DateTime GenerateRandomDate()
+  {
+    Random rand = new();
+    return new DateTime(
+      1950 + rand.Next() % 60,
+      rand.Next() % 12 + 1,
+      rand.Next() % 28 + 1,
+      rand.Next(24),
+      rand.Next(60), rand.Next(60), rand.Next(1000), DateTimeKind.Utc);
+  }
   public static HocKi Generate()
   {
+    DateTime start = GenerateRandomDate();
+    DateTime end = start.AddMonths(6);
     return new HocKi()
     {
-      TenKi = Guid.NewGuid().ToString()
+      TenKi = Guid.NewGuid().ToString(),
+      ThoiGianBatDau = start,
+      ThoiGianKetThuc = end
     };
   }
   [Key]

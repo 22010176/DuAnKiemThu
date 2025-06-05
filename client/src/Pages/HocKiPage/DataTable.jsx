@@ -71,6 +71,7 @@ function DataTable() {
   return (
     <Table className='mt-4' columns={columns} dataSource={kyData}
       pagination={{
+        pageSize: 10,
         showSizeChanger: true,
         showQuickJumper: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} học kỳ`,

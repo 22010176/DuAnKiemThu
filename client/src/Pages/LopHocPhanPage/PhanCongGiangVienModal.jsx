@@ -98,8 +98,8 @@ function PhanCongGiangVienModal() {
   return (
     <Modal
       title="Phân công giảng viên"
-      open={true}
-      // open={isModalVisible}
+      // open={true}
+      open={isModalVisible}
       onCancel={() => {
         setIsModalVisible(false);
         setSelectedTeacher(null);
@@ -171,12 +171,7 @@ function PhanCongGiangVienModal() {
           </Button>
         </Col>
         <Col>
-          <Button
-            type="primary"
-            icon={<CheckOutlined />}
-            onClick={handleConfirmAssign}
-            disabled={!selectedTeacher}
-          >
+          <Button type="primary" icon={<CheckOutlined />} onClick={handleConfirmAssign} disabled={!selectedTeacher} s>
             Xác nhận phân công
           </Button>
         </Col>

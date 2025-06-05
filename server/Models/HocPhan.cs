@@ -13,7 +13,22 @@ public class HocPhan : HocPhanDto, IEntityPostgre
       MaHocPhan = $"{khoa.MaKhoa}_{DateTime.Now.Ticks}",
       TenHocPhan = tenHP,
       HeSoHocPhan = heSoHP,
-      Khoa = khoa
+      Khoa = khoa,
+
+    };
+  }
+  public static HocPhan Generate(Khoa khoa)
+  {
+    Random random = new();
+
+    return new()
+    {
+      MaHocPhan = $"{khoa.MaKhoa}_{DateTime.Now.Ticks}",
+      TenHocPhan = Guid.NewGuid().ToString(),
+      HeSoHocPhan = (float)(random.Next(1, 10) + random.NextDouble()),
+      SoTinChi = (uint)random.Next(1, 5),
+      SoTiet = (uint)random.Next(10, 1000),
+      KhoaId = khoa.Id
     };
   }
 
