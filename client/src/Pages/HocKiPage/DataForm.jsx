@@ -34,7 +34,7 @@ function DataForm() {
     ])
   }
 
-  console.log('ddddd', tenKi, year, thoiGianBatDau, thoiGianKetThuc)
+  console.log('ddddd',{ tenKi, year, thoiGianBatDau, thoiGianKetThuc})
   return (
     <Modal open={showModal} centered width={600} title={
       <h1 className="text-xl font-bold text-blue-900 uppercase">
