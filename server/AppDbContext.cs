@@ -68,8 +68,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHocPhan).IsUnique();
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHocPhan).IsUnique();
 
-    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.maLop).IsUnique();
-    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.tenLop).IsUnique();
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.MaLop).IsUnique();
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.TenLop).IsUnique();
 
     // modelBuilder.Entity<HocPhan_TinChi>()
     //   .HasOne(e => e.HocPhan)

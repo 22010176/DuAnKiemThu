@@ -35,12 +35,12 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
         join hp in _ct.HocPhan on l.HocPhanId equals hp.Id
         join hk in _ct.HocKi on l.HocKiId equals hk.Id
         join gv in _ct.GiangVien on l.GiangVienId equals gv.Id
-        orderby l.maLop.Length, l.maLop
+        orderby l.MaLop.Length, l.MaLop
         select new
         {
-            l.maLop,
-            l.tenLop,
-            l.soLuongSinhVien,
+            l.MaLop,
+            l.TenLop,
+            l.SoLuongSinhVien,
             l.HocPhanId,
             l.HocKiId,
             l.GiangVienId,
@@ -60,8 +60,8 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
         if (lop == null)
             return NotFound();
 
-        lop.tenLop = dto.LopHocPhan!.tenLop;
-        lop.soLuongSinhVien = dto.LopHocPhan.soLuongSinhVien;
+        lop.TenLop = dto.LopHocPhan!.TenLop;
+        lop.SoLuongSinhVien = dto.LopHocPhan.SoLuongSinhVien;
         lop.TrangThai = dto.LopHocPhan.TrangThai;
 
         await _ct.SaveChangesAsync();
@@ -73,8 +73,7 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
     public async Task<IActionResult> CapNhatTrangThai(Guid id)
     {
         var lop = await _ct.LopHocPhan.Include(l => l.HocKi).FirstOrDefaultAsync(l => l.Id == id);
-        if (lop == null)
-            return NotFound();
+        if (lop == null) return NotFound();
 
         lop.TrangThai = LopHocPhanDto.XacDinhTrangThai(lop);
         await _ct.SaveChangesAsync();
@@ -94,15 +93,15 @@ public class LopHocPhanController(IRepository<LopHocPhan> repo, AppDbContext con
         if (hocPhan == null)
             return BadRequest("Học phần không tồn tại");
 
-        var exists = await _ct.LopHocPhan.AnyAsync(l => l.maLop == dto.maLop);
+        var exists = await _ct.LopHocPhan.AnyAsync(l => l.MaLop == dto.MaLop);
         if (exists)
             return BadRequest("Mã lớp đã tồn tại");
 
         var lop = new LopHocPhan
         {
-            maLop = dto.maLop,
-            tenLop = dto.tenLop,
-            soLuongSinhVien = dto.soLuongSinhVien,
+            MaLop = dto.MaLop,
+            TenLop = dto.TenLop,
+            SoLuongSinhVien = dto.SoLuongSinhVien,
             HocKiId = dto.HocKiId,
             HocPhanId = dto.HocPhanId,
             GiangVienId = dto.GiangVienId

@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export const Context = createContext()
 
@@ -11,6 +11,7 @@ export const initialState = {
   showModal: false,
   modalMode: "add",
   form: {
+    id: "",
     maHocPhan: "",
     tenHocPhan: "",
     khoaId: null,
@@ -87,4 +88,9 @@ export const reducer = (state, action) => {
 
 
   return _state
+}
+
+export function useData() {
+  const result = useContext(Context)
+  return result ?? [initialState, () => { }]
 }

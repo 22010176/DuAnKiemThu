@@ -26,33 +26,9 @@ const ThongKeLopPage = () => {
   ];
 
   const thongKeData = [
-    {
-      key: '1',
-      hocPhan: 'Lập trình Java',
-      maHocPhan: 'IT001',
-      soLop: 3,
-      tongSinhVien: 120,
-      sinhVienTrungBinh: 40,
-      khoa: 'CNTT'
-    },
-    {
-      key: '2',
-      hocPhan: 'Cơ sở dữ liệu',
-      maHocPhan: 'IT002',
-      soLop: 2,
-      tongSinhVien: 80,
-      sinhVienTrungBinh: 40,
-      khoa: 'CNTT'
-    },
-    {
-      key: '3',
-      hocPhan: 'Kế toán tài chính',
-      maHocPhan: 'KT001',
-      soLop: 4,
-      tongSinhVien: 160,
-      sinhVienTrungBinh: 40,
-      khoa: 'KT'
-    }
+    { key: '1', hocPhan: 'Lập trình Java', maHocPhan: 'IT001', soLop: 3, tongSinhVien: 120, sinhVienTrungBinh: 40, khoa: 'CNTT' },
+    { key: '2', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'IT002', soLop: 2, tongSinhVien: 80, sinhVienTrungBinh: 40, khoa: 'CNTT' },
+    { key: '3', hocPhan: 'Kế toán tài chính', maHocPhan: 'KT001', soLop: 4, tongSinhVien: 160, sinhVienTrungBinh: 40, khoa: 'KT' }
   ];
 
   const columns = [
@@ -86,44 +62,20 @@ const ThongKeLopPage = () => {
         <Row gutter={16}>
           <Col span={6}>
             <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>Khoa:</div>
-            <Select
-              placeholder="Chọn khoa"
-              style={{ width: '100%' }}
-              value={selectedKhoa || undefined}
-              onChange={setSelectedKhoa}
-              allowClear
-            >
-              {khoaList.map(khoa => (
-                <Option key={khoa.id} value={khoa.id}>{khoa.name}</Option>
-              ))}
+            <Select placeholder="Chọn khoa" style={{ width: '100%' }} value={selectedKhoa || undefined} onChange={setSelectedKhoa} allowClear>
+              {khoaList.map(khoa => <Option key={khoa.id} value={khoa.id}>{khoa.name}</Option>)}
             </Select>
           </Col>
           <Col span={6}>
             <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>Năm học:</div>
-            <Select
-              placeholder="Chọn năm học"
-              style={{ width: '100%' }}
-              value={selectedNamHoc || undefined}
-              onChange={setSelectedNamHoc}
-              allowClear
-            >
-              {namHocList.map(nam => (
-                <Option key={nam} value={nam}>{nam}</Option>
-              ))}
+            <Select placeholder="Chọn năm học" style={{ width: '100%' }} value={selectedNamHoc || undefined} onChange={setSelectedNamHoc} allowClear>
+              {namHocList.map(nam => <Option key={nam} value={nam}>{nam}</Option>)}
             </Select>
           </Col>
           <Col span={6}>
             <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>Kỳ học:</div>
-            <Select
-              placeholder="Chọn kỳ học"
-              style={{ width: '100%' }}
-              value={selectedKy || undefined}
-              onChange={setSelectedKy}
-              allowClear
-            >
-              {kyHocList.map(ky => (
-                <Option key={ky.id} value={ky.id}>{ky.name}</Option>
-              ))}
+            <Select placeholder="Chọn kỳ học" style={{ width: '100%' }} value={selectedKy || undefined} onChange={setSelectedKy} allowClear>
+              {kyHocList.map(ky => <Option key={ky.id} value={ky.id}>{ky.name}</Option>)}
             </Select>
           </Col>
           <Col span={6}>
@@ -132,7 +84,7 @@ const ThongKeLopPage = () => {
               <Button type="primary" icon={<BarChartOutlined />} >
                 Thống kê
               </Button>
-              <Button type='primary'>Xuất báo cáo</Button>  
+              <Button type='primary'>Xuất báo cáo</Button>
               {/* Đổi màu nút Xuất báo cáo thành màu #19A10A */}
             </Space>
           </Col>
@@ -143,42 +95,22 @@ const ThongKeLopPage = () => {
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
           <Card>
-            <Statistic
-              title="Tổng số lớp mở"
-              value={tongSoLop}
-              prefix={<BookOutlined />}
-              valueStyle={{ color: '#3f8600' }}
-            />
+            <Statistic title="Tổng số lớp mở" value={tongSoLop} prefix={<BookOutlined />} valueStyle={{ color: '#3f8600' }} />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic
-              title="Tổng số sinh viên"
-              value={tongSinhVien}
-              prefix={<TeamOutlined />}
-              valueStyle={{ color: '#1890ff' }}
-            />
+            <Statistic title="Tổng số sinh viên" value={tongSinhVien} prefix={<TeamOutlined />} valueStyle={{ color: '#1890ff' }} />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic
-              title="SV trung bình/lớp"
-              value={sinhVienTrungBinhTong}
-              prefix={<AccountBookOutlined />} //đổi thành icon có hình người (2 - 3 người)
-              valueStyle={{ color: '#722ed1' }}
-            />
+            <Statistic title="SV trung bình/lớp" value={sinhVienTrungBinhTong} prefix={<AccountBookOutlined />} valueStyle={{ color: '#722ed1' }} />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic
-              title="Số học phần"
-              value={filteredData.length}
-              prefix={<BookOutlined />}
-              valueStyle={{ color: '#eb2f96' }}
-            />
+            <Statistic title="Số học phần" value={filteredData.length} prefix={<BookOutlined />} valueStyle={{ color: '#eb2f96' }} />
           </Card>
         </Col>
       </Row>
@@ -190,19 +122,17 @@ const ThongKeLopPage = () => {
             <BarChartOutlined style={{ marginRight: '8px' }} />
             Chi tiết thống kê theo học phần
           </span>
-        }
-      >
+        }>
         <Table
           columns={columns}
           dataSource={filteredData}
+          scroll={{ x: 800 }}
+          size="middle"
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => 
-              `${range[0]}-${range[1]} của ${total} học phần`,
+            showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} học phần`,
           }}
-          scroll={{ x: 800 }}
-          size="middle"
         />
       </Card>
     </div>

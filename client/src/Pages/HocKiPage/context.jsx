@@ -12,6 +12,7 @@ export const initialState = {
   yearList: [2023, 2024, 2025, 2026],
   kyData: [],
   formData: {
+    id: '',
     tenKi: '',
     year: 2024,
     thoiGianBatDau: undefined,
@@ -24,21 +25,23 @@ export const reducer = (state, action) => {
   const _actions = Array.isArray(action) ? action : [action]
 
   for (const { type, payload } of _actions) {
+    const _payload = typeof payload == 'function' ? payload(_state) : payload
+
     console.log({ type, payload })
     switch (type) {
       // payload = 2020 | 'all'
       case 'updateSelectedYear':
-        _state.selectedYear = payload
+        _state.selectedYear = _payload
         break
 
       // payload = 'add' | 'edit' | null
       case 'updateModelMode':
-        _state.modelMode = payload
+        _state.modelMode = _payload
         break
 
       // payload = true | false
       case 'updateModel':
-        _state.showModal = payload
+        _state.showModal = _payload
         break
 
       case 'resetFormData':
@@ -47,31 +50,31 @@ export const reducer = (state, action) => {
 
       // payload = { name, value }
       case 'updateFormData':
-        _state.formData = { ..._state.formData, [payload.name]: payload.value }
+        _state.formData = { ..._state.formData, [_payload.name]: _payload.value }
         break
 
       // payload = {}
       case 'setFormData':
         _state.formData = {
-          tenKi: payload.tenKi,
-          year: new Date(payload.thoiGianBatDau).getFullYear(),
-          thoiGianBatDau: dayjs(payload.thoiGianBatDau),
-          thoiGianKetThuc: dayjs(payload.thoiGianKetThuc)
+          tenKi: _payload.tenKi,
+          year: new Date(_payload.thoiGianBatDau).getFullYear(),
+          thoiGianBatDau: dayjs(_payload.thoiGianBatDau),
+          thoiGianKetThuc: dayjs(_payload.thoiGianKetThuc)
         }
         console.log({
           result: _state.formData,
-          input: payload
+          input: _payload
         })
         break
 
       // payload = []
       case 'updateYearList':
-        _state.yearList = payload
+        _state.yearList = _payload
         break
 
       // payload = []
       case 'updateKyData':
-        _state.kyData = payload
+        _state.kyData = _payload
         break
 
       default:
@@ -82,4 +85,9 @@ export const reducer = (state, action) => {
   return _state
 }
 
-export function useData() { return useContext(Context) }
+export function useData() {
+  const result = useContext(Context)
+  console.log(result)
+  return result ?? [initialState, () => { }]
+}
+

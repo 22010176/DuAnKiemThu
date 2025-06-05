@@ -1,10 +1,10 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Popconfirm, Space, Table } from "antd";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
-import { Context } from "./context";
 import { DeleteHocPhan, GetHocPhan } from "@/api/hocphanApi";
+import { useData } from "./context";
 
 function TableHeader({ children }) {
   return (
@@ -13,9 +13,7 @@ function TableHeader({ children }) {
 }
 
 function DataTable() {
-  const [{
-    hocPhanList, selectedKhoaId, selectedKhoa
-  }, dispatch] = useContext(Context)
+  const [{ hocPhanList, selectedKhoaId, selectedKhoa }, dispatch] = useData()
 
   useEffect(function () {
     GetHocPhan()

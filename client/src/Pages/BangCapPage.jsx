@@ -19,20 +19,11 @@ function BangCapPage() {
   const [mode, setMode] = useState('create')
   const [data, setData] = useState([])
 
-
   const success = (content) => {
     messageApi.open({ type: 'success', content });
   };
 
   const error = m => messageApi.open({ type: 'error', content: m, });
-
-
-  // const warning = () => {
-  //   messageApi.open({
-  //     type: 'warning',
-  //     content: 'This is a warning message',
-  //   });
-  // };
 
   const columns = [
     {
@@ -41,15 +32,18 @@ function BangCapPage() {
       render: (_, record, index) => <TableHeader>{index + 1}</TableHeader>
     },
     {
-      title: () => <TableHeader>Mã bằng cấp</TableHeader>, dataIndex: 'maBangCap', key: 'maBangCap', width: 120,
+      dataIndex: 'maBangCap', key: 'maBangCap', width: 120,
+      title: () => <TableHeader>Mã bằng cấp</TableHeader>,
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
-      title: () => <TableHeader>Tên bằng cấp</TableHeader>, dataIndex: 'tenBangCap', key: 'tenBangCap', width: 400,
+      dataIndex: 'tenBangCap', key: 'tenBangCap', width: 400,
+      title: () => <TableHeader>Tên bằng cấp</TableHeader>,
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
-      title: () => <TableHeader>Tên viết tắt</TableHeader>, dataIndex: 'tenVietTat', key: 'tenVietTat', width: 120,
+      dataIndex: 'tenVietTat', key: 'tenVietTat', width: 120,
+      title: () => <TableHeader>Tên viết tắt</TableHeader>,
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {

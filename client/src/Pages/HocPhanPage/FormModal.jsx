@@ -3,20 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, InputNumber, Modal } from 'antd';
 
 import { CreateHocPhan, GetHocPhan, UpdateHocPhan } from "@/api/hocphanApi";
-import { useData } from "../HocKiPage/context";
+import { useData } from "./context";
 
 function FormModal() {
-  const [{
-    showModal, modalMode, selectedKhoa,
-    form: { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan }
-  }, dispatch] = useData()
+  const [{ showModal, modalMode, selectedKhoa, form }, dispatch] = useData()
+  const { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan } = form
 
   async function onFormSubmit(e) {
     e.preventDefault()
-    if (modalMode == 'add')
-      await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
-    else if (modalMode == 'edit')
-      await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    if (modalMode == 'add') await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    else if (modalMode == 'edit') await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+
     const data = await GetHocPhan().then(data => data)
     dispatch([
       { type: "updateModal", payload: false },
