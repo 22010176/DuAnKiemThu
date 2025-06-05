@@ -4,8 +4,14 @@ import { faCheck, faFilter, faPen, faPlus, faTrash, faUserPlus } from "@fortawes
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
 import { useState } from 'react';
+import { useData } from './context';
 
 function FunctionBar() {
+  const [{
+    tableData
+  }, dispatch] = useData()
+
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [form] = Form.useForm();
   const [bulkForm] = Form.useForm();
@@ -21,9 +27,7 @@ function FunctionBar() {
     }),
   };
   const handleAdd = () => {
-    setEditingRecord(null);
-    form.resetFields();
-    setIsModalVisible(true);
+
   };
 
   const handleBulkAdd = () => {

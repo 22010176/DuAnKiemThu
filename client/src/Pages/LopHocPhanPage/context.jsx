@@ -3,9 +3,8 @@ import { createContext, useContext } from "react";
 export const Context = createContext()
 
 export const initialState = {
-    selectedKhoa: '',
-    selectedNamHoc: '',
-    selectedKy: ''
+    tableData: [],
+    addModal: false
 }
 
 export const reducer = (state, action) => {
@@ -17,6 +16,9 @@ export const reducer = (state, action) => {
         console.log({ type, _payload })
 
         switch (type) {
+            case 'updateTableData':
+                _state.tableData = _payload
+                break
             default:
                 break
         }
