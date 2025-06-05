@@ -7,9 +7,7 @@ import { useState } from 'react';
 
 function FormModal() {
   const [form] = Form.useForm();
-  const [bulkForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [data, setData] = useState([
     { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A' },
