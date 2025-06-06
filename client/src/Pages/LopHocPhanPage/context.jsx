@@ -9,11 +9,11 @@ export const initialState = {
   giangVienData: [],
   khoaData: [],
   namHocData: [],
+  selectedLopHocPhan: [],
   addModal: false,
   addBulkModal: false,
+  giangVienModal: false,
   form: {
-    maLop: '',
-    tenLop: '',
     hocPhanId: '',
     hocKiId: '',
     giangVienId: '',
@@ -29,6 +29,14 @@ export const reducer = (state, action) => {
     const _payload = typeof payload == 'function' ? payload(_state) : payload
 
     switch (type) {
+      case 'updateGiangVienData':
+        _state.giangVienData = _payload
+        break
+
+      case 'updateGiangVienModal':
+        _state.giangVienModal = _payload
+        break
+
       // _payload = []
       case 'updateLopHocPhanData':
         _state.lopHocPhanData = _payload
@@ -71,12 +79,15 @@ export const reducer = (state, action) => {
         _state.form = { ...initialState.form }
         break
 
+      case 'updateSelectedRows':
+        _state.selectedLopHocPhan = _payload
+        break
 
       default:
         console.log('Failed: ', { type, _payload })
         continue reducerLoop
     }
-    console.log({ type, _payload, state })
+    console.log({ type, _payload, _state })
   }
 
   return _state

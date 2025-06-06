@@ -1,8 +1,6 @@
-import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
-import { faCopy } from '@fortawesome/free-regular-svg-icons';
-import { faCheck, faFilter, faPen, faPlus, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
+import { Button, Card, Col, Input, Row, Select } from 'antd';
 import { useState } from 'react';
 
 const { Search, } = Input;

@@ -7,11 +7,8 @@ import { DeleteLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
 
 function DataTable() {
   const [{
-    lopHocPhanData
+    lopHocPhanData, selectedLopHocPhan
   }, dispatch] = useData()
-
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
@@ -45,10 +42,12 @@ function DataTable() {
     },
   ];
   const rowSelection = {
-    selectedRowKeys,
+    selectedRowKeys: selectedLopHocPhan.map(i => i.id),
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-
+      dispatch([
+        { type: 'updateSelectedRows', payload: [...selectedRows] }
+      ])
     },
     getCheckboxProps: (record) => ({
       disabled: record.giangVienId,

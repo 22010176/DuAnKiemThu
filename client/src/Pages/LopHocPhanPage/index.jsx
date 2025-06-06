@@ -1,6 +1,7 @@
 import { Card } from 'antd';
 import { useEffect, useReducer } from 'react';
 
+import { GetHocKyList } from '@/api/hocKiApi';
 import { GetHocPhan } from '@/api/hocphanApi';
 import { GetKhoaList } from '@/api/khoaApi';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
@@ -13,7 +14,7 @@ import FormModal from './FormModal';
 import FunctionBar from './FuntionBar';
 import PhanCongGiangVienModal from './PhanCongGiangVienModal';
 import { Context, initialState, reducer } from './context';
-import { GetHocKyList } from '@/api/hocKiApi';
+import { GetGiangVien } from '@/api/giangVien';
 
 const LopHocPhanPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -34,6 +35,9 @@ const LopHocPhanPage = () => {
       ])),
       GetHocKyList().then(i => dispatch([
         { type: "updateHocKiData", payload: i }
+      ])),
+      GetGiangVien().then(i => dispatch([
+        { type: "updateGiangVienData", payload: i }
       ])),
     ])
   }, [])
