@@ -46,7 +46,7 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
     public HocKi? HocKi { get; set; }
     public GiangVien? GiangVien { get; set; }
 }
-public enum TrangThaiLop { DangMo, DaDong, KetThuc }
+// public enum TrangThaiLop { DangMo, DaDong, KetThuc }
 public class LopHocPhanDto
 {
     public string MaLop { get; set; } = null!;
@@ -55,18 +55,6 @@ public class LopHocPhanDto
     public Guid HocPhanId { get; set; }
     public Guid HocKiId { get; set; }
     public Guid? GiangVienId { get; set; }
-
-    public TrangThaiLop TrangThai { get; set; }
-    public static TrangThaiLop XacDinhTrangThai(LopHocPhan lop)
-    {
-        var now = DateTime.Now;
-        if (lop.HocKi == null) return TrangThaiLop.DangMo;
-        if (now > lop.HocKi.ThoiGianKetThuc) return TrangThaiLop.KetThuc;
-        if (lop.GiangVienId != Guid.Empty) return TrangThaiLop.DaDong;
-        if (now >= lop.HocKi.ThoiGianBatDau && now <= lop.HocKi.ThoiGianKetThuc) return TrangThaiLop.DangMo;
-
-        return TrangThaiLop.DangMo;
-    }
 }
 
 

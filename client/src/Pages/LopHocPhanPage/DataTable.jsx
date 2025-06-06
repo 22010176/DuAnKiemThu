@@ -3,19 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Space, Table, Tag, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { useData } from "./context";
-import { GetLopHocPhanList } from "@/api/lopHocPhanApi";
+import { DeleteLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
 
 function DataTable() {
   const [{
-    tableData
+    lopHocPhanData
   }, dispatch] = useData()
 
-  useEffect(function () {
-    GetLopHocPhanList()
-      .then(i => dispatch([
-        { type: "updateTableData", payload: i }
-      ]))
-  }, [dispatch])
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -28,12 +22,6 @@ function DataTable() {
     // { title: <p className='text-lg font-semibold'>Học kì</p>, key: 'tenKi', dataIndex: 'tenKi', width: 120, render: (_, record) => `${record.ky} (${record.namHoc})` },
     { title: <p className='text-lg font-semibold'>Sinh viên</p>, dataIndex: 'soLuongSinhVien', key: 'soLuongSinhVien', width: 90, align: 'center' },
     { title: <p className='text-lg font-semibold'>Tín chỉ</p>, dataIndex: 'soTinChi', key: 'soTinChi', width: 70, align: 'center' },
-    // {
-    //   title: <p className='text-lg font-semibold'>Trạng thái</p>, dataIndex: 'trangThai', key: 'trangThai', width: 120, render: (trangThai) => {
-    //     let color = trangThai === 'Đã phân công' ? 'green' : (trangThai === 'Chưa phân công' ? 'orange' : 'red');
-    //     return <Tag color={color}>{trangThai}</Tag>;
-    //   }
-    // },
     { title: <p className='text-lg font-semibold'>Giáo viên</p>, dataIndex: 'tenGiangVien', key: 'tenGiangVien', width: 150, render: (giangVien) => giangVien || <Tag color="orange">Chưa phân công</Tag> },
     {
       title: <p className='text-lg font-semibold'>Thao tác</p>, key: 'action', width: 120, fixed: 'right',
@@ -43,7 +31,14 @@ function DataTable() {
             <Button variant='outlined' color='blue' type="text" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => { }} />
           </Tooltip>
           <Tooltip title="Xóa">
-            <Button variant='outlined' color='red' type="text" danger icon={<FontAwesomeIcon icon={faTrash} />} onClick={() => { }} />
+            <Button variant='outlined' color='red' type="text" danger icon={<FontAwesomeIcon icon={faTrash} />}
+              onClick={async () => {
+                console.log(record)
+                await DeleteLopHocPhan(record.id)
+                dispatch([
+                  { type: "updateLopHocPhanData", payload: await GetLopHocPhanList() }
+                ])
+              }} />
           </Tooltip>
         </Space>
       ),
@@ -51,16 +46,19 @@ function DataTable() {
   ];
   const rowSelection = {
     selectedRowKeys,
-    onChange: setSelectedRowKeys,
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+
+    },
     getCheckboxProps: (record) => ({
-      disabled: record.trangThai !== 'Chưa phân công',
+      disabled: record.giangVienId,
     }),
   };
 
   return (
     <Table
       columns={columns}
-      dataSource={tableData}
+      dataSource={lopHocPhanData}
       rowKey="id"
       scroll={{ x: 1200 }}
       rowSelection={rowSelection}

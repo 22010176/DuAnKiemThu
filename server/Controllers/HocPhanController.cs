@@ -29,6 +29,7 @@ public class HocPhanController(AppDbContext context) : ControllerBase
         c.HeSoHocPhan,
         c.SoTiet,
         c.SoTinChi,
+        KhoaId = k.Id,
         k.TenKhoa,
         k.MaKhoa
       };

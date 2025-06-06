@@ -1,14 +1,13 @@
-import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
-import { faCheck, faFilter, faPen, faPlus, faTrash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AutoComplete, Button, Card, Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Space, Table, Tag, Tooltip, Typography, message } from 'antd';
+import { Button, Col, Form, Row, Space } from 'antd';
 import { useState } from 'react';
 import { useData } from './context';
 
 function FunctionBar() {
   const [{
-    tableData
+    tableData, addModal, addBulkModal
   }, dispatch] = useData()
 
 
@@ -27,7 +26,10 @@ function FunctionBar() {
     }),
   };
   const handleAdd = () => {
-
+    dispatch([
+      { type: "updateAddModal", payload: true },
+      { type: "updateAddBulkModal", payload: false }
+    ])
   };
 
   const handleBulkAdd = () => {

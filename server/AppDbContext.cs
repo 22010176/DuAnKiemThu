@@ -28,6 +28,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.MaGiangVien).IsUnique();
     modelBuilder.Entity<GiangVien>().HasIndex(b => b.SoDienThoai).IsUnique();
+    modelBuilder.Entity<GiangVien>().HasOne(e => e.BangCap).WithMany(e => e.GiangViens).HasForeignKey(e => e.BangCapId);
 
     modelBuilder.Entity<Khoa>().HasIndex(b => b.MaKhoa).IsUnique();
     modelBuilder.Entity<Khoa>().HasIndex(b => b.TenKhoa).IsUnique();
@@ -36,25 +37,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<HocKi>().HasIndex(b => b.TenKi).IsUnique();
 
     modelBuilder.Entity<Khoa_GiangVien>().HasIndex(k => new { k.KhoaId, k.GiangVienId }).IsUnique();
-    modelBuilder.Entity<Khoa_GiangVien>()
-      .HasOne(e => e.GiangVien)
-      .WithMany(s => s.Khoa_GiangViens)
-      .HasForeignKey(e => e.GiangVienId);
+    modelBuilder.Entity<Khoa_GiangVien>().HasOne(e => e.GiangVien).WithMany(s => s.Khoa_GiangViens).HasForeignKey(e => e.GiangVienId);
+    modelBuilder.Entity<Khoa_GiangVien>().HasOne(e => e.ChucVu).WithMany(c => c.Khoa_GiangViens).HasForeignKey(e => e.ChucVuId);
+    modelBuilder.Entity<Khoa_GiangVien>().HasOne(e => e.Khoa).WithMany(k => k.Khoa_GiangViens).HasForeignKey(e => e.KhoaId);
 
-    modelBuilder.Entity<Khoa_GiangVien>()
-      .HasOne(e => e.ChucVu)
-      .WithMany(c => c.Khoa_GiangViens)
-      .HasForeignKey(e => e.ChucVuId);
-
-    modelBuilder.Entity<Khoa_GiangVien>()
-      .HasOne(e => e.Khoa)
-      .WithMany(k => k.Khoa_GiangViens)
-      .HasForeignKey(e => e.KhoaId);
-
-    modelBuilder.Entity<GiangVien>()
-      .HasOne(e => e.BangCap)
-      .WithMany(e => e.GiangViens)
-      .HasForeignKey(e => e.BangCapId);
 
     base.OnModelCreating(modelBuilder);
 
@@ -68,8 +54,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHocPhan).IsUnique();
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHocPhan).IsUnique();
 
-    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.MaLop).IsUnique();
-    modelBuilder.Entity<LopHocPhan>().HasIndex(b => b.TenLop).IsUnique();
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => new { b.HocKiId, b.MaLop }).IsUnique();
+    modelBuilder.Entity<LopHocPhan>().HasIndex(b => new { b.HocKiId, b.TenLop }).IsUnique();
 
     // modelBuilder.Entity<HocPhan_TinChi>()
     //   .HasOne(e => e.HocPhan)
