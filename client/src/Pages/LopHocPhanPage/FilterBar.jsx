@@ -1,6 +1,6 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Card, Col, Input, Row, Select } from 'antd';
+import { Button, Card, Col, Input, message, Row, Select } from 'antd';
 import { useState } from 'react';
 import { useData } from "./context";
 
@@ -13,7 +13,7 @@ function FilterBar() {
 
   const { khoaId, hocKiId, namHoc, trangThai, lop } = filterForm
   const trangThaiOptions = ['Tất cả', 'Đã phân công', 'Chưa phân công'];
-  console.log(lopHocPhanData, filterForm)
+
   return (
     <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
       <Row gutter={16} align="middle">
@@ -79,17 +79,15 @@ function FilterBar() {
         <Col span={2}>
           <Button icon={<FontAwesomeIcon icon={faFilter} />} type="text"
             onClick={() => {
-              dispatch([
-                {
-                  type: 'updateFilterLopHocPhan',
-                  payload: lopHocPhanData
-                    .filter(i => (khoaId == 'all' || i.khoaId == khoaId)
-                      && (hocKiId == 'all' || i.hocKiId == hocKiId)
-                      && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
-                      && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc))
-                },
-                // { type: 'updateAddBulkModal', payload: true }
-              ])
+              const result = lopHocPhanData
+                .filter(i => (khoaId == 'all' || i.khoaId == khoaId)
+                  && (hocKiId == 'all' || i.hocKiId == hocKiId)
+                  && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
+                  && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc))
+
+              if (result.length == 0) return message.error("Không tìm thấy lớp nào!")
+
+              dispatch([{ type: 'updateFilterLopHocPhan', payload: result }])
             }}>
             Lọc
           </Button>

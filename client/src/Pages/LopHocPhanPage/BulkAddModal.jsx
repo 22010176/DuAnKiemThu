@@ -3,99 +3,43 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Form, InputNumber, Modal, Row, Select, message } from 'antd';
 import { useState } from 'react';
 
+import { useData } from "./context";
+import { CreateLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
+
 function BulkAddModal() {
-  const [bulkForm] = Form.useForm();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
-  const [editingRecord, setEditingRecord] = useState(null);
+  const [{
+    addBulkModal, khoaData, hocPhanData, hocKiData, namHocData, giangVienData, bulkForm
+  }, dispatch] = useData()
+  const { hocPhanId, hocKiId, soLuongSinhVien, soLop } = bulkForm
 
-  // Mock data
-  const [data, setData] = useState([
-    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đã phân công', giangVien: 'Nguyễn Văn A' },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Chưa phân công', giangVien: null },
-  ]);
 
-  const khoaOptions = ['Công nghệ thông tin', 'Kinh tế', 'Ngoại ngữ', 'Cơ khí'];
-  const namHocOptions = ['2024-2025', '2023-2024', '2022-2023'];
-  const kyOptions = ['Kỳ 1', 'Kỳ 2', 'Kỳ hè'];
+  const [khoaId, setKhoaId] = useState()
+  const [nam, setNam] = useState()
 
-  const hocPhanOptions = [
-    { ma: 'CNTT01', ten: 'Lập trình Java', tinChi: 3 },
-    { ma: 'CNTT02', ten: 'Cơ sở dữ liệu', tinChi: 3 },
-    { ma: 'CNTT03', ten: 'Mạng máy tính', tinChi: 2 },
-    { ma: 'KT01', ten: 'Kinh tế vi mô', tinChi: 3 }
-  ];
-
-  const handleSubmit = (values) => {
-    const selectedHocPhan = hocPhanOptions.find(hp => hp.ma === values.maHocPhan);
-
-    if (editingRecord) {
-      setData(data.map(item =>
-        item.id === editingRecord.id
-          ? {
-            ...item,
-            ...values,
-            hocPhan: selectedHocPhan?.ten,
-            soTinChi: selectedHocPhan?.tinChi
-          }
-          : item
-      ));
-      message.success('Cập nhật thành công!');
-    } else {
-      const newRecord = {
-        id: Date.now(),
-        ...values,
-        hocPhan: selectedHocPhan?.ten,
-        soTinChi: selectedHocPhan?.tinChi,
-        giangVien: null
-      };
-      setData([...data, newRecord]);
-      message.success('Thêm mới thành công!');
+  const handleSubmit = async (values) => {
+    const result = []
+    for (let i = 0; i < soLop; ++i) {
+      const res = await CreateLopHocPhan({ hocPhanId, hocKiId, soLuongSinhVien })
+      result.push(res)
     }
-    setIsModalVisible(false);
-  };
-
-  const handleBulkSubmit = (values) => {
-    const selectedHocPhan = hocPhanOptions.find(hp => hp.ma === values.maHocPhan);
-    const newRecords = [];
-
-    for (let i = 1; i <= values.soLop; i++) {
-      newRecords.push({
-        id: Date.now() + i,
-        maLop: `${values.maHocPhan}_${i.toString().padStart(2, '0')}`,
-        tenLop: `${selectedHocPhan?.ten} - Lớp ${i}`,
-        hocPhan: selectedHocPhan?.ten,
-        maHocPhan: values.maHocPhan,
-        khoa: values.khoa,
-        ky: values.ky,
-        namHoc: values.namHoc,
-        soSinhVien: values.soSinhVien,
-        soTinChi: selectedHocPhan?.tinChi,
-        trangThai: 'Chưa phân công',
-        giangVien: null
-      });
-    }
-
-    setData([...data, ...newRecords]);
-    message.success(`Tạo thành công ${values.soLop} lớp học phần!`);
-    setIsBulkModalVisible(false);
+    message.info(`Thêm thành công \n` + result.map(i => i.tenLop).join('\t'))
+    // console.log({ hocPhanId, hocKiId, giangVienId, soLuongSinhVien, soLop })
+    dispatch([
+      { type: 'updateAddBulkModal', payload: false },
+      { type: 'updateLopHocPhanData', payload: await GetLopHocPhanList() },
+      { type: 'resetBulkForm' }
+    ])
   };
 
   return (
     <Modal
       title={<h1 className="text-xl font-bold text-blue-900 uppercase">Tạo hàng loạt lớp học phần</h1>}
-      open={isBulkModalVisible}
+      open={addBulkModal}
       // open={true}
-      onCancel={() => setIsBulkModalVisible(false)}
+      onCancel={() => dispatch([
+        { type: 'updateAddBulkModal', payload: false }
+
+      ])}
       footer={[
         <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" onClick={handleSubmit} key="submit">
           Hoàn thành
@@ -103,20 +47,27 @@ function BulkAddModal() {
         </Button>
       ]}
       width={600}>
-      <Form form={bulkForm} layout="vertical" onFinish={handleBulkSubmit}>
+      <Form layout="vertical">
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="khoa" label="Khoa" rules={[{ required: true }]}>
-              <Select placeholder="Chọn khoa">
-                {khoaOptions.map(khoa => <Option key={khoa} value={khoa}>{khoa}</Option>)}
-              </Select>
+              <Select
+                placeholder="Chọn khoa"
+                value={khoaId}
+                onChange={(value) => setKhoaId(value)}
+                options={khoaData.map(khoa => ({ value: khoa.id, label: khoa.tenKhoa }))} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name="maHocPhan" label="Học phần" rules={[{ required: true }]}>
-              <Select placeholder="Chọn học phần">
-                {hocPhanOptions.map(hp => <Option key={hp.ma} value={hp.ma}>{hp.ma} - {hp.ten} ({hp.tinChi} TC)</Option>)}
-              </Select>
+              <Select
+                placeholder="Chọn học phần"
+                disabled={!khoaId}
+                value={hocPhanId}
+                onChange={(value) => dispatch([
+                  { type: 'updateBulkForm', payload: { name: 'hocPhanId', value } }
+                ])}
+                options={hocPhanData.filter(hp => hp.khoaId == khoaId).map(hp => ({ value: hp.id, label: `${hp.maHocPhan}-${hp.tenHocPhan} (${hp.soTinChi} TC)` }))} />
             </Form.Item>
           </Col>
 
@@ -125,18 +76,23 @@ function BulkAddModal() {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="namHoc" label="Năm học" rules={[{ required: true }]}>
-              <Select placeholder="Chọn năm học">
-                {namHocOptions.map(nam => <Option key={nam} value={nam}>{nam}</Option>)}
-              </Select>
+              <Select
+                placeholder="Chọn năm học"
+                value={nam}
+                onChange={(value) => setNam(value)}
+                options={namHocData.map(nam => ({ value: nam.nam, label: `${nam.nam} - ${nam.nam + 1}` }))} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item name="ky" label="Kỳ học" rules={[{ required: true }]}>
-              <Select placeholder="Chọn kỳ">
-                {kyOptions.map(ky => (
-                  <Option key={ky} value={ky}>{ky}</Option>
-                ))}
-              </Select>
+              <Select
+                placeholder="Chọn kỳ"
+                disabled={!nam}
+                value={hocKiId}
+                onChange={(value) => dispatch([
+                  { type: 'updateBulkForm', payload: { name: 'hocKiId', value } }
+                ])}
+                options={hocKiData.filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == nam).map(ky => ({ value: ky.id, label: ky.tenKi }))} />
             </Form.Item>
           </Col>
 
@@ -145,13 +101,21 @@ function BulkAddModal() {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="soLop" label="Số lớp cần tạo" rules={[{ required: true }]}>
-              <InputNumber min={1} max={10} placeholder="3" style={{ width: '100%' }} />
+              <InputNumber min={1} max={20} placeholder="3" style={{ width: '100%' }}
+                value={soLop}
+                onChange={(value) => dispatch([
+                  { type: 'updateBulkForm', payload: { name: 'soLop', value } }
+                ])} />
             </Form.Item>
           </Col>
 
           <Col span={12}>
             <Form.Item name="soSinhVien" label="Số sinh viên mỗi lớp" rules={[{ required: true }]}>
-              <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }} />
+              <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }}
+                value={soLuongSinhVien}
+                onChange={(value) => dispatch([
+                  { type: 'updateBulkForm', payload: { name: 'soLuongSinhVien', value } }
+                ])} />
             </Form.Item>
           </Col>
         </Row>

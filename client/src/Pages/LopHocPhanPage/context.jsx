@@ -15,17 +15,24 @@ export const initialState = {
   addBulkModal: false,
   giangVienModal: false,
   filterForm: {
-    khoaId: undefined,
-    namHoc: undefined,
-    hocKiId: undefined,
-    trangThai: undefined,
-    lop: undefined
+    khoaId: 'all',
+    namHoc: 'all',
+    hocKiId: 'all',
+    trangThai: 'all',
+    lop: ''
   },
   form: {
     hocPhanId: '',
     hocKiId: '',
     giangVienId: '',
     soLuongSinhVien: 0
+  },
+  bulkForm: {
+    hocPhanId: '',
+    hocKiId: '',
+    giangVienId: '',
+    soLuongSinhVien: 0,
+    soLop: 0
   }
 }
 
@@ -38,6 +45,14 @@ export const reducer = (state, action) => {
     const _payload = typeof payload == 'function' ? payload(_state) : payload
 
     switch (type) {
+      // _payload = { name: '', value }
+      case 'updateBulkForm':
+        _state.bulkForm[_payload.name] = _payload.value ?? null
+        break
+
+      case 'resetBulkForm':
+        _state.bulkForm = { ...initialState.bulkForm }
+        break
       // _payload = []
       case 'updateFilterLopHocPhan':
         _state.filterLopHocPhan = _payload

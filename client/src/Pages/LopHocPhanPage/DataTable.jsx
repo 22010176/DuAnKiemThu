@@ -1,6 +1,6 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, message, Space, Table, Tag, Tooltip } from 'antd';
 
 import { DeleteLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
 
@@ -8,12 +8,9 @@ import { useData } from "./context";
 
 function DataTable() {
   const [{
-    lopHocPhanData, selectedLopHocPhan, filterForm, filterLopHocPhan
+    lopHocPhanData, selectedLopHocPhan, filterLopHocPhan
   }, dispatch] = useData()
 
-  const { namHoc, hocKiId, khoaId, lopId, trangThai } = filterForm
-  console.log({ namHoc, hocKiId, khoaId, lopId, trangThai })
-  console.log(lopHocPhanData, filterForm)
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
     { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
@@ -34,11 +31,12 @@ function DataTable() {
           <Tooltip title="Xóa">
             <Button variant='outlined' color='red' type="text" danger icon={<FontAwesomeIcon icon={faTrash} />}
               onClick={async () => {
-                console.log(record)
                 await DeleteLopHocPhan(record.id)
                 dispatch([
-                  { type: "updateLopHocPhanData", payload: await GetLopHocPhanList() }
+                  { type: "updateLopHocPhanData", payload: await GetLopHocPhanList() },
+                  { type: 'updateFilterLopHocPhan', payload: [] }
                 ])
+                message.success(`Xóa thành công ${record.tenLop}!`)
               }} />
           </Tooltip>
         </Space>
@@ -48,10 +46,7 @@ function DataTable() {
   const rowSelection = {
     selectedRowKeys: selectedLopHocPhan.map(i => i.id),
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      dispatch([
-        { type: 'updateSelectedRows', payload: [...selectedRows] }
-      ])
+      dispatch([{ type: 'updateSelectedRows', payload: [...selectedRows] }])
     },
     getCheckboxProps: (record) => ({
       disabled: record.giangVienId,
@@ -61,7 +56,7 @@ function DataTable() {
   return (
     <Table
       columns={columns}
-      dataSource={filterLopHocPhan ? filterLopHocPhan : lopHocPhanData}
+      dataSource={filterLopHocPhan.length ? filterLopHocPhan : lopHocPhanData}
       rowKey="id"
       scroll={{ x: 1200 }}
       rowSelection={rowSelection}
