@@ -1,32 +1,29 @@
-import { useState } from "react";
-import { Card, Select, Table, Row, Col, Statistic, DatePicker, Button, Space } from 'antd';
-import { BarChartOutlined, TeamOutlined, BookOutlined, CalendarOutlined, AccountBookOutlined } from '@ant-design/icons';
+import { BarChartOutlined } from '@ant-design/icons';
+import { Card, Table } from 'antd';
+import { useData } from "./context";
 
-const { Option } = Select;
-const { RangePicker } = DatePicker;
 
 function DataTable() {
-  const [selectedKhoa, setSelectedKhoa] = useState('');
-  const [selectedNamHoc, setSelectedNamHoc] = useState('');
-  const [selectedKy, setSelectedKy] = useState('');
+  const [{
+    selectedKhoa, thongKeHocPhan
+  }, dispatch] = useData();
 
-  const thongKeData = [
-    { key: '1', hocPhan: 'Lập trình Java', maHocPhan: 'IT001', soLop: 3, tongSinhVien: 120, sinhVienTrungBinh: 40, khoa: 'CNTT' },
-    { key: '2', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'IT002', soLop: 2, tongSinhVien: 80, sinhVienTrungBinh: 40, khoa: 'CNTT' },
-    { key: '3', hocPhan: 'Kế toán tài chính', maHocPhan: 'KT001', soLop: 4, tongSinhVien: 160, sinhVienTrungBinh: 40, khoa: 'KT' }
-  ];
+  // console.log(thongKeHocPhan)
 
   const columns = [
     { title: 'Mã học phần', dataIndex: 'maHocPhan', key: 'maHocPhan', width: 120, },
-    { title: 'Tên học phần', dataIndex: 'hocPhan', key: 'hocPhan', width: 200, },
-    { title: 'Số lớp mở', dataIndex: 'soLop', key: 'soLop', width: 100, align: 'center', },
+    { title: 'Tên học phần', dataIndex: 'tenHocPhan', key: 'tenHocPhan', width: 200, },
+    { title: 'Số lớp mở', dataIndex: 'soLopHocPhan', key: 'soLopHocPhan', width: 100, align: 'center', },
     { title: 'Tổng sinh viên', dataIndex: 'tongSinhVien', key: 'tongSinhVien', width: 120, align: 'center', },
-    { title: 'SV trung bình/lớp', dataIndex: 'sinhVienTrungBinh', key: 'sinhVienTrungBinh', width: 150, align: 'center', },
-    { title: 'Khoa', dataIndex: 'khoa', key: 'khoa', width: 100, align: 'center', }
+    {
+      title: 'SV trung bình/lớp', dataIndex: 'trungBinhSinhVienLop', key: 'trungBinhSinhVienLop', width: 150, align: 'center',
+      render: data => (data ?? 0).toFixed(2)
+    },
+    { title: 'Khoa', dataIndex: 'tenKhoa', key: 'tenKhoa', width: 100, align: 'center', }
   ];
 
-  const filteredData = thongKeData.filter(item => {
-    return (!selectedKhoa || item.khoa === selectedKhoa);
+  const filteredData = thongKeHocPhan.filter(item => {
+    return (selectedKhoa == 'all' || item.khoaId === selectedKhoa);
   });
 
   return (

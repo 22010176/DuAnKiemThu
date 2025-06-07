@@ -7,7 +7,7 @@ import FilterSection from './FilterSection';
 import OverallStats from './OverallStats';
 import { Context, initialState, reducer } from './context';
 import { GetKhoaList } from '@/api/khoaApi';
-import { GetNamHocList } from '@/api/lhpThongKeApi';
+import { GetNamHocList, GetThongKeLopHocPhanTheoHocPhan, GetThongKeLopHocPhanTheoKhoa } from '@/api/lhpThongKeApi';
 import { GetHocKyList } from '@/api/hocKiApi';
 
 const ThongKeLopPage = () => {
@@ -17,14 +17,16 @@ const ThongKeLopPage = () => {
     Promise.all([
       GetKhoaList(),
       GetNamHocList(),
-      GetHocKyList()
-    ]).then(data => {
-      dispatch([
-        { type: 'updateData', payload: { key: 'khoaData', data: data[0] } },
-        { type: 'updateData', payload: { key: 'namHocData', data: data[1] } },
-        { type: 'updateData', payload: { key: 'hocKiData', data: data[2] } },
-      ])
-    })
+      GetHocKyList(),
+      GetThongKeLopHocPhanTheoKhoa(),
+      GetThongKeLopHocPhanTheoHocPhan()
+    ]).then(data => dispatch([
+      { type: 'updateData', payload: { key: 'khoaData', data: data[0] } },
+      { type: 'updateData', payload: { key: 'namHocData', data: data[1] } },
+      { type: 'updateData', payload: { key: 'hocKiData', data: data[2] } },
+      { type: 'updateData', payload: { key: 'thongKeKhoa', data: data[3] } },
+      { type: 'updateData', payload: { key: 'thongKeHocPhan', data: data[4] } },
+    ]))
   }, [])
 
   return (

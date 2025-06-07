@@ -1,15 +1,14 @@
-import { GetKhoaList } from '@/api/khoaApi';
 import { BarChartOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Row, Select, Space } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
 import { useData } from './context';
-import { GetNamHocList } from '@/api/lhpThongKeApi';
-import { GetHocKyList } from '@/api/hocKiApi';
+import { GetThongKeLopHocPhanTheoHocKi, GetThongKeLopHocPhanTheoHocPhan } from '@/api/lhpThongKeApi';
 
 
 function FilterSection() {
   const [{
-    selectedKhoa, selectedKy,
+    selectedKhoa, selectedKy, selectedNam,
     khoaData, namHocData, hocKiData
   }, dispatch] = useData()
   const [namHoc, setNamHoc] = useState('all')
@@ -27,19 +26,18 @@ function FilterSection() {
               { value: 'all', label: 'Tất cả khoa' },
               ...khoaData.map(k => ({ value: k.id, label: k.tenKhoa }))
             ]} />
-
-
         </Col>
         <Col span={6}>
           <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>Năm học:</div>
           <Select
             placeholder="Chọn năm học"
             style={{ width: '100%' }}
-            value={namHoc || undefined}
-            onChange={a => {
-              setNamHoc(a)
-              dispatch([{ type: 'updateSelectedKy', payload: 'all' }])
-            }}
+            value={selectedNam || undefined}
+            onChange={async a => dispatch([
+              { type: 'updateData', payload: { key: 'thongKeHocPhan', data: await GetThongKeLopHocPhanTheoHocPhan(new Date(a, 0, 1)) } },
+              { type: 'updateSelectedNam', payload: a },
+              { type: 'updateSelectedKy', payload: 'all' }
+            ])}
             allowClear
             options={[
               { value: 'all', label: 'Tất cả năm học' },
@@ -52,12 +50,19 @@ function FilterSection() {
             placeholder="Chọn kỳ học"
             style={{ width: '100%' }}
             allowClear
-            disabled={namHoc == 'all'}
+            disabled={selectedNam == 'all'}
             value={selectedKy || undefined}
-            onChange={a => dispatch([{ type: 'updateSelectedKy', payload: a }])}
+            onChange={async (a) => {
+              dispatch([
+                { type: 'updateData', payload: { key: 'thongKeHocPhan', data: await GetThongKeLopHocPhanTheoHocKi(a) } },
+                { type: 'updateSelectedKy', payload: a }
+              ])
+            }}
             options={[
               { value: 'all', label: 'Tất cả kỳ học' },
-              ...hocKiData.filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == namHoc).map(ky => ({ value: ky.id, label: ky.tenKi }))
+              ...hocKiData
+                .filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == selectedNam)
+                .map(ky => ({ value: ky.id, label: ky.tenKi }))
             ]} />
         </Col>
         <Col span={6}>

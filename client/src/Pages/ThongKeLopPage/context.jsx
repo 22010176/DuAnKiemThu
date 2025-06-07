@@ -5,10 +5,14 @@ export const Context = createContext()
 export const initialState = {
     selectedKhoa: 'all',
     selectedKy: 'all',
+    selectedNam: 'all',
 
     khoaData: [],
     namHocData: [],
     hocKiData: [],
+
+    thongKeKhoa: [],
+    thongKeHocPhan: []
 }
 
 export const reducer = (state, action) => {
@@ -34,6 +38,11 @@ export const reducer = (state, action) => {
             case 'updateSelectedKhoa':
                 _state.selectedKhoa = _payload
                 break
+
+            case 'updateSelectedNam':
+                _state.selectedNam = _payload
+                break
+
             default:
                 break
         }
