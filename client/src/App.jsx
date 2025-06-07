@@ -9,7 +9,6 @@ import HocKiPage from '@/Pages/HocKiPage';
 import HocPhanPage from '@/Pages/HocPhanPage';
 import KhoaPage from "@/Pages/KhoaPage";
 import LopHocPhanPage from '@/Pages/LopHocPhanPage';
-import PhanCongGVPage from '@/Pages/PhanCongGVPage';
 import ThongKeLopPage from '@/Pages/ThongKeLopPage';
 import ThongKePage from '@/Pages/ThongKePage';
 // import TeachingSalarySystem from '@/Pages/TeachingRateSetup';
@@ -27,7 +26,6 @@ function App() {
           <Route path="hoc-ki" element={<HocKiPage />} />
           <Route path="hoc-phan" element={<HocPhanPage />} />
           <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />
-          <Route path="phan-cong-gv" element={<PhanCongGVPage />} />
           <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
         </Route>
       </Routes>

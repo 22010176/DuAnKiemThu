@@ -16,3 +16,9 @@ export async function CreateLopHocPhan({ hocPhanId, hocKiId, soLuongSinhVien, gi
   });
   return result.data;
 }
+
+export async function AssignGiangVienToLopHocPhan({ lopHocPhanId, giangVienId }) {
+  const result = await axios.post('http://localhost:5249/LopHocPhan/phan-cong-giang-vien',
+    { lopHocPhanId, giangVienId });
+  return result.data;
+}

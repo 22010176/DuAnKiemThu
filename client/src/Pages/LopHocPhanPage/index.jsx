@@ -6,6 +6,7 @@ import { GetHocPhan } from '@/api/hocphanApi';
 import { GetKhoaList } from '@/api/khoaApi';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
 import { GetLopHocPhanList } from '@/api/lopHocPhanApi';
+import { GetGiangVien } from '@/api/giangVien';
 
 import BulkAddModal from './BulkAddModal';
 import DataTable from './DataTable';
@@ -14,32 +15,26 @@ import FormModal from './FormModal';
 import FunctionBar from './FuntionBar';
 import PhanCongGiangVienModal from './PhanCongGiangVienModal';
 import { Context, initialState, reducer } from './context';
-import { GetGiangVien } from '@/api/giangVien';
 
 const LopHocPhanPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(function () {
     Promise.all([
-      GetLopHocPhanList().then(i => dispatch([
-        { type: "updateLopHocPhanData", payload: i }
-      ])),
-      GetKhoaList().then(i => dispatch([
-        { type: "updateKhoaData", payload: i }
-      ])),
-      GetHocPhan().then(i => dispatch([
-        { type: "updateHocPhanData", payload: i }
-      ])),
-      GetNamHocList().then(i => dispatch([
-        { type: "updateNamHocData", payload: i }
-      ])),
-      GetHocKyList().then(i => dispatch([
-        { type: "updateHocKiData", payload: i }
-      ])),
-      GetGiangVien().then(i => dispatch([
-        { type: "updateGiangVienData", payload: i }
-      ])),
-    ])
+      GetLopHocPhanList(),
+      GetKhoaList(),
+      GetHocPhan(),
+      GetNamHocList(),
+      GetHocKyList(),
+      GetGiangVien(),
+    ]).then(data => dispatch([
+      { type: "updateLopHocPhanData", payload: data[0] },
+      { type: "updateKhoaData", payload: data[1] },
+      { type: "updateHocPhanData", payload: data[2] },
+      { type: "updateNamHocData", payload: data[3] },
+      { type: "updateHocKiData", payload: data[4] },
+      { type: "updateGiangVienData", payload: data[5] }
+    ]))
   }, [])
 
   return (

@@ -1,15 +1,19 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Space, Table, Tag, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
-import { useData } from "./context";
+
 import { DeleteLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
+
+import { useData } from "./context";
 
 function DataTable() {
   const [{
-    lopHocPhanData, selectedLopHocPhan
+    lopHocPhanData, selectedLopHocPhan, filterForm, filterLopHocPhan
   }, dispatch] = useData()
 
+  const { namHoc, hocKiId, khoaId, lopId, trangThai } = filterForm
+  console.log({ namHoc, hocKiId, khoaId, lopId, trangThai })
+  console.log(lopHocPhanData, filterForm)
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
     { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
@@ -57,7 +61,7 @@ function DataTable() {
   return (
     <Table
       columns={columns}
-      dataSource={lopHocPhanData}
+      dataSource={filterLopHocPhan ? filterLopHocPhan : lopHocPhanData}
       rowKey="id"
       scroll={{ x: 1200 }}
       rowSelection={rowSelection}

@@ -1,7 +1,8 @@
 import { CheckOutlined, SearchOutlined } from '@ant-design/icons';
-import { AutoComplete, Button, Card, Col, Divider, Input, Modal, Row, Select, Space, Tag, Typography, message } from 'antd';
+import { AutoComplete, Button, Card, Col, Divider, Input, Modal, Row, Space, Tag, Typography, message } from 'antd';
 import { useState } from 'react';
 
+import { AssignGiangVienToLopHocPhan, GetLopHocPhanList } from '@/api/lopHocPhanApi';
 import { useData } from './context';
 
 const { Title, Text } = Typography;
@@ -9,78 +10,57 @@ const { Title, Text } = Typography;
 function PhanCongGiangVienModal() {
   const [messageApi, contextHolder] = message.useMessage()
   const [{
-    giangVienModal, selectedLopHocPhan, lopHocPhanData, giangVienData
+    giangVienModal, selectedLopHocPhan, giangVienData
   }, dispatch] = useData()
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [teacherSearchValue, setTeacherSearchValue] = useState('');
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [teacherOptions, setTeacherOptions] = useState([]);
-
-
-  // Mock data for classes
-  const [classData, setClassData] = useState([
-    { id: 1, maLop: 'CNTT01_01', tenLop: 'Lập trình Java - Lớp 1', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 45, soTinChi: 3, trangThai: 'Đang mở', giangVien: null, maGiangVien: null },
-    { id: 2, maLop: 'CNTT02_01', tenLop: 'Cơ sở dữ liệu - Lớp 1', hocPhan: 'Cơ sở dữ liệu', maHocPhan: 'CNTT02', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 40, soTinChi: 3, trangThai: 'Đang mở', giangVien: 'Nguyễn Văn A', maGiangVien: 'GV001' },
-    { id: 3, maLop: 'CNTT01_02', tenLop: 'Lập trình Java - Lớp 2', hocPhan: 'Lập trình Java', maHocPhan: 'CNTT01', khoa: 'Công nghệ thông tin', ky: 'Kỳ 1', namHoc: '2024-2025', soSinhVien: 42, soTinChi: 3, trangThai: 'Đang mở', giangVien: null, maGiangVien: null }
-  ]);
-
-
 
   const handleTeacherSearch = (value) => {
     setTeacherSearchValue(value);
-
     if (!value) return setTeacherOptions([])
+
     setTeacherOptions(giangVienData
-      .filter(teacher =>
+      .filter(teacher => (
         teacher.id.toLowerCase().includes(value.toLowerCase()) ||
-        teacher.tenGiangVien.toLowerCase().includes(value.toLowerCase()))
-      .map(teacher => ({
-        value: teacher.id,
-        label: `${teacher.id} - ${teacher.tenGiangVien}`,
-        teacher: teacher
-      })));
-
+        teacher.tenGiangVien.toLowerCase().includes(value.toLowerCase())
+      )).map(teacher => ({ value: teacher.id, label: `${teacher.id} - ${teacher.tenGiangVien}`, teacher })));
   };
 
-  const handleTeacherSelect = (value, option) => {
-    setSelectedTeacher(option.teacher);
-    setTeacherSearchValue(`${option.teacher.id} - ${option.teacher.tenGiangVien}`);
+  const handleTeacherSelect = (_, option) => {
+    const teacher = option.teacher;
+    setSelectedTeacher(teacher);
+    setTeacherSearchValue(`${teacher.id} - ${teacher.tenGiangVien}`);
   };
 
-
-
-  const handleConfirmAssign = () => {
+  const handleConfirmAssign = async () => {
     if (!selectedTeacher) return message.warning('Vui lòng chọn giảng viên!');;
 
-    const updatedClassData = classData.map(item => {
-      if (!selectedRowKeys.includes(item.id)) return item;
+    await Promise.all(selectedLopHocPhan.map(i => AssignGiangVienToLopHocPhan({
+      lopHocPhanId: i.id,
+      giangVienId: selectedTeacher.id
+    })))
 
-      return { ...item, giangVien: selectedTeacher.name, maGiangVien: selectedTeacher.id };
-    });
-
-    setClassData(updatedClassData);
-    setSelectedRowKeys([]);
-    setSelectedTeacher(null);
     setTeacherSearchValue('');
-    messageApi.success(`Đã phân công thành công ${selectedRowKeys.length} lớp cho ${selectedTeacher.name}!`);
+    messageApi.success(`Đã phân công thành công ${selectedLopHocPhan.length} lớp cho ${selectedTeacher.tenGiangVien}!`);
+
+    const result = await GetLopHocPhanList()
+    dispatch([
+      { type: 'updateGiangVienModal', payload: false },
+      { type: 'updateSelectedRows', payload: [] },
+      { type: 'updateLopHocPhanData', payload: result }
+    ])
   };
 
-  // classData.filter(item => selectedRowKeys.includes(item.id));
   return (
     <>
       {contextHolder}
-      <Modal
-        title="Phân công giảng viên"
-        open={giangVienModal}
-        footer={null}
-        width={1000}
-        onCancel={() => {
-          dispatch([
-            { type: "updateGiangVienModal", payload: false },
-            { type: "updateSelectedRows", payload: [] },
-          ])
-        }}>
+      <Modal title="Phân công giảng viên" open={giangVienModal} footer={null} width={1000}
+        onCancel={() => dispatch([
+          { type: "updateGiangVienModal", payload: false },
+          { type: "updateSelectedRows", payload: [] },
+        ])}>
         <div style={{ marginBottom: '16px' }}>
           <Title level={4}>Danh sách lớp được chọn:</Title>
           <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
@@ -134,10 +114,10 @@ function PhanCongGiangVienModal() {
 
         <Row justify="end" gutter={8}>
           <Col>
-            <Button onClick={() => {
-              setSelectedTeacher(null);
-              setTeacherSearchValue('');
-            }}>
+            <Button onClick={() => dispatch([
+              { type: 'updateGiangVienModal', payload: false },
+              { type: 'updateSelectedRows', payload: [] },
+            ])}>
               Hủy
             </Button>
           </Col>

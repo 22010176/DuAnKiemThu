@@ -5,6 +5,7 @@ export const Context = createContext()
 export const initialState = {
   hocPhanData: [],
   lopHocPhanData: [],
+  filterLopHocPhan: [],
   hocKiData: [],
   giangVienData: [],
   khoaData: [],
@@ -13,6 +14,13 @@ export const initialState = {
   addModal: false,
   addBulkModal: false,
   giangVienModal: false,
+  filterForm: {
+    khoaId: undefined,
+    namHoc: undefined,
+    hocKiId: undefined,
+    trangThai: undefined,
+    lop: undefined
+  },
   form: {
     hocPhanId: '',
     hocKiId: '',
@@ -22,6 +30,7 @@ export const initialState = {
 }
 
 export const reducer = (state, action) => {
+  console.warn('new Dispatch: ')
   const _state = { ...state }
   const _actions = Array.isArray(action) ? action : [action]
 
@@ -29,10 +38,17 @@ export const reducer = (state, action) => {
     const _payload = typeof payload == 'function' ? payload(_state) : payload
 
     switch (type) {
+      // _payload = []
+      case 'updateFilterLopHocPhan':
+        _state.filterLopHocPhan = _payload
+        break
+
+      // _payload = []
       case 'updateGiangVienData':
         _state.giangVienData = _payload
         break
 
+      // _payload = true | false
       case 'updateGiangVienModal':
         _state.giangVienModal = _payload
         break
@@ -67,10 +83,17 @@ export const reducer = (state, action) => {
         _state.form[_payload.name] = _payload.value ?? null
         break
 
+      // _payload = { name: '', value }
+      case 'updateFilterForm':
+        _state.filterForm[_payload.name] = _payload.value ?? null
+        break
+
+      // _payload = []
       case 'updateNamHocData':
         _state.namHocData = _payload
         break
 
+      // _payload = []
       case "updateHocKiData":
         _state.hocKiData = _payload
         break
@@ -79,6 +102,7 @@ export const reducer = (state, action) => {
         _state.form = { ...initialState.form }
         break
 
+      // _payload = [ {}, {}, ... ]
       case 'updateSelectedRows':
         _state.selectedLopHocPhan = _payload
         break
@@ -87,7 +111,7 @@ export const reducer = (state, action) => {
         console.log('Failed: ', { type, _payload })
         continue reducerLoop
     }
-    console.log({ type, _payload, _state })
+    console.log('Success: ', { type, _payload, _state })
   }
 
   return _state
