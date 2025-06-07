@@ -30,6 +30,19 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
             GiangVienId = giangVienId
         };
     }
+    public static LopHocPhan Generate(GiangVien? giangVien, HocPhan hocPhan, HocKi hocKi, int index)
+    {
+        Random random = new();
+        return new LopHocPhan()
+        {
+            MaLop = $"{hocPhan.MaHocPhan}-{index.ToString().PadLeft(2, '0')}", // HP_KI_Năm bd
+            TenLop = $"{hocPhan.TenHocPhan} (N{index.ToString().PadLeft(2, '0')})",
+            SoLuongSinhVien = (uint)random.Next(40, 200),
+            HocPhanId = hocPhan.Id,
+            HocKiId = hocKi.Id,
+            GiangVienId = giangVien?.Id
+        };
+    }
 
     public static string IsValid(AppDbContext context, CreateLopHocPhanDto input)
     {

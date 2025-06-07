@@ -8,7 +8,7 @@ import { CreateLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
 
 function BulkAddModal() {
   const [{
-    addBulkModal, khoaData, hocPhanData, hocKiData, namHocData, giangVienData, bulkForm
+    addBulkModal, khoaData, hocPhanData, hocKiData, namHocData, bulkForm
   }, dispatch] = useData()
   const { hocPhanId, hocKiId, soLuongSinhVien, soLop } = bulkForm
 

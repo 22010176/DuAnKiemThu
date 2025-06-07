@@ -1,14 +1,31 @@
 import { BarChartOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
 
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import DataTable from './DataTable';
 import FilterSection from './FilterSection';
 import OverallStats from './OverallStats';
 import { Context, initialState, reducer } from './context';
+import { GetKhoaList } from '@/api/khoaApi';
+import { GetNamHocList } from '@/api/lhpThongKeApi';
+import { GetHocKyList } from '@/api/hocKiApi';
 
 const ThongKeLopPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(function () {
+    Promise.all([
+      GetKhoaList(),
+      GetNamHocList(),
+      GetHocKyList()
+    ]).then(data => {
+      dispatch([
+        { type: 'updateData', payload: { key: 'khoaData', data: data[0] } },
+        { type: 'updateData', payload: { key: 'namHocData', data: data[1] } },
+        { type: 'updateData', payload: { key: 'hocKiData', data: data[2] } },
+      ])
+    })
+  }, [])
 
   return (
     <Context.Provider value={[state, dispatch]}>

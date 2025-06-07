@@ -221,7 +221,7 @@ public class TestController(AppDbContext context) : ControllerBase
         HocKi hk = hocKis[random.Next(hocKis.Count)];
         GiangVien? gv = random.NextDouble() > 0.5 ? giangViens[random.Next(giangViens.Count)] : null;
 
-        LopHocPhan lopHocPhan = LopHocPhan.Generate(hk.TenKi, hp.TenHocPhan, hk.ThoiGianBatDau.Year.ToString(), hp.Id, hk.Id, gv?.Id);
+        LopHocPhan lopHocPhan = LopHocPhan.Generate(gv, hp, hk, lhp_ + i + 1);
         lopHocPhans.Add(lopHocPhan);
       }
       catch (Exception e)

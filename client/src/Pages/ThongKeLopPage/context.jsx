@@ -3,9 +3,12 @@ import { createContext, useContext } from "react";
 export const Context = createContext()
 
 export const initialState = {
-    selectedKhoa: '',
-    selectedNamHoc: '',
-    selectedKy: ''
+    selectedKhoa: 'all',
+    selectedKy: 'all',
+
+    khoaData: [],
+    namHocData: [],
+    hocKiData: [],
 }
 
 export const reducer = (state, action) => {
@@ -17,6 +20,20 @@ export const reducer = (state, action) => {
         console.log({ type, _payload })
 
         switch (type) {
+            // _payload = { key: 'khoaData' | 'namHocData' | 'hocKiData', data: [] }
+            case 'updateData':
+                _state[_payload.key] = _payload.data
+                break
+
+            // _payload = { }
+            case 'updateSelectedKy':
+                _state.selectedKy = _payload
+                break
+
+            // _payload = { }
+            case 'updateSelectedKhoa':
+                _state.selectedKhoa = _payload
+                break
             default:
                 break
         }
