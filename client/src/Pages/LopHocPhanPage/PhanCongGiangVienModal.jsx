@@ -10,7 +10,7 @@ const { Title, Text } = Typography;
 function PhanCongGiangVienModal() {
   const [messageApi, contextHolder] = message.useMessage()
   const [{
-    giangVienModal, selectedLopHocPhan, giangVienData
+    giangVienModal, filterLopHocPhan, selectedLopHocPhan, giangVienData, filterForm: { khoaId }
   }, dispatch] = useData()
 
   const [teacherSearchValue, setTeacherSearchValue] = useState('');
@@ -22,16 +22,17 @@ function PhanCongGiangVienModal() {
     if (!value) return setTeacherOptions([])
 
     setTeacherOptions(giangVienData
-      .filter(teacher => (
+      .filter(teacher => teacher.idKhoa == khoaId && (
         teacher.id.toLowerCase().includes(value.toLowerCase()) ||
         teacher.tenGiangVien.toLowerCase().includes(value.toLowerCase())
-      )).map(teacher => ({ value: teacher.id, label: `${teacher.id} - ${teacher.tenGiangVien}`, teacher })));
+      ))
+      .map(teacher => ({ value: teacher.id, label: `${teacher.id} - ${teacher.tenGiangVien}`, teacher })));
   };
 
   const handleTeacherSelect = (_, option) => {
     const teacher = option.teacher;
     setSelectedTeacher(teacher);
-    setTeacherSearchValue(`${teacher.id} - ${teacher.tenGiangVien}`);
+    setTeacherSearchValue(`${teacher.id} - ${teacher.tenGiangVien} - ${teacher.tenKhoa}`);
   };
 
   const handleConfirmAssign = async () => {
@@ -52,15 +53,20 @@ function PhanCongGiangVienModal() {
       { type: 'updateLopHocPhanData', payload: result }
     ])
   };
-
+  console.log(selectedTeacher)
   return (
     <>
       {contextHolder}
       <Modal title="Phân công giảng viên" open={giangVienModal} footer={null} width={1000}
-        onCancel={() => dispatch([
-          { type: "updateGiangVienModal", payload: false },
-          { type: "updateSelectedRows", payload: [] },
-        ])}>
+        onCancel={() => {
+          setTeacherOptions([])
+          setSelectedTeacher(null)
+          setTeacherSearchValue('')
+          dispatch([
+            { type: "updateGiangVienModal", payload: false },
+            { type: "updateSelectedRows", payload: [] },
+          ])
+        }}>
         <div style={{ marginBottom: '16px' }}>
           <Title level={4}>Danh sách lớp được chọn:</Title>
           <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>

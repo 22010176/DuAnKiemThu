@@ -13,11 +13,10 @@ function TableHeader({ children }) {
 }
 
 function DataTable() {
-  const [{ hocPhanList, selectedKhoaId, selectedKhoa }, dispatch] = useData()
+  const [{ hocPhanList, selectedKhoaId }, dispatch] = useData()
 
   useEffect(function () {
-    GetHocPhan()
-      .then(data => dispatch({ type: 'updateHocPhanList', payload: data }))
+    GetHocPhan().then(data => dispatch({ type: 'updateHocPhanList', payload: data }))
   }, [dispatch])
 
   const columns = [
@@ -29,7 +28,7 @@ function DataTable() {
     { title: <TableHeader>Số tiết</TableHeader>, dataIndex: 'soTiet', key: 'soTiet', width: 80, align: 'center', },
     { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, },
     {
-      title: <TableHeader>Thao tác</TableHeader>, key: 'action', width: 100, align: 'center',
+      title: <TableHeader>Thao tác</TableHeader>, key: 'action', width: 100, align: 'center', fixed: 'right',
       render: (_, record) => (
         <Space>
           <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
@@ -54,13 +53,11 @@ function DataTable() {
     },
   ];
 
-
   return (
     <div className='rounded bg-white shadow'>
       <Table
         columns={columns}
-        dataSource={hocPhanList}
-        rowKey="id"
+        dataSource={hocPhanList.filter(i => (selectedKhoaId == 'all' || i.khoaId == selectedKhoaId))}
         size="small"
         bordered
         scroll={{ x: 800 }}

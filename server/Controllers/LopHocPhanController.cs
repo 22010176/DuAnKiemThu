@@ -52,6 +52,7 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
             k."TenVietTat",
             lhp."GiangVienId",
             gv."TenGiangVien",
+            hk."Id" hocKiId,
             hk."ThoiGianBatDau",
             hk."ThoiGianKetThuc"
       FROM "LopHocPhan" lhp
@@ -59,7 +60,7 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
       INNER JOIN "HocPhan" hp ON hp."Id" = lhp."HocPhanId"
       INNER JOIN "Khoa" k ON k."Id" = hp."KhoaId"
       INNER JOIN "HocKi" hk ON hk."Id" = lhp."HocKiId"
-      ORDER BY hk."ThoiGianBatDau";
+      ORDER BY hk."ThoiGianBatDau" DESC;
 """;
       List<object> nam = [];
       using var cmd = new NpgsqlCommand(query, conn);
@@ -86,8 +87,9 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
             TenVietTat = reader.GetString(12),
             GiangVienId,
             TenGiangVien,
-            ThoiGianBatDau = reader.GetDateTime(15),
-            ThoiGianKetThuc = reader.GetDateTime(16)
+            HocKiId = reader.GetGuid(15),
+            ThoiGianBatDau = reader.GetDateTime(16),
+            ThoiGianKetThuc = reader.GetDateTime(17)
          });
       }
 
@@ -98,13 +100,12 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
    [HttpPut("sua-thong-tin")]
    public async Task<IActionResult> SuaThongTin([FromBody] UpdateLopHocPhanDto dto)
    {
-      var lop = await _ct.LopHocPhan.FindAsync(dto.LopHocPhanId);
-      if (lop == null)
-         return NotFound();
+      var lop = await _ct.LopHocPhan.FindAsync(dto.Id);
+      if (lop == null) return NotFound();
 
-      lop.TenLop = dto.LopHocPhan!.TenLop;
-      lop.SoLuongSinhVien = dto.LopHocPhan.SoLuongSinhVien;
-      // lop.TrangThai = dto.LopHocPhan.TrangThai;
+      lop.SoLuongSinhVien = dto.SoLuongSinhVien;
+      lop.HocKiId = dto.HocKiId;
+      lop.HocPhanId = dto.HocPhanId;
 
       await _ct.SaveChangesAsync();
 

@@ -1,7 +1,5 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Card, Col, Input, message, Row, Select } from 'antd';
-import { useState } from 'react';
+import { Card, Col, Input, Row, Select } from 'antd';
+
 import { useData } from "./context";
 
 const { Search, } = Input;
@@ -10,26 +8,27 @@ function FilterBar() {
   const [{
     hocPhanData, lopHocPhanData, hocKiData, filterForm, giangVienData, khoaData, namHocData
   }, dispatch] = useData()
-
   const { khoaId, hocKiId, namHoc, trangThai, lop } = filterForm
-  const trangThaiOptions = ['Tất cả', 'Đã phân công', 'Chưa phân công'];
 
   return (
     <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
       <Row gutter={16} align="middle">
-        <Col span={4}>
+        <Col span={5}>
           <Select
             placeholder="Chọn khoa"
             allowClear
             style={{ width: '100%' }}
             value={khoaId}
-            onChange={(value) => dispatch([{ type: 'updateFilterForm', payload: { name: 'khoaId', value } }])}
+            onChange={(value) => dispatch([
+              { type: 'updateFilterForm', payload: { name: 'khoaId', value } },
+              { type: 'updateSelectedRows', payload: [] }
+            ])}
             options={[
-              { value: 'all', label: 'Tất cả' },
+              { value: 'all', label: 'Tất cả khoa' },
               ...khoaData.map(khoa => ({ value: khoa.id, label: khoa.tenKhoa }))
             ]} />
         </Col>
-        <Col span={4}>
+        <Col span={5}>
           <Select
             placeholder="Chọn năm học"
             allowClear
@@ -38,9 +37,10 @@ function FilterBar() {
             onChange={(value) => dispatch([
               { type: 'updateFilterForm', payload: { name: 'namHoc', value } },
               { type: 'updateFilterForm', payload: { name: 'hocKiId', value: 'all' } },
+              { type: 'updateSelectedRows', payload: [] }
             ])}
             options={[
-              { value: 'all', label: 'Tất cả' },
+              { value: 'all', label: 'Tất cả năm học' },
               ...namHocData.map(nam => ({ value: nam.nam, label: `${nam.nam}-${nam.nam + 1}` }))
             ]} />
         </Col>
@@ -51,9 +51,12 @@ function FilterBar() {
             style={{ width: '100%' }}
             disabled={!namHoc}
             value={hocKiId}
-            onChange={(value) => dispatch([{ type: 'updateFilterForm', payload: { name: 'hocKiId', value } }])}
+            onChange={(value) => dispatch([
+              { type: 'updateFilterForm', payload: { name: 'hocKiId', value } },
+              { type: 'updateSelectedRows', payload: [] }
+            ])}
             options={[
-              { value: 'all', label: 'Tất cả' },
+              { value: 'all', label: 'Tất cả kì học' },
               ...hocKiData
                 .filter(i => new Date(i.thoiGianBatDau).getFullYear() == namHoc)
                 .map(ky => ({ value: ky.id, label: ky.tenKi }))
@@ -65,8 +68,15 @@ function FilterBar() {
             allowClear
             style={{ width: '100%' }}
             value={trangThai}
-            onChange={(value) => dispatch([{ type: 'updateFilterForm', payload: { name: 'trangThai', value } }])}
-            options={trangThaiOptions.map((trangThai, i) => ({ value: i || undefined, label: trangThai }))} />
+            onChange={(value) => dispatch([
+              { type: 'updateFilterForm', payload: { name: 'trangThai', value } },
+              { type: 'updateSelectedRows', payload: [] }
+            ])}
+            options={[
+              { value: 'all', label: 'Tất cả trạng thái' },
+              { value: 'no', label: 'Chưa phân công' },
+              { value: 'yes', label: 'Đã phân công' },
+            ]} />
         </Col>
         <Col span={6}>
           <Search
@@ -75,22 +85,6 @@ function FilterBar() {
             placeholder="Tìm kiếm theo tên lớp, mã lớp..."
             allowClear
             style={{ width: '100%' }} />
-        </Col>
-        <Col span={2}>
-          <Button icon={<FontAwesomeIcon icon={faFilter} />} type="text"
-            onClick={() => {
-              const result = lopHocPhanData
-                .filter(i => (khoaId == 'all' || i.khoaId == khoaId)
-                  && (hocKiId == 'all' || i.hocKiId == hocKiId)
-                  && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
-                  && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc))
-
-              if (result.length == 0) return message.error("Không tìm thấy lớp nào!")
-
-              dispatch([{ type: 'updateFilterLopHocPhan', payload: result }])
-            }}>
-            Lọc
-          </Button>
         </Col>
       </Row>
     </Card>

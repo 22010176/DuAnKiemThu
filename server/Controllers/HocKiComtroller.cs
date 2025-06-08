@@ -17,9 +17,8 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
   public override async Task<ActionResult<ICollection>> Get()
   {
     var result =
-
         from c in _ct.HocKi
-        orderby c.Id.ToString().Length, c.Id
+        orderby c.ThoiGianBatDau descending, c.Id.ToString().Length, c.Id
         select new
         {
           c.TenKi,
@@ -29,8 +28,7 @@ public class HocKiController(IRepository<HocKi> repo, AppDbContext context) : Te
           soLop = c.LopHocPhan!.Count()
         };
 
-
-    return Ok(result);
+    return Ok(await result.ToListAsync());
   }
 
   [HttpPost]

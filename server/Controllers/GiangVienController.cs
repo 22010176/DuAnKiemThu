@@ -165,7 +165,7 @@ FROM
       TenBangCap = b.TenVietTat,
       idBangCap = b.Id,
       k.MaKhoa,
-      TenKhoa = k.TenVietTat,
+      k.TenKhoa,
       idKhoa = k.Id,
       c.MaChucVu,
       c.TenChucVu,

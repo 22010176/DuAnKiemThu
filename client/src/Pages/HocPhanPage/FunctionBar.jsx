@@ -4,6 +4,7 @@ import { useContext, useEffect } from 'react';
 
 import { Context } from './context';
 import { GetKhoaList } from '@/api/khoaApi';
+import { GetNamHocList } from '@/api/lhpThongKeApi';
 
 const { Option } = Select;
 
@@ -13,10 +14,9 @@ function FunctionBar() {
   }, dispatch] = useContext(Context);
 
   useEffect(function () {
-    GetKhoaList()
-      .then(data => dispatch([
-        { type: 'updateKhoaList', payload: data },
-      ]))
+    GetKhoaList().then(data => dispatch([
+      { type: 'updateKhoaList', payload: data },
+    ]))
   }, [dispatch])
 
   return (

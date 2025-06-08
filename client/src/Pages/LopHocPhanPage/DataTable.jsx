@@ -8,8 +8,10 @@ import { useData } from "./context";
 
 function DataTable() {
   const [{
-    lopHocPhanData, selectedLopHocPhan, filterLopHocPhan
+    lopHocPhanData, selectedLopHocPhan, filterLopHocPhan, filterForm
+
   }, dispatch] = useData()
+  const { khoaId, hocKiId, namHoc, trangThai, lop } = filterForm
 
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
@@ -26,7 +28,14 @@ function DataTable() {
       render: (_, record) => (
         <Space>
           <Tooltip title="Sửa">
-            <Button variant='outlined' color='blue' type="text" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => { }} />
+            <Button disabled={record.giangVienId != null} variant='outlined' color='blue' type="text" icon={<FontAwesomeIcon icon={faPen} />}
+              onClick={() => {
+                dispatch([
+                  { type: 'setEditForm', payload: record },
+                  { type: 'updateFormMode', payload: 'edit' },
+                  { type: 'updateAddModal', payload: true }
+                ])
+              }} />
           </Tooltip>
           <Tooltip title="Xóa">
             <Button variant='outlined' color='red' type="text" danger icon={<FontAwesomeIcon icon={faTrash} />}
@@ -48,21 +57,26 @@ function DataTable() {
     onChange: (selectedRowKeys, selectedRows) => {
       dispatch([{ type: 'updateSelectedRows', payload: [...selectedRows] }])
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.giangVienId,
-    }),
+    getCheckboxProps: (record) => {
+      console.log(record)
+      return {
+        disabled: record.giangVienId != null || new Date(record.thoiGianBatDau) < Date.now(),
+      }
+    },
   };
-
+  console.log(lopHocPhanData)
   return (
     <Table
-      columns={columns}
-      dataSource={filterLopHocPhan.length ? filterLopHocPhan : lopHocPhanData}
       rowKey="id"
+      columns={columns}
       scroll={{ x: 1200 }}
       rowSelection={rowSelection}
+      dataSource={lopHocPhanData.filter(i => (khoaId == 'all' || i.khoaId == khoaId)
+        && (hocKiId == 'all' || i.hocKiId == hocKiId)
+        && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
+        && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc))}
       pagination={{
         pageSize: 10,
-        // total: filteredData.length,
         showSizeChanger: true,
         showQuickJumper: true,
         showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} lớp học phần`

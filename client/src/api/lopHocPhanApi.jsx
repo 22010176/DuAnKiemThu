@@ -22,3 +22,10 @@ export async function AssignGiangVienToLopHocPhan({ lopHocPhanId, giangVienId })
     { lopHocPhanId, giangVienId });
   return result.data;
 }
+
+export async function UpdateLopHocPhan({ hocPhanId, hocKiId, giangVienId, soLuongSinhVien, id }) {
+  const result = await axios.put('http://localhost:5249/LopHocPhan/sua-thong-tin', {
+    hocPhanId, hocKiId, giangVienId, soLuongSinhVien, id
+  })
+  return result.data
+}

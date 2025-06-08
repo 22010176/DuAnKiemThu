@@ -13,14 +13,13 @@ function TableHeader({ children }) {
 
 function DataTable() {
   const [{
-    data, kyData
+    data, kyData, selectedYear
   }, dispatch] = useData()
 
   useEffect(function () {
-    GetHocKyList()
-      .then(res => {
-        dispatch({ type: "updateKyData", payload: res.map((i, j) => ({ ...i, key: j })) })
-      })
+    GetHocKyList().then(res => dispatch([
+      { type: "updateKyData", payload: res.map((i, j) => ({ ...i, key: j })) }
+    ]))
   }, [dispatch])
 
   const columns = [
@@ -31,7 +30,7 @@ function DataTable() {
     { title: <TableHeader>Ngày kết thúc</TableHeader>, dataIndex: 'thoiGianKetThuc', key: 'thoiGianKetThuc', width: 120, align: 'center', render: (date) => <span className='text-lg'>{dayjs(date).format('DD/MM/YYYY')}</span> },
     {
       title: <TableHeader>Trạng thái</TableHeader>, dataIndex: 'trangThai', key: 'trangThai', width: 120, align: 'center',
-      render: (status) => {
+      render: status => {
         let color = 'default';
         if (status === 'Đang diễn ra') color = 'green';
         else if (status === 'Sắp diễn ra') color = 'blue';
@@ -45,6 +44,7 @@ function DataTable() {
         <Space size="small">
           <Button type="primary" size="small" icon={<EditOutlined />}
             onClick={() => {
+              console.log(record)
               dispatch([
                 { type: "updateModelMode", payload: "edit" },
                 { type: "updateModel", payload: true },
@@ -54,11 +54,8 @@ function DataTable() {
           <Popconfirm title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Không"
             onConfirm={async () => {
               await DeleteHocKy(record.id)
-
-              const reuslt = await GetHocKyList()
-
               dispatch([
-                { type: "updateKyData", payload: reuslt },
+                { type: "updateKyData", payload: await GetHocKyList() },
                 // { type: "updateSelectedYear", payload: 'all' }
               ])
             }}>
@@ -69,7 +66,9 @@ function DataTable() {
     },
   ];
   return (
-    <Table className='mt-4' columns={columns} dataSource={kyData}
+    <Table className='mt-4'
+      columns={columns}
+      dataSource={kyData.filter(i => (selectedYear == 'all' || new Date(i.thoiGianBatDau).getFullYear() == selectedYear))}
       pagination={{
         pageSize: 10,
         showSizeChanger: true,

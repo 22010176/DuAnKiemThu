@@ -14,6 +14,7 @@ export const initialState = {
   addModal: false,
   addBulkModal: false,
   giangVienModal: false,
+  formMode: '',
   filterForm: {
     khoaId: 'all',
     namHoc: 'all',
@@ -22,6 +23,9 @@ export const initialState = {
     lop: ''
   },
   form: {
+    id: '',
+    khoaId: '',
+    nam: '',
     hocPhanId: '',
     hocKiId: '',
     giangVienId: '',
@@ -45,6 +49,21 @@ export const reducer = (state, action) => {
     const _payload = typeof payload == 'function' ? payload(_state) : payload
 
     switch (type) {
+      case 'updateFormMode':
+        _state.formMode = _payload
+        break;
+
+      case 'setEditForm':
+        _state.form = {
+          id: _payload.id,
+          hocPhanId: _payload.hocPhanId,
+          khoaId: _payload.khoaId,
+          nam: new Date(_payload.thoiGianBatDau).getFullYear(),
+          hocKiId: _payload.hocKiId,
+          giangVienId: _payload.giangVienId,
+          soLuongSinhVien: _payload.soLuongSinhVien
+        }
+        break;
       // _payload = { name: '', value }
       case 'updateBulkForm':
         _state.bulkForm[_payload.name] = _payload.value ?? null

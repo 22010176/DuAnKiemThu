@@ -2,7 +2,7 @@ import { faArrowRotateRight, faPlus, faUpload } from '@fortawesome/free-solid-sv
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Select } from 'antd';
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Context } from './context';
 
 function FunctionBar() {
@@ -20,7 +20,7 @@ function FunctionBar() {
             onChange={e => dispatch({ type: "updateSelectedYear", payload: e })}
             options={[
               { value: "all", label: "Tất cả năm học" },
-              ...yearList.map(nam => ({ value: nam, label: nam }))
+              ...yearList.map(nam => ({ value: nam.nam, label: `${nam.nam}-${nam.nam + 1}` }))
             ]} />
         </div>
       </div>

@@ -1,16 +1,20 @@
-import { DatePicker, Select } from 'antd';
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
+
+import { GetNamHocList } from '@/api/lhpThongKeApi';
 
 import DataForm from './DataForm';
 import DataTable from './DataTable';
 import FunctionBar from './FunctionBar';
 import { Context, initialState, reducer } from './context';
 
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-
 function HocKiPage() {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(function () {
+    GetNamHocList().then(data => dispatch([
+      { type: 'updateYearList', payload: data }
+    ]))
+  }, [])
 
   return (
     <Context.Provider value={[state, dispatch]}>

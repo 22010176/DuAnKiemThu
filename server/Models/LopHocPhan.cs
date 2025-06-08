@@ -78,8 +78,11 @@ public class CreateLopHocPhanDto : LopHocPhanDto
 
 public class UpdateLopHocPhanDto
 {
-    public LopHocPhanDto? LopHocPhan { get; set; }
-    public Guid LopHocPhanId { get; set; }
+    public uint SoLuongSinhVien { get; set; } = 0!;
+    public Guid HocPhanId { get; set; }
+    public Guid HocKiId { get; set; }
+    public Guid? GiangVienId { get; set; }
+    public Guid Id { get; set; }
 }
 
 public class PhanCongGiangVienDto

@@ -1,30 +1,34 @@
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, DatePicker, Form, Input, Modal, Select } from 'antd';
-import { useContext } from 'react';
+import { Button, DatePicker, Input, Modal, Select } from 'antd';
 
+import { CreateHocKy, GetHocKyList, UpdateHocKy } from '@/api/hocKiApi';
 import { useData } from './context';
-import { CreateHocKy, GetHocKyList } from '@/api/hocKiApi';
 
 const { RangePicker } = DatePicker;
 
 function DataForm() {
   const [{
-    showModal,
-    modelMode,
-    yearList,
-    formData
-  }, dispatch] = useData();
-  const {
-    tenKi, year, thoiGianBatDau, thoiGianKetThuc
-  } = formData
+    showModal, modelMode, yearList, formData },
+    dispatch] = useData();
+  const { id, tenKi, year, thoiGianBatDau, thoiGianKetThuc } = formData
 
-  // const namHocList = [2023, 2024, 2025]
   async function onSubmit() {
     try {
-      await CreateHocKy({ tenKi, thoiGianBatDau, thoiGianKetThuc })
+      if (modelMode == 'add') await CreateHocKy({
+        tenKi,
+        thoiGianBatDau: thoiGianBatDau.toDate(),
+        thoiGianKetThuc: thoiGianKetThuc.toDate()
+      })
+      else if (modelMode == 'edit') await UpdateHocKy({
+        id: id,
+        tenKi,
+        thoiGianBatDau: thoiGianBatDau.toDate(),
+        thoiGianKetThuc: thoiGianKetThuc.toDate()
+      })
     } catch (error) { console.log(error) }
 
+    // console.log({ id, tenKi, thoiGianBatDau, thoiGianKetThuc })
     const data = await GetHocKyList()
     dispatch([
       { type: "updateModel", payload: false },
@@ -35,58 +39,59 @@ function DataForm() {
     ])
   }
 
-  console.log('ddddd',{ tenKi, year, thoiGianBatDau, thoiGianKetThuc})
   return (
     <Modal open={showModal} centered width={600} title={
       <h1 className="text-xl font-bold text-blue-900 uppercase">
         {modelMode == 'edit' ? 'Sửa học kì' : 'Thêm học kì mới'}
       </h1>}
-      onCancel={() => {
-        console.log("Test");
-        dispatch([
-          { type: "updateModel", payload: false },
-          { type: "resetFormData" },
-          { type: "updateModelMode" }
-        ])
-      }}
+      onCancel={() => dispatch([
+        { type: "updateModel", payload: false },
+        { type: "resetFormData" },
+        { type: "updateModelMode" }
+      ])}
       footer={[
         <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}
           onClick={onSubmit}>
           Hoàn thành
         </Button>
       ]}>
-      <Form layout="vertical" initialValues={{ trangThai: 'Chưa bắt đầu' }}>
-        <Form.Item key="namHoc" name="namHoc" label="Năm học" rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}>
-          <Select placeholder="Chọn năm học"
+      <form className='flex flex-col gap-5' initialValues={{ trangThai: 'Chưa bắt đầu' }}>
+        <div className='grid gap-2' key="namHoc" name="namHoc" label="Năm học" rules={[{ required: true, message: 'Vui lòng chọn năm học!' }]}>
+          <label className='font-semibold'>Năm học</label>
+          <Select
+            placeholder="Chọn năm học"
+            required
             value={year}
-            options={yearList.map(i => ({ value: i, label: `${i}-${i + 1}` }))}
-            onChange={e => {
-              dispatch({ type: "updateFormData", payload: { name: "year", value: e } })
-            }} />
-        </Form.Item>
-        <Form.Item key="thoiGian" name="thoiGian" label="Thời gian" rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}>
-          <RangePicker className="w-full" format="DD/MM/YYYY" placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+            options={yearList.map(nam => ({ value: nam.nam, label: `${nam.nam}-${nam.nam + 1}` }))}
+            onChange={e => dispatch([
+              { type: "updateFormData", payload: { name: "year", value: e } }
+            ])} />
+        </div>
+        <div className='grid gap-2' rules={[{ required: true, message: 'Vui lòng chọn thời gian!' }]}>
+          <label className='font-semibold'>Thời gian</label>
+          <RangePicker className="w-full" format="DD/MM/YYYY" placeholder={['Ngày bắt đầu', 'Ngày kết thúc']} required
             disabledDate={(current) => current <= new Date(year, 0, 1) || current > new Date(year + 1, 11, 31)}
             value={[thoiGianBatDau, thoiGianKetThuc]}
             onChange={e => {
-              const start = e[0].toDate();
-              const end = e[1].toDate();
-
+              const start = e[0];
+              const end = e[1];
               dispatch([
                 { type: "updateFormData", payload: { name: "thoiGianBatDau", value: start } },
                 { type: "updateFormData", payload: { name: "thoiGianKetThuc", value: end } },
               ])
             }} />
-        </Form.Item>
-        <Form.Item key="tenKy" name="tenKy" label="Tên học kỳ" rules={[{ required: true, message: 'Vui lòng nhập tên học kỳ!' }]}>
+        </div>
+        <div className='grid gap-2' >
+          <label className='font-semibold'>Tên học kỳ</label>
           <Input
             placeholder="Nhập tên học kỳ"
             value={tenKi}
+            required
             onChange={e => {
               dispatch({ type: "updateFormData", payload: { name: "tenKi", value: e.target.value } })
             }} />
-        </Form.Item>
-      </Form>
+        </div>
+      </form>
     </Modal>
   )
 }

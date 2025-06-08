@@ -56,15 +56,12 @@ export const reducer = (state, action) => {
       // payload = {}
       case 'setFormData':
         _state.formData = {
+          id: _payload.id,
           tenKi: _payload.tenKi,
           year: new Date(_payload.thoiGianBatDau).getFullYear(),
           thoiGianBatDau: dayjs(_payload.thoiGianBatDau),
           thoiGianKetThuc: dayjs(_payload.thoiGianKetThuc)
         }
-        console.log({
-          result: _state.formData,
-          input: _payload
-        })
         break
 
       // payload = []
@@ -87,7 +84,6 @@ export const reducer = (state, action) => {
 
 export function useData() {
   const result = useContext(Context)
-  console.log(result)
   return result ?? [initialState, () => { }]
 }
 

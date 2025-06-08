@@ -9,7 +9,7 @@ public class HocKi : HocKiDto, IEntityPostgre
   {
     Random rand = new();
     return new DateTime(
-      1950 + rand.Next() % 60,
+      1950 + rand.Next() % 80,
       rand.Next() % 12 + 1,
       rand.Next() % 28 + 1,
       rand.Next(24),
