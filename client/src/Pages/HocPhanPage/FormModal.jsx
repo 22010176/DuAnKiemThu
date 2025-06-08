@@ -1,6 +1,6 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Input, InputNumber, Modal } from 'antd';
+import { Button, Input, InputNumber, message, Modal } from 'antd';
 
 import { CreateHocPhan, GetHocPhan, UpdateHocPhan } from "@/api/hocphanApi";
 import { useData } from "./context";
@@ -11,6 +11,8 @@ function FormModal() {
 
   async function onFormSubmit(e) {
     e.preventDefault()
+    if (!tenHocPhan) return message.error("Mã học phần không được để trống!")
+
     if (modalMode == 'add') await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
     else if (modalMode == 'edit') await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
 
@@ -23,7 +25,7 @@ function FormModal() {
       { type: "updateSelectedKhoa", payload: 'all' }
     ])
   }
-  console.log({ id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+
   return (
     <Modal
       okText="Hoàn thành" cancelText="Hủy" width={600} open={showModal}
@@ -72,7 +74,8 @@ function FormModal() {
             <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, color: '#333' }}>
               Hệ số <span style={{ color: 'red' }}>*</span>
             </label>
-            <InputNumber min={0.1} max={3.0} step={0.1} placeholder="1.5" style={{ width: '100%' }} value={heSoHocPhan}
+            <InputNumber min={0.1} max={3.0} step={0.1} placeholder="1.5" style={{ width: '100%' }}
+              value={heSoHocPhan || 1}
               onChange={e => dispatch({ type: 'updateForm', payload: { name: "heSoHocPhan", value: e } })} />
           </div>
 
@@ -81,14 +84,16 @@ function FormModal() {
               <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, color: '#333' }}>
                 Số tín chỉ <span style={{ color: 'red' }}>*</span>
               </label>
-              <InputNumber min={1} max={10} placeholder="3" style={{ width: '100%' }} value={soTinChi}
+              <InputNumber min={1} max={10} placeholder="3" style={{ width: '100%' }}
+                value={soTinChi || 3}
                 onChange={e => dispatch({ type: 'updateForm', payload: { name: "soTinChi", value: e } })} />
             </div>
             <div style={{ flex: 1 }}>
               <label style={{ display: 'block', marginBottom: 6, fontWeight: 500, color: '#333' }}>
                 Số tiết <span style={{ color: 'red' }}>*</span>
               </label>
-              <InputNumber min={15} max={150} placeholder="45" style={{ width: '100%' }} value={soTiet}
+              <InputNumber min={15} max={150} placeholder="45" style={{ width: '100%' }}
+                value={soTiet || 45}
                 onChange={e => dispatch({ type: 'updateForm', payload: { name: "soTiet", value: e } })} />
             </div>
           </div>

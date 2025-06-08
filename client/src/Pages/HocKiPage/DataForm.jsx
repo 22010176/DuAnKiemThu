@@ -1,6 +1,6 @@
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, DatePicker, Input, Modal, Select } from 'antd';
+import { Button, DatePicker, Input, message, Modal, Select } from 'antd';
 
 import { CreateHocKy, GetHocKyList, UpdateHocKy } from '@/api/hocKiApi';
 import { useData } from './context';
@@ -14,20 +14,29 @@ function DataForm() {
   const { id, tenKi, year, thoiGianBatDau, thoiGianKetThuc } = formData
 
   async function onSubmit() {
+    console.log(thoiGianBatDau, thoiGianKetThuc)
+    if (!thoiGianBatDau) return message.error("Thời gian bắt đầu không được để trống!")
+    if (!thoiGianKetThuc) return message.error("Thời gian kết thúc không được để trống!")
+    if (!tenKi) return message.error("Tên kì không được để trống!")
+
+    let result;
     try {
-      if (modelMode == 'add') await CreateHocKy({
+      if (modelMode == 'add') result = await CreateHocKy({
         tenKi,
         thoiGianBatDau: thoiGianBatDau.toDate(),
         thoiGianKetThuc: thoiGianKetThuc.toDate()
       })
-      else if (modelMode == 'edit') await UpdateHocKy({
+      else if (modelMode == 'edit') result = await UpdateHocKy({
         id: id,
         tenKi,
         thoiGianBatDau: thoiGianBatDau.toDate(),
         thoiGianKetThuc: thoiGianKetThuc.toDate()
       })
-    } catch (error) { console.log(error) }
-
+    } catch (error) {
+      console.log(error)
+      message.error("Lỗi không thể thêm học kì!")
+    }
+    // console.log(result)
     // console.log({ id, tenKi, thoiGianBatDau, thoiGianKetThuc })
     const data = await GetHocKyList()
     dispatch([
