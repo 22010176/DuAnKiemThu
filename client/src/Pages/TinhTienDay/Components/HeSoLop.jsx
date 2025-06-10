@@ -1,5 +1,9 @@
-import { Button, Card, ConfigProvider, Divider, Form, Input, InputNumber, Modal, Space, Table, Tag } from 'antd';
-import { useState } from 'react';
+import { CreateHeSoLopHocPhan, DeleteHeSoLopHocPhan, GetHeSoLopHocPhan, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, ConfigProvider, Divider, Form, Input, InputNumber, message, Modal, Space, Table, Tag } from 'antd';
+import { useWatch } from 'antd/es/form/Form';
+import { useEffect, useState } from 'react';
 
 const heSoLopData = [
   { key: '1', soSinhVien: '<20', heSo: -0.3, trangThai: 'Đang áp dụng' },
@@ -13,11 +17,19 @@ const heSoLopData = [
 
 function HeSoLop() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [heSoLop, setHeSoLop] = useState([])
+  const [heSoLopId, setHeSoLopId] = useState()
   const [modalType, setModalType] = useState('');
+
   const [form] = Form.useForm();
+  const formData = useWatch(i => i, form)
+
+  useEffect(function () {
+    GetHeSoLopHocPhan().then(setHeSoLop)
+  }, [])
 
   const heSoColumns = [
-    { title: 'Số sinh viên', dataIndex: 'soSinhVien', key: 'soSinhVien', },
+    { title: 'Số sinh viên', dataIndex: 'soHocSinhToiThieu', key: 'soHocSinhToiThieu', },
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value) => (
@@ -28,18 +40,28 @@ function HeSoLop() {
     },
     {
       title: 'Thao tác', key: 'action',
-      render: () => (
+      render: (_, item) => (
         <Space>
-          <Button size="small" onClick={() => {
-            setModalType('heSo');
-            setModalVisible(true);
-          }}>
-            <i className="fas fa-edit"></i> Sửa
+          <Button size='small' onClick={() => {
+
+            setHeSoLopId(item.id)
+            form.setFieldValue('id', item.id)
+            form.setFieldValue('heSo', item.heSo)
+            form.setFieldValue('soHocSinhToiThieu', item.soHocSinhToiThieu)
+            setModalType('edit')
+            setModalVisible(true)
+          }} >
+            Sửa
           </Button>
-          <Button size="small" danger>
-            <i className="fas fa-trash"></i> Xóa
+          <Button size="small" danger
+            onClick={async () => {
+              await DeleteHeSoLopHocPhan({ id: item.id })
+              await GetHeSoLopHocPhan().then(setHeSoLop)
+              message.info("Xóa hệ số lớp học phần thành công!")
+            }}>
+            Xóa
           </Button>
-        </Space>
+        </Space >
       ),
     },
   ];
@@ -55,28 +77,45 @@ function HeSoLop() {
     },
     {
       title: 'Thao tác', key: 'action',
-      render: () => (
+      render: (_, entry) => (
         <Space>
           <Button size="small" onClick={() => {
-            setModalType('heSo');
-            setModalVisible(true);
+
+            setModalVisible(true)
           }}>
-            <i className="fas fa-edit"></i> Sửa
+            Sửa
           </Button>
           <Button size="small" danger>
-            <i className="fas fa-trash"></i> Xóa
+            Xóa
           </Button>
-        </Space>
+        </Space >
       ),
     },
   ];
 
   const handleModalOk = () => {
-    form.validateFields().then(() => {
+    form.validateFields().then(async () => {
       setModalVisible(false);
+      console.log(formData)
+      try {
+        if (modalType == 'add') {
+          await CreateHeSoLopHocPhan(formData)
+          message.info("Tạo hệ số lớp mới thành công!")
+
+        }
+        else if (modalType == 'edit') {
+          await UpdateHeSoLopHocPhan({ id: heSoLopId, ...formData })
+          message.info("Cập nhật hệ số lớp mới thành công!")
+        }
+      } catch (error) {
+        message.error("Thao tác thất bại!")
+      }
+      await GetHeSoLopHocPhan().then(setHeSoLop)
+      setHeSoLopId()
       form.resetFields();
     });
   };
+
   return (
     <>
       <div className='grid grid-cols-2 gap-10'>
@@ -89,37 +128,16 @@ function HeSoLop() {
               }
             }
           }}>
-          {/* <Divider type="vertical" /> */}
-
-
-
           <Card
             title={
               <Button type="primary" onClick={() => {
-                setModalType('addHeSo');
+                setModalType('add');
                 setModalVisible(true);
-              }}>
-                <i className="fas fa-plus"></i> Thêm hệ số
-              </Button>
-            }
-          // extra={
-
-          // }
-          >
-            <Table bordered columns={heSoColumns} dataSource={heSoLopData} pagination={false} size="middle" />
+              }}>Thêm hệ số</Button>}>
+            <Table bordered columns={heSoColumns} dataSource={heSoLop} pagination={false} size="middle" />
             {/* <Divider type="vertical" /> */}
           </Card>
-          <Card
-            title={
-              <Button type="primary" onClick={() => {
-                setModalType('addHeSo');
-                setModalVisible(true);
-              }}>
-                <i className="fas fa-plus"></i> Thêm hệ số
-              </Button>
-            }
-          // extra={            }
-          >
+          <Card>
             <Table bordered columns={bangCapColumns} dataSource={heSoLopData} pagination={false} size="middle" />
           </Card>
         </ConfigProvider>
@@ -127,18 +145,18 @@ function HeSoLop() {
       <Modal
         visible={modalVisible}
         onOk={handleModalOk}
-        title={modalType === 'heSo' ? 'Cập nhật hệ số lớp' : 'Thêm hệ số lớp'}
+        title={modalType === 'edit' ? 'Cập nhật hệ số lớp' : 'Thêm hệ số lớp'}
         onCancel={() => {
           setModalVisible(false);
           form.resetFields();
         }}
         width={500}>
         <Form form={form} layout="vertical">
-          <Form.Item label="Số sinh viên" name="soSinhVien" rules={[{ required: true, message: 'Vui lòng nhập khoảng sinh viên!' }]}>
-            <Input placeholder="Ví dụ: 80-89" />
+          <Form.Item label="Số sinh viên" name="soHocSinhToiThieu" rules={[{ required: true, message: 'Vui lòng nhập khoảng sinh viên!' }]}>
+            <InputNumber style={{ width: '100%' }} min={0} max={150} placeholder="Ví dụ: 80-89" />
           </Form.Item>
           <Form.Item label="Hệ số" name="heSo" rules={[{ required: true, message: 'Vui lòng nhập hệ số!' }]}>
-            <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={2} />
+            <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={3} />
           </Form.Item>
         </Form>
       </Modal>

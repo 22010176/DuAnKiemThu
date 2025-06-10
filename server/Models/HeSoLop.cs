@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace server.Models;
 
 public class HeSoLop
@@ -12,6 +14,7 @@ public class HeSoLop
     };
   }
 
+  [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
   public uint SoHocSinhToiThieu { get; set; }
   public double HeSo { get; set; }

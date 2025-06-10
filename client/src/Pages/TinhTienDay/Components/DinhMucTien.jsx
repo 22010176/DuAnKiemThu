@@ -1,4 +1,6 @@
 import { GetDinhMucTien, UpdateDinhMucTien } from '@/api/dinhMucTien';
+import { faPen, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Form, Input, InputNumber, message, Modal, Table, Tag } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import React, { useEffect, useState } from 'react';
@@ -28,15 +30,15 @@ function DinhMucTien() {
 
   const dinhMucColumns = [
     { title: 'Loại tiết', dataIndex: 'loaiTiet', key: 'loaiTiet', render: (text) => "Tiết chuẩn" },
-    { title: 'Số tiền (VNĐ)', dataIndex: 'soTien', key: 'soTien', render: (value) => value.toLocaleString('vi-VN') },
-    { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat', render: (date) => new Date(date).toLocaleDateString('vi-VN') },
+    { title: 'Số tiền (VNĐ)', dataIndex: 'soTien', key: 'soTien', render: (value) => value?.toLocaleString('vi-VN') },
+    { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat', render: (date) => new Date(date)?.toLocaleDateString('vi-VN') },
     {
       title: 'Thao tác', key: 'action',
       render: () => (
         <Button type="primary" size="small" onClick={() => {
           setModalVisible(true);
         }}>
-          <i className="fas fa-edit"></i> Cập nhật
+          <FontAwesomeIcon icon={faPen} />
         </Button>
       ),
     },
@@ -57,7 +59,9 @@ function DinhMucTien() {
       const result = await UpdateDinhMucTien(customValue);
       console.log('Update result:', result);
       message.success('Cập nhật định mức tiền thành công!');
-
+      GetDinhMucTien().then(response => {
+        setData(response);
+      })
       form.resetFields();
     });
   };

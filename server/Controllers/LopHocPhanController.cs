@@ -161,9 +161,7 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
    public async Task<IActionResult> XoaLopHocPhan(Guid id)
    {
       var lop = await _ct.LopHocPhan.FindAsync(id);
-      if (lop == null)
-         return NotFound();
-
+      if (lop == null) return NotFound();
       _ct.LopHocPhan.Remove(lop);
       await _ct.SaveChangesAsync();
 
@@ -175,8 +173,7 @@ public class LopHocPhanController(AppDbContext context, IConfiguration configura
    public async Task<IActionResult> PhanCongGiangVien([FromBody] PhanCongGiangVienDto dto)
    {
       var lop = await _ct.LopHocPhan.FindAsync(dto.LopHocPhanId);
-      if (lop == null)
-         return NotFound();
+      if (lop == null) return NotFound();
 
       lop.GiangVienId = dto.GiangVienId;
       await _ct.SaveChangesAsync();
