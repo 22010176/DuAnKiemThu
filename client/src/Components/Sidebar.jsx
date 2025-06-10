@@ -54,7 +54,7 @@ const links3 = items3.map(i => i.to)
 
 const items2 = [
   // { content: "Lớp học phần", to: "", icon: faCalendar },
-  { content: "Báo cáo - Tra cứu", to: "", icon: faMagnifyingGlass },
+  { content: "Báo cáo - Tra cứu", to: "tinh-tien-day", icon: faMagnifyingGlass },
   { content: "Quản trị hệ thống", to: "", icon: faGear },
 ]
 

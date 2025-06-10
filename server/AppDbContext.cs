@@ -5,7 +5,6 @@ namespace server;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-  // public DbSet<Product> Products { get; set; }
   public DbSet<BangCap> BangCap { get; set; }
   public DbSet<ChucVu> ChucVu { get; set; }
   public DbSet<GiangVien> GiangVien { get; set; }
@@ -13,9 +12,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<Khoa_GiangVien> Khoa_GiangVien { get; set; }
   public DbSet<HocKi> HocKi { get; set; }
   public DbSet<HocPhan> HocPhan { get; set; }
-  // public DbSet<TinChi> TinChi { get; set; }
+  public DbSet<DinhMucTien> DinhMucTien { get; set; }
+  public DbSet<HeSoLop> HeSoLop { get; set; }
   public DbSet<LopHocPhan> LopHocPhan { get; set; }
-  // public DbSet<HocPhan_TinChi> HocPhan_TinChi { get; set; }
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<BangCap>().HasIndex(b => b.MaBangCap).IsUnique();
@@ -49,7 +49,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianBatDau).IsUnique();
     modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianKetThuc).IsUnique();
 
-    modelBuilder.Entity<TinChi>().HasIndex(b => b.LoaiTinChi).IsUnique();
+    // modelBuilder.Entity<TinChi>().HasIndex(b => b.LoaiTinChi).IsUnique();
 
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.MaHocPhan).IsUnique();
     modelBuilder.Entity<HocPhan>().HasIndex(b => b.TenHocPhan).IsUnique();

@@ -79,7 +79,6 @@ public class HocPhan : HocPhanDto, IEntityPostgre
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
   public Khoa? Khoa { get; set; }
-  public ICollection<HocPhan_TinChi>? HocPhan_TinChis { get; set; }
   public ICollection<LopHocPhan>? LopHocPhans { get; set; }
 }
 

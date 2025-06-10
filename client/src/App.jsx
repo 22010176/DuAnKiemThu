@@ -12,7 +12,6 @@ import LopHocPhanPage from '@/Pages/LopHocPhanPage';
 import ThongKeLopPage from '@/Pages/ThongKeLopPage';
 import ThongKePage from '@/Pages/ThongKePage';
 
-import StandardRateSetup from '@/Pages/StandardRateSetup';
 // import TeachingRateSetup from '@/Pages/TeachingRateSetup';
 import TinhTienDay from '@/Pages/TinhTienDay';
 // import TeachingSalarySystem from '@/Pages/TeachingRateSetup';
@@ -33,7 +32,7 @@ function App() {
           <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
 
           <Route path='tinh-tien-day' element={<TinhTienDay />} />
-          <Route path='thiet-lap-dinh-muc' element={<StandardRateSetup />} />
+          {/* <Route path='thiet-lap-dinh-muc' element={<StandardRateSetup />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

@@ -103,5 +103,4 @@ public class HocPhanInput
   public uint SoTinChi { get; set; } = 0!;
   public uint SoTiet { get; set; } = 0!;
   public Guid KhoaId { get; set; }
-
 }
