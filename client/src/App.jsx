@@ -11,30 +11,34 @@ import KhoaPage from "@/Pages/KhoaPage";
 import LopHocPhanPage from '@/Pages/LopHocPhanPage';
 import ThongKeLopPage from '@/Pages/ThongKeLopPage';
 import ThongKePage from '@/Pages/ThongKePage';
+
 import StandardRateSetup from '@/Pages/StandardRateSetup';
 // import TeachingRateSetup from '@/Pages/TeachingRateSetup';
-import TinhTienDay from './Pages/TinhTienDay';
+import TinhTienDay from '@/Pages/TinhTienDay';
 // import TeachingSalarySystem from '@/Pages/TeachingRateSetup';
 
 function App() {
-  // return (
-  //   <BrowserRouter>
-  //     <Routes>
-  //       <Route path="/" element={<MainLayout />}>
-  //         <Route path="khoa" element={<KhoaPage />} />
-  //         <Route path="bang-cap" element={<BangCapPage />} />
-  //         <Route path="giao-vien" element={<GiaoVienPage />} />
-  //         <Route path="thong-ke" element={<ThongKePage />} />
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="khoa" element={<KhoaPage />} />
+          <Route path="bang-cap" element={<BangCapPage />} />
+          <Route path="giao-vien" element={<GiaoVienPage />} />
+          <Route path="thong-ke" element={<ThongKePage />} />
 
-  //         <Route path="hoc-ki" element={<HocKiPage />} />
-  //         <Route path="hoc-phan" element={<HocPhanPage />} />
-  //         <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />
-  //         <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
-  //       </Route>
-  //     </Routes>
-  //   </BrowserRouter>
-  // )
-  return <TinhTienDay />
+          <Route path="hoc-ki" element={<HocKiPage />} />
+          <Route path="hoc-phan" element={<HocPhanPage />} />
+          <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />
+          <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
+
+          <Route path='tinh-tien-day' element={<TinhTienDay />} />
+          <Route path='thiet-lap-dinh-muc' element={<StandardRateSetup />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+  // return <TinhTienDay />
 }
 
 export default App
