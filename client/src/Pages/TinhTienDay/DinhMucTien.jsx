@@ -76,12 +76,14 @@ function DinhMucTien() {
 
   return (
     <>
-      <Card title="Định mức tiền theo tiết chuẩn hiện tại">
-        <Table columns={dinhMucColumns} dataSource={[data[0]]} pagination={false} size="middle" />
-      </Card>
-      <Card title="Lịch sử cập nhật định mức " style={{ marginTop: '16px' }}>
-        <Table size="middle" columns={lichSuColumns} dataSource={data} pagination={{ pageSize: 5 }} />
-      </Card>
+      <div className='p-5'>
+        <Card title="Định mức tiền theo tiết chuẩn hiện tại">
+          <Table columns={dinhMucColumns} dataSource={[data[0]]} pagination={false} size="middle" />
+        </Card>
+        <Card title="Lịch sử cập nhật định mức " style={{ marginTop: '16px' }}>
+          <Table size="middle" columns={lichSuColumns} dataSource={data} pagination={{ pageSize: 5 }} />
+        </Card>
+      </div>
 
       <Modal
         visible={modalVisible}

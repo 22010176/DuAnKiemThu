@@ -1,10 +1,10 @@
-import { Button, Card, ConfigProvider, Form, Input, InputNumber, message, Modal, Select, Space, Table, Tag } from 'antd';
+import { Button, Card, ConfigProvider, Form, InputNumber, message, Modal, Select, Space, Table, Tag } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 
-import { CreateHeSoLopHocPhan, DeleteHeSoLopHocPhan, GetHeSoLopHocPhan, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
+import { CreateHeSoBangCap, GetHeSoBangCapNam } from '@/api/heSoBangCapApi';
+import { CreateHeSoLopHocPhan, GetHeSoLopHocPhan, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
-import { CreateHeSoBangCap, GetHeSoBangCap, GetHeSoBangCapNam } from '@/api/heSoBangCapApi';
 
 function HeSoLop() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -18,7 +18,6 @@ function HeSoLop() {
   const [selectedNamHoc, setSelectedNamHoc] = useState()
 
   const [heSoBangCap, setHeSoBangCap] = useState([])
-  console.log(heSoBangCap)
   const [heSo, setHeSo] = useState(0)
 
   const [form] = Form.useForm();
@@ -83,20 +82,17 @@ function HeSoLop() {
       title: 'Thao tác', key: 'action',
       render: (_, entry) => (
         <Space>
-          {(entry.id == editHeSoBangCap?.id)
-            ? <Button size="small" onClick={async () => {
+          {(entry.id == editHeSoBangCap?.id) ?
+            <Button size="small" onClick={async () => {
               await CreateHeSoBangCap({ id: "", maBangCap: editHeSoBangCap.bangCapId, nam: selectedNamHoc, heSo })
               await GetHeSoBangCapNam({ nam: selectedNamHoc }).then(setHeSoBangCap)
               message.info("Cập nhật hệ số bằng cấp thành công")
               setEditHeSoBangCap()
-            }}>Lưu</Button>
-            : <Button size="small" onClick={() => {
+            }}>Lưu</Button> :
+            <Button disabled={editHeSoBangCap != null} size="small" onClick={() => {
               setEditHeSoBangCap(entry)
               setHeSo(entry.heSo)
             }}>Sửa</Button>}
-          <Button size="small" danger>
-            Xóa
-          </Button>
         </Space >
       ),
     },
@@ -127,7 +123,7 @@ function HeSoLop() {
 
   return (
     <>
-      <div className='grid grid-cols-2 gap-10'>
+      <div className='grid grid-cols-2 gap-10 p-5'>
         <ConfigProvider
           theme={{
             components: {

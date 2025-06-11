@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
 
@@ -66,7 +65,6 @@ public class HeSoLopHocPhanController(AppDbContext context) : ControllerBase
 
 public class HeSoLopInput()
 {
-
   public uint SoHocSinhToiThieu { get; set; }
   public double HeSo { get; set; }
 }

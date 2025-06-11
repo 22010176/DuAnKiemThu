@@ -23,7 +23,6 @@ function DataForm() {
     if (thoiGianKetThuc.month() - thoiGianBatDau.month() < 4) return message.error("Thời gian kết thúc phải cách thời gian bắt đầu 4 tháng!")
     // const _bd = thoiGianBatDau.toDate(), _kt = thoiGianKetThuc.toDate();
 
-    console.log(_bd)
     let result;
     try {
       if (modelMode == 'add') result = await CreateHocKy({

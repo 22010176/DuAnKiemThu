@@ -61,53 +61,54 @@ function TienDayGiangVien() {
 
   return (
     <>
-      <Card title="Bộ lọc tính tiền dạy">
-        <Row gutter={16}>
-          <Col span={6}>
-            <Select placeholder="Chọn khoa" style={{ width: '100%' }}>
-              <Option value="all">Toàn trường</Option>
-              <Option value="cntt">Công nghệ thông tin</Option>
-              <Option value="toan">Toán học</Option>
-              <Option value="ly">Vật lý</Option>
-            </Select>
-          </Col>
-          <Col span={6}>
-            <Select placeholder="Năm học" style={{ width: '100%' }}>
-              <Option value="2023-2024">2023-2024</Option>
-              <Option value="2024-2025">2024-2025</Option>
-            </Select>
-          </Col>
-          <Col span={6}>
-            <Select placeholder="Kì học" style={{ width: '100%' }}>
-              <Option value="1">Kì 1</Option>
-              <Option value="2">Kì 2</Option>
-              <Option value="3">Kì hè</Option>
-            </Select>
-          </Col>
-          <Col span={6}>
-            <Button type="primary" style={{ width: '100%' }}>
-              <i className="fas fa-search"></i> Tìm kiếm
-            </Button>
-          </Col>
-        </Row>
-      </Card>
+      <div className='p-5'>
+        <Card title="Bộ lọc tính tiền dạy">
+          <Row gutter={16}>
+            <Col span={6}>
+              <Select placeholder="Chọn khoa" style={{ width: '100%' }}>
+                <Option value="all">Toàn trường</Option>
+                <Option value="cntt">Công nghệ thông tin</Option>
+                <Option value="toan">Toán học</Option>
+                <Option value="ly">Vật lý</Option>
+              </Select>
+            </Col>
+            <Col span={6}>
+              <Select placeholder="Năm học" style={{ width: '100%' }}>
+                <Option value="2023-2024">2023-2024</Option>
+                <Option value="2024-2025">2024-2025</Option>
+              </Select>
+            </Col>
+            <Col span={6}>
+              <Select placeholder="Kì học" style={{ width: '100%' }}>
+                <Option value="1">Kì 1</Option>
+                <Option value="2">Kì 2</Option>
+                <Option value="3">Kì hè</Option>
+              </Select>
+            </Col>
+            <Col span={6}>
+              <Button type="primary" style={{ width: '100%' }}>
+                <i className="fas fa-search"></i> Tìm kiếm
+              </Button>
+            </Col>
+          </Row>
+        </Card>
 
-      <Card title="Kết quả tính tiền dạy" style={{ marginTop: '16px' }}>
-        <Row gutter={16} style={{ marginBottom: '16px' }}>
-          <Col span={8}>
-            <Statistic title="Tổng số giáo viên" value={2} prefix={<i className="fas fa-user-tie"></i>} />
-          </Col>
-          <Col span={8}>
-            <Statistic title="Tổng số lớp" value={3} prefix={<i className="fas fa-chalkboard-teacher"></i>} />
-          </Col>
-          <Col span={8}>
-            <Statistic title="Tổng tiền chi trả" value={22956000} prefix={<i className="fas fa-money-bill-wave"></i>} formatter={(value) => value.toLocaleString('vi-VN') + ' VNĐ'} />
-          </Col>
-        </Row>
+        <Card title="Kết quả tính tiền dạy" style={{ marginTop: '16px' }}>
+          <Row gutter={16} style={{ marginBottom: '16px' }}>
+            <Col span={8}>
+              <Statistic title="Tổng số giáo viên" value={2} prefix={<i className="fas fa-user-tie"></i>} />
+            </Col>
+            <Col span={8}>
+              <Statistic title="Tổng số lớp" value={3} prefix={<i className="fas fa-chalkboard-teacher"></i>} />
+            </Col>
+            <Col span={8}>
+              <Statistic title="Tổng tiền chi trả" value={22956000} prefix={<i className="fas fa-money-bill-wave"></i>} formatter={(value) => value.toLocaleString('vi-VN') + ' VNĐ'} />
+            </Col>
+          </Row>
 
-        <Table columns={tienDayColumns} dataSource={tienDayData} pagination={{ pageSize: 10 }} size="middle" />
-      </Card>
-
+          <Table columns={tienDayColumns} dataSource={tienDayData} pagination={{ pageSize: 10 }} size="middle" />
+        </Card>
+      </div>
 
       {/* Modal chi tiết tính tiền */}
       <Modal

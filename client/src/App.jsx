@@ -1,5 +1,5 @@
-import '@ant-design/v5-patch-for-react-19';
 import { BrowserRouter, Route, Routes } from "react-router";
+import '@ant-design/v5-patch-for-react-19';
 
 import MainLayout from "@/Layouts/MainLayout";
 
@@ -11,11 +11,9 @@ import KhoaPage from "@/Pages/KhoaPage";
 import LopHocPhanPage from '@/Pages/LopHocPhanPage';
 import ThongKeLopPage from '@/Pages/ThongKeLopPage';
 import ThongKePage from '@/Pages/ThongKePage';
-
-// import TeachingRateSetup from '@/Pages/TeachingRateSetup';
-import TinhTienDay from '@/Pages/TinhTienDay';
-import Testing from './Pages/Test';
-// import TeachingSalarySystem from '@/Pages/TeachingRateSetup';
+import DinhMucTien from '@/Pages/TinhTienDay/DinhMucTien';
+import HeSoLop from '@/Pages/TinhTienDay/HeSoLop';
+import TienDayGiangVien from '@/Pages/TinhTienDay/TienDayGiangVien';
 
 function App() {
   return (
@@ -32,8 +30,9 @@ function App() {
           <Route path="thoi-khoa-bieu" element={<LopHocPhanPage />} />
           <Route path="thong-ke-so-lop" element={<ThongKeLopPage />} />
 
-          <Route path='tinh-tien-day' element={<TinhTienDay />} />
-          {/* <Route path='thiet-lap-dinh-muc' element={<StandardRateSetup />} /> */}
+          <Route path='tinh-tien-day' element={<TienDayGiangVien />} />
+          <Route path='dinh-muc-tien' element={<DinhMucTien />} />
+          <Route path='he-so-tinh-tien' element={<HeSoLop />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -28,39 +28,48 @@ function SubLink2({ icon, to, content }) {
   )
 }
 
+function Header({ pathname, links = [], icon, title }) {
+  return (
+    <div className='flex gap-5 items-center' style={{ color: links.includes(pathname) ? "#FB8D18" : "#ffffff" }}>
+      {icon && <Icon icon={icon} />}
+      <h1 className='font-bold text-lg' style={{ color: links?.includes(pathname) ? "#FB8D18" : "#ffffff" }}>{title}</h1>
+    </div >
+  )
+}
+
 const theme = {
   components: {
     Collapse: {
-      contentBg: "#2D3064", colorText: "white", colorTextHeading: "white", headerPadding: "20px 15px"
+      contentBg: "#2D3064",
+      colorText: "white",
+      colorTextHeading: "white",
+      headerPadding: "20px 15px"
     }
   },
 }
 
-const items1 = [
-  { content: "Bằng cấp", to: "/bang-cap" },
-  { content: "Khoa", to: "/khoa" },
-  { content: "Giáo viên", to: "/giao-vien" },
-  { content: "Thống kê", to: "/thong-ke" },
-]
-const links1 = items1.map(i => i.to)
-
-const items3 = [
-  { content: "Học kì", to: "/hoc-ki" },
-  { content: "Học phần", to: "/hoc-phan" },
-  { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
-  { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
-]
-const links3 = items3.map(i => i.to)
-
-const items2 = [
-  // { content: "Lớp học phần", to: "", icon: faCalendar },
-  { content: "Báo cáo - Tra cứu", to: "tinh-tien-day", icon: faMagnifyingGlass },
-  { content: "Quản trị hệ thống", to: "", icon: faGear },
-]
+const items = {
+  giaoVien: [
+    { content: "Bằng cấp", to: "/bang-cap" },
+    { content: "Khoa", to: "/khoa" },
+    { content: "Giáo viên", to: "/giao-vien" },
+    { content: "Thống kê", to: "/thong-ke" },
+  ],
+  lopHocPhan: [
+    { content: "Học kì", to: "/hoc-ki" },
+    { content: "Học phần", to: "/hoc-phan" },
+    { content: "Thời khóa biểu", to: "/thoi-khoa-bieu" },
+    { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
+  ],
+  thongKe: [
+    { content: "Định mức tiền", to: "/dinh-muc-tien" },
+    { content: "Hệ số tính tiền", to: "/he-so-tinh-tien" },
+    { content: "Tra cứu tiền dạy", to: "/tinh-tien-day" },
+  ]
+}
 
 function Sidebar() {
   const { pathname } = useLocation();
-  const [open, setOpen] = useState(true)
   const [selected, setSelected] = useState('')
 
   // console.log(pathname)
@@ -78,42 +87,37 @@ function Sidebar() {
           items={[
             {
               key: "2",
-              label: (
-                <div className='flex gap-5 items-center' style={{ color: links1.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
-                  <Icon icon={faUser} />
-                  <h1 className='font-bold text-lg' style={{ color: links1.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Giáo viên</h1>
-                </div>
-              ), children: (
+              label: <Header pathname={pathname} links={items.giaoVien.map(i => i.to)} icon={faUser} title="Giáo viên" />,
+              children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
-                  {items1.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                  {items.giaoVien.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
                 </ul>
               ),
             },
             {
               key: "3",
-              label: (
-                <div className='flex gap-5 items-center' style={{ color: links3.includes(pathname) ? "#FB8D18" : "#ffffff" }} onClick={() => setOpen(e => !e)}>
-                  <Icon icon={faCalendar} />
-                  <h1 className='font-bold text-lg' style={{ color: links3.includes(pathname) ? "#FB8D18" : "#ffffff" }}>Lớp học phần</h1>
-                </div>
-              ),
+              label: <Header pathname={pathname} links={items.lopHocPhan.map(i => i.to)} icon={faCalendar} title="Lớp học phần" />,
               children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
-                  {items3.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                  {items.lopHocPhan.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
                 </ul>
               ),
-            }
+            },
+            {
+              key: "4",
+              label: <Header pathname={pathname} links={items.thongKe.map(i => i.to)} icon={faMagnifyingGlass} title="Báo cáo - Tra cứu" />,
+              children: (
+                <ul className='flex flex-col gap-2 ps-5 relative'>
+                  {items.thongKe.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}
+                </ul>
+              ),
+            },
           ]} />
-        {/* <div className='border-t-1 border-white'>
-          <Collapse accordion expandIconPosition='end' bordered={false} activeKey={(links.includes(pathname) || open) && "2"}
-            expandIcon={({ isActive }) => <FontAwesomeIcon icon={faChevronRight} className='scale-130' rotation={isActive ? 90 : 0} />}
-            items={[]} />
-        </div> */}
       </ConfigProvider>
 
       {/* Con lai */}
       <div className='border-b-1 border-white'>
-        {items2.map((i, j) => <SubLink2 {...i} key={j} />)}
+        {/* {items2.map((i, j) => <SubLink2 {...i} key={j} />)} */}
       </div>
     </div>
   )

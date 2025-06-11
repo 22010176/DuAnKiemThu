@@ -17,6 +17,6 @@ public class HeSoLop
   [Key]
   public Guid Id { get; set; } = Guid.NewGuid();
   public uint SoHocSinhToiThieu { get; set; }
+  // public uint NamHoc { get; set; }
   public double HeSo { get; set; }
-
 }
