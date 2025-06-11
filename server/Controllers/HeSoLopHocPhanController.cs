@@ -16,16 +16,56 @@ public class HeSoLopHocPhanController(AppDbContext context) : ControllerBase
       from h in context.HeSoLop
       orderby h.SoHocSinhToiThieu ascending
       select h;
+
+    return Ok(result.ToList());
+  }
+
+  [HttpGet("{nam}")]
+  public ActionResult GetByYear(uint nam)
+  {
+    var result =
+      from h in context.HeSoLop
+      where h.NamHoc == nam
+      orderby h.SoHocSinhToiThieu ascending
+      select h;
+
+    if (result.Count() > 0) return Ok(result.ToList());
+    try
+    {
+      context.HeSoLop.AddRange([
+        new HeSoLop()
+      {
+        HeSo = 1,
+        SoHocSinhToiThieu = 1,
+        NamHoc = nam
+      },
+      new HeSoLop(){
+        HeSo = 2,
+        SoHocSinhToiThieu = 75,
+        NamHoc = nam
+      }
+      ]);
+      context.SaveChanges();
+    }
+    catch (Exception) { }
+
+    result =
+      from h in context.HeSoLop
+      where h.NamHoc == nam
+      orderby h.SoHocSinhToiThieu ascending
+      select h;
     return Ok(result.ToList());
   }
 
   [HttpPost]
   public async Task<ActionResult> Post(HeSoLopInput input)
   {
+    Console.WriteLine($"{input.NamHoc} {input.SoHocSinhToiThieu} {input.HeSo}");
     HeSoLop h = new()
     {
       HeSo = input.HeSo,
-      SoHocSinhToiThieu = input.SoHocSinhToiThieu
+      SoHocSinhToiThieu = input.SoHocSinhToiThieu,
+      NamHoc = input.NamHoc
     };
 
     context.HeSoLop.Add(h);
@@ -42,6 +82,7 @@ public class HeSoLopHocPhanController(AppDbContext context) : ControllerBase
 
     heSoLop.HeSo = input.HeSo;
     heSoLop.SoHocSinhToiThieu = input.SoHocSinhToiThieu;
+    heSoLop.NamHoc = input.NamHoc;
 
     await context.SaveChangesAsync();
     return Ok();
@@ -66,5 +107,6 @@ public class HeSoLopHocPhanController(AppDbContext context) : ControllerBase
 public class HeSoLopInput()
 {
   public uint SoHocSinhToiThieu { get; set; }
+  public uint NamHoc { get; set; }
   public double HeSo { get; set; }
 }

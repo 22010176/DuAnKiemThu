@@ -59,7 +59,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     modelBuilder.Entity<LopHocPhan>().HasIndex(b => new { b.HocKiId, b.TenLop }).IsUnique();
 
 
-    modelBuilder.Entity<HeSoLop>().HasIndex(b => b.SoHocSinhToiThieu).IsUnique(true);
+    modelBuilder.Entity<HeSoLop>().HasIndex(b => new { b.SoHocSinhToiThieu, b.NamHoc }).IsUnique(true);
 
     modelBuilder.Entity<HeSoBangCap>().HasOne(i => i.BangCap).WithMany(b => b.HeSoBangCap).HasForeignKey(i => i.MaBangCap);
     modelBuilder.Entity<HeSoBangCap>().HasIndex(i => new { i.Nam, i.MaBangCap }).IsUnique(true);

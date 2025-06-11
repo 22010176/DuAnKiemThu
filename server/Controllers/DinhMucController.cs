@@ -33,13 +33,6 @@ public class DinhMucController(AppDbContext context) : ControllerBase
     return Ok(dinhMuc);
   }
 
-  // [HttpPut]
-  // public async Task<IActionResult> Update(DinhMuc instances)
-  // {
-  //   await _context.UpdateAsync([instances]);
-  //   return NoContent();
-  // }
-
   [HttpDelete("{id}")]
   public async Task<IActionResult> Delete(string id)
   {

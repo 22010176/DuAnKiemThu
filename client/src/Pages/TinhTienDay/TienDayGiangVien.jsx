@@ -113,15 +113,14 @@ function TienDayGiangVien() {
       {/* Modal chi tiết tính tiền */}
       <Modal
         title={`Chi tiết tính tiền - ${selectedTeacher?.tenGV}`}
-        visible={detailModalVisible}
+        width={800}
+        open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={[
           <Button key="close" onClick={() => setDetailModalVisible(false)}>
             Đóng
           </Button>
-        ]}
-        width={800}
-      >
+        ]}>
         {selectedTeacher && (
           <>
             <Row gutter={16} style={{ marginBottom: '16px' }}>

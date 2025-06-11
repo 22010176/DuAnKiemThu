@@ -14,6 +14,8 @@ public class TestController(AppDbContext context) : ControllerBase
   [HttpDelete]
   public async Task<ActionResult> Delete()
   {
+    _ct.HeSoBangCap.RemoveRange(await _ct.HeSoBangCap.ToListAsync());
+    _ct.HeSoLop.RemoveRange(await _ct.HeSoLop.ToListAsync());
     _ct.Khoa_GiangVien.RemoveRange(await _ct.Khoa_GiangVien.ToListAsync());
     _ct.GiangVien.RemoveRange(await _ct.GiangVien.ToListAsync());
     _ct.BangCap.RemoveRange(await _ct.BangCap.ToListAsync());

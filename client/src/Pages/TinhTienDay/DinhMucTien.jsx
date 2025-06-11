@@ -1,19 +1,10 @@
-import { GetDinhMucTien, UpdateDinhMucTien } from '@/api/dinhMucTien';
-import { faPen, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Form, Input, InputNumber, message, Modal, Table, Tag } from 'antd';
+import { Button, Card, Form, Input, InputNumber, message, Modal, Table } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Sample data
-const dinhMucData = [
-  { key: '1', loaiTiet: 'Tiết chuẩn', soTien: 130000, ngayCapNhat: '2024-01-15', nguoiCapNhat: 'Admin', trangThai: 'Đang áp dụng' }
-];
-
-const lichSuDinhMucData = [
-  { key: '1', soTien: 130000, ngayCapNhat: '2024-01-15', nguoiCapNhat: 'Admin', lyDo: 'Cập nhật theo quyết định số 123/QĐ-MTM' },
-  { key: '2', soTien: 120000, ngayCapNhat: '2023-09-01', nguoiCapNhat: 'Admin', lyDo: 'Điều chỉnh theo lạm phát' }
-];
+import { GetDinhMucTien, UpdateDinhMucTien } from '@/api/dinhMucTien';
 
 function DinhMucTien() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,8 +38,6 @@ function DinhMucTien() {
   const lichSuColumns = [
     { title: 'Số tiền (VNĐ)', dataIndex: 'soTien', key: 'soTien', render: (value) => value.toLocaleString('vi-VN') },
     { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat', render: (date) => new Date(date).toLocaleDateString('vi-VN') },
-    // { title: 'Người cập nhật', dataIndex: 'nguoiCapNhat', key: 'nguoiCapNhat', },
-    // { title: 'Trạng thái', dataIndex: 'trangThai', key: 'trangThai', render: (status) => <Tag color="green">{status}</Tag> },
     { title: 'Lý do', dataIndex: 'lyDo', key: 'lyDo', }
   ];
 
@@ -86,11 +75,9 @@ function DinhMucTien() {
       </div>
 
       <Modal
-        visible={modalVisible}
+        open={modalVisible}
         onOk={handleModalOk}
-
         title={'Cập nhật định mức tiền'}
-
         onCancel={() => {
           setModalVisible(false);
           form.resetFields();

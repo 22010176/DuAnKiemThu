@@ -3,7 +3,7 @@ import { useWatch } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 
 import { CreateHeSoBangCap, GetHeSoBangCapNam } from '@/api/heSoBangCapApi';
-import { CreateHeSoLopHocPhan, GetHeSoLopHocPhan, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
+import { CreateHeSoLopHocPhan, GetHeSoLopHocPhan, GetHeSoLopHocPhanTheoNam, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
 
 function HeSoLop() {
@@ -24,7 +24,11 @@ function HeSoLop() {
   const formData = useWatch(i => i, form)
 
   useEffect(function () {
-    GetHeSoBangCapNam({ nam: selectedNamHoc }).then(setHeSoBangCap)
+    GetHeSoBangCapNam({ nam: selectedNamHoc || new Date().getFullYear() })
+      .then(setHeSoBangCap)
+
+    GetHeSoLopHocPhanTheoNam({ nam: selectedNamHoc || new Date().getFullYear() })
+      .then(setHeSoLop)
   }, [selectedNamHoc])
 
   useEffect(function () {
@@ -32,7 +36,7 @@ function HeSoLop() {
 
     GetNamHocList().then(async data => {
       setNamHoc(data)
-      setSelectedNamHoc(data[0].nam)
+      setSelectedNamHoc(data[0].nam || new Date().getFullYear())
     })
 
     GetHeSoBangCapNam({ nam: new Date().getFullYear() }).then(setHeSoBangCap)
@@ -72,11 +76,7 @@ function HeSoLop() {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value, entry) => entry.bangCapId == editHeSoBangCap?.bangCapId ?
         <InputNumber value={heSo} onChange={setHeSo} /> :
-        (
-          <Tag color='blue-inverse'>
-            {value == -1 ? 1 : value}
-          </Tag>
-        )
+        <Tag color='blue-inverse'>{value == -1 ? 1 : value}</Tag>
     },
     {
       title: 'Thao tác', key: 'action',
@@ -101,21 +101,18 @@ function HeSoLop() {
   const handleModalOk = () => {
     form.validateFields().then(async () => {
       setModalVisible(false);
-      console.log(formData)
       try {
         if (modalType == 'add') {
-          await CreateHeSoLopHocPhan(formData)
+          await CreateHeSoLopHocPhan({ ...formData, namHoc: selectedNamHoc })
           message.info("Tạo hệ số lớp mới thành công!")
-
-        }
-        else if (modalType == 'edit') {
-          await UpdateHeSoLopHocPhan({ id: heSoLopId, ...formData })
+        } else if (modalType == 'edit') {
+          await UpdateHeSoLopHocPhan({ id: heSoLopId, ...formData, namHoc: selectedNamHoc })
           message.info("Cập nhật hệ số lớp mới thành công!")
         }
-      } catch (error) {
+      } catch {
         message.error("Thao tác thất bại!")
       }
-      await GetHeSoLopHocPhan().then(setHeSoLop)
+      await GetHeSoLopHocPhanTheoNam({ nam: selectedNamHoc }).then(setHeSoLop)
       setHeSoLopId()
       form.resetFields();
     });
@@ -149,7 +146,10 @@ function HeSoLop() {
             <Select className='w-50'
               value={selectedNamHoc}
               onChange={e => setSelectedNamHoc(e)}
-              options={namHoc.map(i => ({ value: i.nam, label: `${i.nam}-${i.nam + 1}` }))} />
+              options={namHoc.map(i => ({
+                value: i.nam,
+                label: `${i.nam}-${i.nam + 1}`
+              }))} />
             <Card>
               <Table bordered size="small" pagination={false}
                 columns={bangCapColumns}
