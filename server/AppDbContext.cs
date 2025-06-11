@@ -15,6 +15,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<DinhMucTien> DinhMucTien { get; set; }
   public DbSet<HeSoLop> HeSoLop { get; set; }
   public DbSet<LopHocPhan> LopHocPhan { get; set; }
+  public DbSet<HeSoBangCap> HeSoBangCap { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -59,10 +60,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
 
     modelBuilder.Entity<HeSoLop>().HasIndex(b => b.SoHocSinhToiThieu).IsUnique(true);
-    // modelBuilder.Entity<HocPhan_TinChi>()
-    //   .HasOne(e => e.HocPhan)
-    //   .WithMany(hp => hp.HocPhan_TinChis)
-    //   .HasForeignKey(e => e.HocPhanId);
-  }
 
+    modelBuilder.Entity<HeSoBangCap>().HasOne(i => i.BangCap).WithMany(b => b.HeSoBangCap).HasForeignKey(i => i.MaBangCap);
+    modelBuilder.Entity<HeSoBangCap>().HasIndex(i => new { i.Nam, i.MaBangCap }).IsUnique(true);
+  }
 }

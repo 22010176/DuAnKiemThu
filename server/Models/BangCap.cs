@@ -43,6 +43,7 @@ public class BangCapDto
   public string MaBangCap { get; set; } = null!;
   public string TenBangCap { get; set; } = null!;
   public string TenVietTat { get; set; } = null!;
-  public double HeSo { get; set; } = 1.0; // Default value, can be adjusted later
+
+  public List<HeSoBangCap>? HeSoBangCap { get; set; }
 }
 

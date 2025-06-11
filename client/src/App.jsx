@@ -14,6 +14,7 @@ import ThongKePage from '@/Pages/ThongKePage';
 
 // import TeachingRateSetup from '@/Pages/TeachingRateSetup';
 import TinhTienDay from '@/Pages/TinhTienDay';
+import Testing from './Pages/Test';
 // import TeachingSalarySystem from '@/Pages/TeachingRateSetup';
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   )
-  // return <TinhTienDay />
+  // return <Testing />
 }
 
 export default App

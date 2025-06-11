@@ -83,16 +83,16 @@ public class TestController(AppDbContext context) : ControllerBase
     Console.WriteLine(string.Join('\n', formatedKhoa.Select(i => i.MaKhoa)));
 
     List<BangCap> _bangCap = [
-        new (){ MaBangCap = "BC-1", TenBangCap = "Giáo sư", TenVietTat = "GS", HeSo=3.0},
-        new (){ MaBangCap = "BC-2", TenBangCap = "Phó Giáo sư", TenVietTat = "PGS", HeSo=2.5},
-        new (){ MaBangCap = "BC-3", TenBangCap = "Tiến sĩ", TenVietTat = "TS", HeSo=2.0},
-        new (){ MaBangCap = "BC-4", TenBangCap = "Tiến sĩ khoa học", TenVietTat = "TSKH", HeSo=2.0},
-        new (){ MaBangCap = "BC-5", TenBangCap = "Thạc sĩ", TenVietTat = "ThS", HeSo=1.5},
-        new (){ MaBangCap = "BC-6", TenBangCap = "Cử nhân", TenVietTat = "CN", HeSo=1.0},
-        new (){ MaBangCap = "BC-7", TenBangCap = "Kỹ sư", TenVietTat = "KS", HeSo=1.5},
-        // new (){ MaBangCap = "BC-8", TenBangCap = "Bác sĩ", TenVietTat = "BS", HeSo=1.0},
-        // new (){ MaBangCap = "BC-9", TenBangCap = "Dược sĩ", TenVietTat = "DS", HeSo=1.0},
-        new (){ MaBangCap = "BC-10", TenBangCap = "Giáo viên", TenVietTat = "GV", HeSo=1.0 }
+        new (){ MaBangCap = "BC-1", TenBangCap = "Giáo sư", TenVietTat = "GS", },
+        new (){ MaBangCap = "BC-2", TenBangCap = "Phó Giáo sư", TenVietTat = "PGS", },
+        new (){ MaBangCap = "BC-3", TenBangCap = "Tiến sĩ", TenVietTat = "TS", },
+        new (){ MaBangCap = "BC-4", TenBangCap = "Tiến sĩ khoa học", TenVietTat = "TSKH", },
+        new (){ MaBangCap = "BC-5", TenBangCap = "Thạc sĩ", TenVietTat = "ThS", },
+        new (){ MaBangCap = "BC-6", TenBangCap = "Cử nhân", TenVietTat = "CN", },
+        new (){ MaBangCap = "BC-7", TenBangCap = "Kỹ sư", TenVietTat = "KS", },
+        // new (){ MaBangCap = "BC-8", TenBangCap = "Bác sĩ", TenVietTat = "BS", },
+        // new (){ MaBangCap = "BC-9", TenBangCap = "Dược sĩ", TenVietTat = "DS", },
+        new (){ MaBangCap = "BC-10", TenBangCap = "Giáo viên", TenVietTat = "GV",  }
     ];
     var formatedBangCap = _bangCap.Select((item, i) =>
       BangCap.FormatInput(i + 1, new() { TenBangCap = item.TenBangCap, TenVietTat = item.TenVietTat }));
@@ -236,5 +236,16 @@ public class TestController(AppDbContext context) : ControllerBase
     return Ok();
   }
 
+
+  [HttpPost("add-he-so-cac-nam")]
+  public async Task<ActionResult> AddHeSo()
+  {
+    var namHoc =
+      _ct.HocKi.GroupBy(i => i.ThoiGianBatDau.Year)
+      .Select(c => new { c })
+      .ToList();
+
+    return Ok(namHoc);
+  }
 
 }
