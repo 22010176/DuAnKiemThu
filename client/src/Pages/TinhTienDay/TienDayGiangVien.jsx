@@ -1,5 +1,8 @@
+import { GetHocKyList } from '@/api/hocKiApi';
+import { GetKhoaList } from '@/api/khoaApi';
+import { GetNamHocList } from '@/api/lhpThongKeApi';
 import { Button, Card, Col, Divider, Modal, Row, Select, Statistic, Table, Tag } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const { Option } = Select;
 
@@ -23,6 +26,22 @@ function TienDayGiangVien() {
   const [detailModalVisible, setDetailModalVisible] = React.useState(false);
   const [selectedTeacher, setSelectedTeacher] = React.useState(null);
 
+  // filterData
+  const [khoa, setKhoa] = useState([])
+  const [kyHoc, setKyHoc] = useState([])
+  const [namHoc, setNamHoc] = useState([])
+
+  // filterForm
+  const [filterForm, setFilterForm] = useState({ khoa: 'all', kyHoc: null, namHoc: 'all' })
+
+  useEffect(function () {
+    // fetch data
+    GetKhoaList().then(setKhoa)
+    GetNamHocList().then(setNamHoc)
+    GetHocKyList().then(setKyHoc)
+  }, [])
+
+
   const tienDayColumns = [
     { title: 'Mã GV', dataIndex: 'maGV', key: 'maGV', },
     { title: 'Tên giáo viên', dataIndex: 'tenGV', key: 'tenGV', },
@@ -43,13 +62,11 @@ function TienDayGiangVien() {
           onClick={() => {
             setSelectedTeacher(record);
             setDetailModalVisible(true);
-          }}>
-          <i className="fas fa-eye"></i> Chi tiết
-        </Button>
+          }}>Chi tiết</Button>
       ),
     },
   ];
-
+  console.log(kyHoc)
   const chiTietColumns = [
     { title: 'Mã lớp', dataIndex: 'maLop', key: 'maLop', },
     { title: 'Tên học phần', dataIndex: 'tenHP', key: 'tenHP', },
@@ -65,29 +82,32 @@ function TienDayGiangVien() {
         <Card title="Bộ lọc tính tiền dạy">
           <Row gutter={16}>
             <Col span={6}>
-              <Select placeholder="Chọn khoa" style={{ width: '100%' }}>
-                <Option value="all">Toàn trường</Option>
-                <Option value="cntt">Công nghệ thông tin</Option>
-                <Option value="toan">Toán học</Option>
-                <Option value="ly">Vật lý</Option>
-              </Select>
+              <Select placeholder="Chọn khoa" style={{ width: '100%' }}
+                value={filterForm.khoa}
+                onChange={(value) => setFilterForm({ ...filterForm, khoa: value })}
+                options={[
+                  { value: "all", label: "Toàn trường" },
+                  ...khoa.map(i => ({ value: i.id, label: i.tenKhoa }))
+                ]} />
             </Col>
             <Col span={6}>
-              <Select placeholder="Năm học" style={{ width: '100%' }}>
-                <Option value="2023-2024">2023-2024</Option>
-                <Option value="2024-2025">2024-2025</Option>
-              </Select>
+              <Select placeholder="Năm học" style={{ width: '100%' }}
+                value={filterForm.namHoc}
+                onChange={(value) => setFilterForm({ ...filterForm, namHoc: value })}
+                options={[
+                  { value: "all", label: "Toàn trường" },
+                  ...namHoc.map(i => ({ value: i.nam, label: `${i.nam} - ${i.nam + 1}` }))
+                ]} />
             </Col>
             <Col span={6}>
-              <Select placeholder="Kì học" style={{ width: '100%' }}>
-                <Option value="1">Kì 1</Option>
-                <Option value="2">Kì 2</Option>
-                <Option value="3">Kì hè</Option>
-              </Select>
+              <Select placeholder="Kì học" style={{ width: '100%' }} disabled={filterForm.namHoc === 'all'}
+                value={filterForm.kyHoc}
+                onChange={(value) => setFilterForm({ ...filterForm, kyHoc: value })}
+                options={kyHoc.filter(i => new Date(i.thoiGianBatDau).getFullYear() === filterForm.namHoc).map(i => ({ value: i.id, label: i.tenHocKy }))} />
             </Col>
             <Col span={6}>
               <Button type="primary" style={{ width: '100%' }}>
-                <i className="fas fa-search"></i> Tìm kiếm
+                Tìm kiếm
               </Button>
             </Col>
           </Row>
@@ -117,7 +137,8 @@ function TienDayGiangVien() {
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={[
-          <Button key="close" onClick={() => setDetailModalVisible(false)}>
+          <Button key="close"
+            onClick={() => setDetailModalVisible(false)}>
             Đóng
           </Button>
         ]}>
