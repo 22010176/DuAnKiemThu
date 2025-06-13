@@ -16,6 +16,7 @@ function FormModal() {
   const { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan } = form
 
   async function onFormSubmit(e) {
+    console.log({ id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
     e.preventDefault()
     if (!tenHocPhan) return message.error("Nhập thiếu thông tin!")
     if (!isValidString(tenHocPhan)) {

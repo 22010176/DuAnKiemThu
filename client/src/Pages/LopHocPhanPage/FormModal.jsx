@@ -37,8 +37,9 @@ function FormModal() {
     <>
       {contextHolder}
       <Modal
+        centered
         open={addModal}
-        width={800}
+        width={600}
         title={<h1 className="text-xl font-bold text-blue-900 uppercase">
           {formMode == 'edit' ? 'Sửa lớp học phần' : 'Thêm lớp học phần mới'}
         </h1>}
@@ -53,8 +54,8 @@ function FormModal() {
             {<FontAwesomeIcon icon={faCheck} />}
           </Button>
         ]}>
-        <form layout="vertical" onFinish={handleSubmit}>
-          <div className="grid-cols-[2fr_3fr] grid gap-5 mb-5 w-full">
+        <form className="my-10" layout="vertical" onFinish={handleSubmit}>
+          <div className="grid-cols-2 grid gap-x-5 gap-y-10 mb-5 w-full">
             <div className=" flex flex-col gap-2" name="khoa">
               <label className="font-semibold">Khoa</label>
               <Select
@@ -79,8 +80,8 @@ function FormModal() {
                   .filter(hp => hp.khoaId == khoaId)
                   .map(hp => ({ value: hp.id, label: `${hp.maHocPhan}-${hp.tenHocPhan} (${hp.soTinChi} TC)` }))} />
             </div>
-          </div>
-          <div className="grid-cols-3 grid gap-5 mb-5 w-full">
+            {/* </div>
+          <div className="grid-cols-2 grid gap-10 mb-5 w-full"> */}
             <div className="flex flex-col gap-2" >
               <label className="font-semibold">Năm học</label>
               <Select
@@ -97,7 +98,7 @@ function FormModal() {
                   })
                   .map(nam => ({ value: nam.nam, label: `${nam.nam} - ${nam.nam + 1}` }))} />
             </div>
-            <div className="flex flex-col gap-2" >
+            <div className="flex flex-col gap-y-2" >
               <label className="font-semibold">Kỳ học</label>
               <Select
                 placeholder="Chọn kỳ"

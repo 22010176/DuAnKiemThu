@@ -263,12 +263,12 @@ function TienDayGiangVien() {
                     "tienDay": "Tiền dạy"
 
                   }
-                  console.log(tinhTienTableData
-                    .map(i => Object.fromEntries(Object
-                      .entries(i)
-                      .map(([key, value]) => [mapping[key], value])
-                      .filter(([key]) => key)
-                    )))
+                  // console.log(tinhTienTableData
+                  //   .map(i => Object.fromEntries(Object
+                  //     .entries(i)
+                  //     .map(([key, value]) => [mapping[key], value])
+                  //     .filter(([key]) => key)
+                  //   )))
                   exportToExcel(
                     tinhTienTableData
                       .map(i => Object.fromEntries(Object

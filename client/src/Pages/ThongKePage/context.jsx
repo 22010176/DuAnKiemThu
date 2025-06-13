@@ -17,9 +17,9 @@ export function reducer(state, action) {
   // console.log({ type, payload })
   switch (type) {
     case 'updateData': {
-      console.log(_state.gioiTinh)
+      // console.log(_state.gioiTinh)
       let totalLecturers = payload.gioiTinh.reduce((acc, item) => {
-        console.log({ acc, item })
+        // console.log({ acc, item })
         return acc + (item.soGiangVien ?? 0)
       }, 0);
 

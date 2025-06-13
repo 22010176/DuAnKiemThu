@@ -1,10 +1,9 @@
 import { PlusOutlined, SearchOutlined, } from '@ant-design/icons';
-import { Button, Input, Select } from 'antd';
+import { Button, Input, Select, Tooltip } from 'antd';
 import { useContext, useEffect } from 'react';
 
-import { Context } from './context';
 import { GetKhoaList } from '@/api/khoaApi';
-import { GetNamHocList } from '@/api/lhpThongKeApi';
+import { Context } from './context';
 
 const { Option } = Select;
 
@@ -31,13 +30,15 @@ function FunctionBar() {
         <Input placeholder="Tìm kiếm theo tên hoặc mã học phần" prefix={<SearchOutlined />} style={{ width: 280 }} size="middle" />
       </div>
       <div className='flex justify-between items-center'>
-        <Button disabled={selectedKhoa == null} type="primary" icon={<PlusOutlined />}
-          onClick={() => dispatch([
-            { type: "updateModal", payload: true },
-            { type: "updateModalMode", payload: "add" }
-          ])}>
-          Thêm mới
-        </Button>
+        <Tooltip title="Phải chọn khoa trước!">
+          <Button disabled={selectedKhoa == null} type="primary" icon={<PlusOutlined />}
+            onClick={() => dispatch([
+              { type: "updateModal", payload: true },
+              { type: "updateModalMode", payload: "add" }
+            ])}>
+            Thêm mới
+          </Button>
+        </Tooltip>
       </div>
     </div>
   )

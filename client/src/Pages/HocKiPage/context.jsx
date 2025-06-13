@@ -27,7 +27,7 @@ export const reducer = (state, action) => {
   for (const { type, payload } of _actions) {
     const _payload = typeof payload == 'function' ? payload(_state) : payload
 
-    console.log({ type, payload })
+    // console.log({ type, payload })
     switch (type) {
       // payload = 2020 | 'all'
       case 'updateSelectedYear':

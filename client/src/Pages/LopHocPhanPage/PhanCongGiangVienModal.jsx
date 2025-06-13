@@ -26,13 +26,13 @@ function PhanCongGiangVienModal() {
         teacher.id.toLowerCase().includes(value.toLowerCase()) ||
         teacher.tenGiangVien.toLowerCase().includes(value.toLowerCase())
       ))
-      .map(teacher => ({ value: teacher.id, label: `${teacher.id} - ${teacher.tenGiangVien}`, teacher })));
+      .map(teacher => ({ value: teacher.id, label: `${teacher.maGiangVien} - ${teacher.tenGiangVien}`, teacher })));
   };
 
   const handleTeacherSelect = (_, option) => {
     const teacher = option.teacher;
     setSelectedTeacher(teacher);
-    setTeacherSearchValue(`${teacher.id} - ${teacher.tenGiangVien} - ${teacher.tenKhoa}`);
+    setTeacherSearchValue(`${teacher.maGiangVien} - ${teacher.tenGiangVien} - ${teacher.tenKhoa}`);
   };
 
   const handleConfirmAssign = async () => {
@@ -52,8 +52,9 @@ function PhanCongGiangVienModal() {
       { type: 'updateSelectedRows', payload: [] },
       { type: 'updateLopHocPhanData', payload: result }
     ])
+    setSelectedTeacher(null)
   };
-  console.log(selectedTeacher)
+  // console.log(selectedTeacher)
   return (
     <>
       {contextHolder}
@@ -102,7 +103,7 @@ function PhanCongGiangVienModal() {
             <Row gutter={16}>
               <Col span={12}>
                 <Space direction="vertical" size="small">
-                  <Text><strong>Mã GV:</strong> {selectedTeacher.id}</Text>
+                  <Text><strong>Mã GV:</strong> {selectedTeacher.maGiangVien}</Text>
                   <Text><strong>Tên:</strong> {selectedTeacher.tenGiangVien}</Text>
                 </Space>
               </Col>

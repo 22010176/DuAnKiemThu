@@ -37,7 +37,7 @@ function DataTable() {
     {
       title: <TableHeader>Trạng thái</TableHeader>, dataIndex: 'trangThai', key: 'trangThai', width: 120, align: 'center',
       render: (_, entry) => {
-        console.log(entry)
+        // console.log(entry)
         let color = 'default';
         const tgBatDau = new Date(entry.thoiGianBatDau);
         const tgKetThuc = new Date(entry.thoiGianKetThuc);
@@ -55,7 +55,7 @@ function DataTable() {
           color = 'red';
           status = 'Đã kết thúc'
         }
-        console.log(status, entry, { tgBatDau, tgKetThuc, tgHienTai }, tgKetThuc < tgHienTai)
+        // console.log(status, entry, { tgBatDau, tgKetThuc, tgHienTai }, tgKetThuc < tgHienTai)
         return <Tag color={color}>{status}</Tag>;
       }
     },

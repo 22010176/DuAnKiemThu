@@ -22,11 +22,9 @@ function DataTable() {
       title: <p className='text-lg font-semibold'>Học kì</p>, key: 'tenKi', dataIndex: 'tenKi', width: 220,
       render: (_, record) => {
         const hocKy = hocKiData.find(i => i.id == record.hocKiId)
-        console.log(hocKy)
+        // console.log(hocKy)
         return (
-          <p>
-            <span className="font-semibold">{new Date(hocKy.thoiGianBatDau).getFullYear()}</span> - {hocKy.tenKi}
-          </p>
+          <p>{hocKy.tenKi}</p>
         )
       }
     },
@@ -75,7 +73,7 @@ function DataTable() {
       }
     },
   };
-  console.log(lopHocPhanData)
+  // console.log(lopHocPhanData)
   return (
     <Table
       size="small"

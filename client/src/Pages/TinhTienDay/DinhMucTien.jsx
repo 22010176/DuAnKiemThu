@@ -56,9 +56,9 @@ function DinhMucTien() {
   };
 
   async function OnSubmit(values) {
-    console.log('Submitted values:', values);
+    // console.log('Submitted values:', values);
     // Call API to update dinh muc tien
-    // await UpdateDinhMucTien(values);
+    await UpdateDinhMucTien(values);
     setModalVisible(false);
     form.resetFields();
   }
