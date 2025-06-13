@@ -1,10 +1,24 @@
-import { Button, Card, ConfigProvider, Form, InputNumber, message, Modal, Select, Space, Table, Tag } from 'antd';
+import { faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, ConfigProvider, Form, InputNumber, message, Modal, Popconfirm, Select, Space, Table, Tag } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 
 import { CreateHeSoBangCap, GetHeSoBangCapNam } from '@/api/heSoBangCapApi';
-import { CreateHeSoLopHocPhan, GetHeSoLopHocPhan, GetHeSoLopHocPhanTheoNam, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
+import { CreateHeSoLopHocPhan, DeleteHeSoLopHocPhan, GetHeSoLopHocPhan, GetHeSoLopHocPhanTheoNam, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
+
+const colors = [
+  '#E07502', '#C00EB2', '#19A10A', '#EA1D20'
+]
+
+function HeSoBangCap(value, colors = [], range = []) {
+  const colorNum = colors.length
+  const div = Math.abs(range[1] - range[0]) / colorNum
+  const min = Math.min(...range)
+  const steps = new Array(colorNum).fill(0).map((_, i) => min + i * div)
+  return steps.findIndex(i => i >= value)
+}
 
 function HeSoLop() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,7 +61,7 @@ function HeSoLop() {
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value) => (
-        <Tag color={value < 0 ? 'red' : value > 0 ? 'green' : 'blue'}>
+        <Tag color={colors[HeSoBangCap(value, colors, [-1, 3])]}>
           {value > 0 ? '+' : ''}{value}
         </Tag>
       )
@@ -56,16 +70,22 @@ function HeSoLop() {
       title: 'Thao tác', key: 'action',
       render: (_, item) => (
         <Space>
-          <Button size='small' onClick={() => {
+          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
             form.setFieldValue('heSo', item.heSo)
             form.setFieldValue('soHocSinhToiThieu', item.soHocSinhToiThieu)
 
             setHeSoLopId(item.id)
             setModalType('edit')
             setModalVisible(true)
-          }}>
-            Sửa
-          </Button>
+          }} />
+          <Popconfirm title="Bạn có chắc chắn muốn xóa?" okText="Có" cancelText="Không"
+            onConfirm={async () => {
+              await DeleteHeSoLopHocPhan({ id: item.id })
+              GetHeSoLopHocPhan().then(setHeSoLop)
+              message.info("Xoá hệ số thành công!")
+            }}>
+            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+          </Popconfirm>
         </Space >
       ),
     },
@@ -75,8 +95,8 @@ function HeSoLop() {
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value, entry) => entry.bangCapId == editHeSoBangCap?.bangCapId ?
-        <InputNumber value={heSo} onChange={setHeSo} /> :
-        <Tag color='blue-inverse'>{value == -1 ? 1 : value}</Tag>
+        <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={3} value={heSo} onChange={setHeSo} /> :
+        <Tag color={colors[HeSoBangCap(value, colors, [-1, 3])]}>{value > 0 ? '+' : ''}{value == -1 ? 1 : value}</Tag>
     },
     {
       title: 'Thao tác', key: 'action',
@@ -89,10 +109,10 @@ function HeSoLop() {
               message.info("Cập nhật hệ số bằng cấp thành công")
               setEditHeSoBangCap()
             }}>Lưu</Button> :
-            <Button disabled={editHeSoBangCap != null} size="small" onClick={() => {
+            <Button disabled={editHeSoBangCap != null} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
               setEditHeSoBangCap(entry)
               setHeSo(entry.heSo)
-            }}>Sửa</Button>}
+            }} />}
         </Space >
       ),
     },
@@ -120,7 +140,7 @@ function HeSoLop() {
 
   return (
     <>
-      <div className='grid grid-cols-2 gap-10 p-5'>
+      <div className='grid grid-cols-2 gap-5 p-5'>
         <Select className='w-50 col-span-2'
           value={selectedNamHoc}
           onChange={e => setSelectedNamHoc(e)}
@@ -139,10 +159,15 @@ function HeSoLop() {
           }}>
           <Card
             title={
-              <Button type="primary" onClick={() => {
-                setModalType('add');
-                setModalVisible(true);
-              }}>Thêm hệ số</Button>}>
+              <div className='flex justify-between'>
+                <p className='text-xl font-bold'>Hệ số lớp</p>
+                <Button icon={<FontAwesomeIcon icon={faPlus} />}
+                  type="primary" onClick={() => {
+                    setModalType('add');
+                    setModalVisible(true);
+                  }}>Thêm hệ số</Button>
+              </div>
+            }>
             <Table
               pagination={false} size="small" bordered
               columns={heSoColumns}
@@ -150,7 +175,11 @@ function HeSoLop() {
             {/* <Divider type="vertical" /> */}
           </Card>
           {/* <div className='flex flex-col gap-5'> */}
-          <Card>
+          <Card title={
+            <div className='flex justify-between'>
+              <p className='text-xl font-bold'>Hệ số bằng cấp</p>
+            </div>
+          }>
             <Table bordered size="small" pagination={false}
               columns={bangCapColumns}
               dataSource={heSoBangCap?.filter(i => i.nam == selectedNamHoc)} />
@@ -169,7 +198,7 @@ function HeSoLop() {
         width={500}>
         <Form form={form} layout="vertical">
           <Form.Item label="Số sinh viên" name="soHocSinhToiThieu" rules={[{ required: true, message: 'Vui lòng nhập khoảng sinh viên!' }]}>
-            <InputNumber style={{ width: '100%' }} min={0} max={150} placeholder="Ví dụ: 80-89" />
+            <InputNumber style={{ width: '100%' }} min={0} max={150} />
           </Form.Item>
           <Form.Item label="Hệ số" name="heSo" rules={[{ required: true, message: 'Vui lòng nhập hệ số!' }]}>
             <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={3} />

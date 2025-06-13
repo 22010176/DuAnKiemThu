@@ -36,11 +36,14 @@ function CreateForm() {
       <form className="grid gap-5 grid-cols-2"
         onSubmit={async function (e) {
           e.preventDefault()
+          const { giangVien: { tenGiangVien, soDienThoai, gioiTinh, mail, bangCapId }, khoaId, chucVuId } = state.formValue
+          console.log({ tenGiangVien, soDienThoai, gioiTinh, mail, bangCapId, khoaId, chucVuId })
+          if (tenGiangVien.length === 0 || soDienThoai.length === 0 || mail.length === 0 || bangCapId === undefined || khoaId === undefined || chucVuId === undefined)
+            return message.error("Nhập thiếu thông tin!")
+
           // const data = Object.fromEntries(new FormData(e.target))
-          // console.log(JSON.stringify(state.formValue))
           // await axios.post('http://localhost:5249/Khoa', data)
           if (state.mode === 'create') {
-
             await axios.post('http://localhost:5249/GiangVien/them-giang-vien', state.formValue)
               .then(() => {
                 success("Thêm giáo viên thành công!")
@@ -62,11 +65,11 @@ function CreateForm() {
         }>
         {/* <div>
           <label className="font-semibold">Mã giáo viên</label>
-          <Input required disabled name="maGiangVien" value={state.formValue.giangVien.maGiangVien} />
+          <Input  disabled name="maGiangVien" value={state.formValue.giangVien.maGiangVien} />
         </div> */}
         <div className="">
           <label className="font-semibold">Họ tên</label>
-          <Input required name="tenGiangVien" value={state.formValue.giangVien.tenGiangVien}
+          <Input name="tenGiangVien" value={state.formValue.giangVien.tenGiangVien}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: e.target.value } })} />
         </div>
         <div >
@@ -93,14 +96,14 @@ function CreateForm() {
             name="sinhNhat"
             value={dayjs(state.formValue?.giangVien?.sinhNhat)}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: 'sinhNhat', value: e.toDate() } })} />
-          {/* <input required className="w-full border-1 rounded border-gray-300 p-1" type="date" name="sinhNhat"
+          {/* <input  className="w-full border-1 rounded border-gray-300 p-1" type="date" name="sinhNhat"
             value={convertDateToInput(state.formValue.giangVien.sinhNhat)}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: parseDateFromInput(e.target.value) } })} /> */}
         </div>
         <div>
           <label className="font-semibold">Số điện thoại</label>
           <Input
-            required
+
             name="soDienThoai"
             value={state.formValue.giangVien.soDienThoai}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: e.target.value } })} />
@@ -108,20 +111,20 @@ function CreateForm() {
         <div>
           <label className="font-semibold">Mail</label>
           <Input
-            required
+
             name="mail"
             value={state.formValue.giangVien.mail}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: e.target.value } })} />
         </div>
         <div>
           <label className="font-semibold">Bằng cấp</label>
-          <Select required name="bangCapId" className="w-full" value={state.formValue.giangVien.bangCapId}
+          <Select name="bangCapId" className="w-full" value={state.formValue.giangVien.bangCapId}
             options={state.bangCapData.map(i => ({ value: i.id, label: i.tenBangCap }))}
             onChange={e => dispatch({ type: "updateGVInput", payload: { name: "bangCapId", value: e } })} />
         </div>
         <div>
           <label className="font-semibold">Chức vụ</label>
-          <Select className="w-full" required name="chucVuId" value={state.formValue.chucVuId}
+          <Select className="w-full" name="chucVuId" value={state.formValue.chucVuId}
             options={state.chucVuData.map(i => ({ value: i.id, label: i.tenChucVu }))}
             onChange={e => dispatch({ type: "updateChucVuInput", payload: e })} />
         </div>

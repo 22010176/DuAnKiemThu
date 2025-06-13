@@ -102,6 +102,9 @@ function KhoaPage() {
         <form ref={createFormRef} className="flex flex-col gap-5"
           onSubmit={async function (e) {
             e.preventDefault()
+            if (form.tenKhoa.length === 0 || form.tenVietTat.length === 0 || form.viTri.length === 0 || form.moTa.length === 0)
+              return message.error("Nhập thiếu thông tin!")
+
             const data = Object.fromEntries(new FormData(createFormRef.current))
             data.maKhoa = ""
             if (mode === 'create') {
@@ -130,19 +133,19 @@ function KhoaPage() {
           </div> */}
           <div>
             <label className="font-semibold">Tên khoa</label>
-            <Input required name="tenKhoa" value={form.tenKhoa} onChange={e => setForm(d => ({ ...d, tenKhoa: e.target.value }))} />
+            <Input name="tenKhoa" value={form.tenKhoa} onChange={e => setForm(d => ({ ...d, tenKhoa: e.target.value }))} />
           </div>
           <div>
             <label className="font-semibold">Vị trí</label>
-            <Input required name="viTri" value={form.viTri} onChange={e => setForm(d => ({ ...d, viTri: e.target.value }))} />
+            <Input name="viTri" value={form.viTri} onChange={e => setForm(d => ({ ...d, viTri: e.target.value }))} />
           </div>
           <div>
             <label className="font-semibold">Tên viết tắt</label>
-            <Input required maxLength={10} showCount name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
+            <Input maxLength={10} showCount name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
           </div>
           <div>
             <label className="font-semibold">Mô tả</label>
-            <Input required name="moTa" value={form.moTa} onChange={e => setForm(d => ({ ...d, moTa: e.target.value }))} />
+            <Input name="moTa" value={form.moTa} onChange={e => setForm(d => ({ ...d, moTa: e.target.value }))} />
           </div>
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành

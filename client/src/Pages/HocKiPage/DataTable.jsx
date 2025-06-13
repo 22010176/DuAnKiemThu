@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 
 import { DeleteHocKy, GetHocKyList } from '@/api/hocKiApi';
 import { useData } from './context';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 function TableHeader({ children }) {
@@ -62,8 +64,8 @@ function DataTable() {
       render: (_, record) => (
         <Space size="small">
           <Button
+            variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
             disabled={new Date(record.thoiGianBatDau) <= new Date()}
-            type="primary" size="small" icon={<EditOutlined />}
             onClick={() => {
               dispatch([
                 { type: "updateModelMode", payload: "edit" },
@@ -79,7 +81,7 @@ function DataTable() {
                 // { type: "updateSelectedYear", payload: 'all' }
               ])
             }}>
-            <Button disabled={new Date(record.thoiGianBatDau) <= new Date()} type="primary" danger size="small" icon={<DeleteOutlined />} />
+            <Button disabled={new Date(record.thoiGianBatDau) <= new Date()} variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </Space>
       ),
