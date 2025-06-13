@@ -12,31 +12,26 @@ function TableHeader({ children }) {
 function HocPhanDataTable() {
   const [data, setData] = useState([])
   const [{ filterForm }, dispatch] = useData()
-  const { khoaId, hocKiId, namHoc, lop, hocPhan } = filterForm
-  console.log({ khoaId, hocKiId, namHoc, lop, hocPhan, t: data[1] })
+  const { khoaId, hocKiId, namHoc, trangThai } = filterForm
+
   const filterData = useMemo(() => {
-    return Object.values(data
-      .filter(i =>
-        (khoaId == 'all' || i.khoaId == khoaId) &&
-        (hocKiId == 'all' || i.hocKiId == hocKiId) &&
-        (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc) &&
-        (hocPhan == 'all' || i.id == hocPhan))
+    const result = Object.values(data
       .reduce((acc, item) => {
         if (!acc[item.id]) acc[item.id] = { ...item }
         else acc[item.id].soLopHocPhan += (item.soLopHocPhan || 0)
         return acc
       }, {}))
 
-  }, [data, khoaId, hocKiId, namHoc, hocPhan])
-
+    return result.filter(i =>
+      (khoaId == 'all' || i.khoaId == khoaId) &&
+      (hocKiId == 'all' || i.hocKiId == "00000000-0000-0000-0000-000000000000" || i.hocKiId == hocKiId) &&
+      (namHoc == 'all' || i.thoiGianBatDau == "0001-01-01T00:00:00" || new Date(i.thoiGianBatDau).getFullYear() == namHoc) &&
+      (trangThai === 'all' || (i.soLopHocPhan > 0 && trangThai === 'yes') || (i.soLopHocPhan == 0 && trangThai === 'no')))
+  }, [data, khoaId, hocKiId, namHoc, trangThai])
 
   useEffect(function () {
     GetHocPhanTinhTrang().then(res => setData(res))
   }, [])
-
-
-  console.log()
-
 
   const columns = [
     { title: <TableHeader>STT</TableHeader>, key: 'stt', width: 60, align: 'center', render: (_, __, index) => index + 1, },
@@ -58,7 +53,6 @@ function HocPhanDataTable() {
       dataSource={filterData}
       size="small"
       bordered
-      // scroll={{ x: 800 }}
       pagination={{
         pageSize: 10,
         showSizeChanger: false,

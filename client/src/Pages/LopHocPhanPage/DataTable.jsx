@@ -8,18 +8,28 @@ import { useData } from "./context";
 
 function DataTable() {
   const [{
-    lopHocPhanData, selectedLopHocPhan, filterLopHocPhan, filterForm
-
+    lopHocPhanData, hocKiData, selectedLopHocPhan, filterLopHocPhan, filterForm
   }, dispatch] = useData()
   const { khoaId, hocKiId, namHoc, trangThai, lop, hocPhan } = filterForm
-  console.log(hocPhan)
+
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
     { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
     { title: <p className='text-lg font-semibold'>Tên lớp</p>, dataIndex: 'tenLop', key: 'tenLop', width: 200, },
     { title: <p className='text-lg font-semibold'>Học phần</p>, dataIndex: 'tenHocPhan', key: 'tenHocPhan', width: 150, },
     { title: <p className='text-lg font-semibold'>Khoa</p>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 150, },
-    // { title: <p className='text-lg font-semibold'>Học kì</p>, key: 'tenKi', dataIndex: 'tenKi', width: 120, render: (_, record) => `${record.ky} (${record.namHoc})` },
+    {
+      title: <p className='text-lg font-semibold'>Học kì</p>, key: 'tenKi', dataIndex: 'tenKi', width: 220,
+      render: (_, record) => {
+        const hocKy = hocKiData.find(i => i.id == record.hocKiId)
+        console.log(hocKy)
+        return (
+          <p>
+            <span className="font-semibold">{new Date(hocKy.thoiGianBatDau).getFullYear()}</span> - {hocKy.tenKi}
+          </p>
+        )
+      }
+    },
     { title: <p className='text-lg font-semibold'>Sinh viên</p>, dataIndex: 'soLuongSinhVien', key: 'soLuongSinhVien', width: 90, align: 'center' },
     { title: <p className='text-lg font-semibold'>Tín chỉ</p>, dataIndex: 'soTinChi', key: 'soTinChi', width: 70, align: 'center' },
     { title: <p className='text-lg font-semibold'>Giáo viên</p>, dataIndex: 'tenGiangVien', key: 'tenGiangVien', width: 150, render: (giangVien) => giangVien || <Tag color="orange">Chưa phân công</Tag> },
@@ -65,19 +75,21 @@ function DataTable() {
       }
     },
   };
-  // console.log(lopHocPhanData)
+  console.log(lopHocPhanData)
   return (
     <Table
       size="small"
       rowKey="id"
       columns={columns}
-      scroll={{ x: 1200 }}
+      scroll={{ x: 1800 }}
       rowSelection={rowSelection}
       dataSource={lopHocPhanData.filter(i => (khoaId == 'all' || i.khoaId == khoaId)
         && (hocKiId == 'all' || i.hocKiId == hocKiId)
         && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
         && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc)
-        && (hocPhan == 'all' || i.hocPhanId == hocPhan))}
+        && (hocPhan == 'all' || i.hocPhanId == hocPhan)
+        && (trangThai == 'all' || (i.giangVienId != null && trangThai == 'yes') || (i.giangVienId == null && trangThai == 'no'))
+      )}
       pagination={{
         pageSize: 10,
         showSizeChanger: true,

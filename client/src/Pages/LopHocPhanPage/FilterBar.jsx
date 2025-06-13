@@ -4,7 +4,7 @@ import { useData } from "./context";
 
 const { Search, } = Input;
 
-function FilterBar() {
+function FilterBar({ trangThaiFilter, searchFilter, hocPhanFilter }) {
   const [{
     hocPhanData, lopHocPhanData, hocKiData, filterForm, giangVienData, khoaData, namHocData
   }, dispatch] = useData()
@@ -14,7 +14,7 @@ function FilterBar() {
   return (
     <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
       <Row gutter={16} align="middle">
-        <Col span={5}>
+        <Col span={3}>
           <Select
             placeholder="Chọn khoa"
             allowClear
@@ -34,7 +34,7 @@ function FilterBar() {
               ...khoaData.map(khoa => ({ value: khoa.id, label: khoa.tenKhoa }))
             ]} />
         </Col>
-        <Col span={5}>
+        <Col span={3}>
           <Select
             placeholder="Chọn năm học"
             allowClear
@@ -50,11 +50,11 @@ function FilterBar() {
               // { type: 'updateBulkForm', payload: { name: 'hocKiId' } },
             ])}
             options={[
-              { value: 'all', label: 'Tất cả năm học' },
+              // { value: 'all', label: 'Tất cả năm học' },
               ...namHocData.map(nam => ({ value: nam.nam, label: `${nam.nam}-${nam.nam + 1}` }))
             ]} />
         </Col>
-        <Col span={4}>
+        <Col span={3}>
           <Select
             placeholder="Chọn kỳ"
             allowClear
@@ -75,7 +75,7 @@ function FilterBar() {
             ]} />
         </Col>
 
-        <Col span={4}>
+        {hocPhanFilter && <Col span={3}>
           <Select
             placeholder="Chọn học phần"
             allowClear
@@ -93,9 +93,9 @@ function FilterBar() {
                 .filter(hocPhan => hocPhan.khoaId == khoaId)
                 .map(hocPhan => ({ value: hocPhan.id, label: hocPhan.tenHocPhan }))
             ]} />
-        </Col>
+        </Col>}
 
-        {/* <Col span={4}>
+        {trangThaiFilter?.length > 0 && <Col span={3}>
           <Select
             placeholder="Chọn trạng thái"
             allowClear
@@ -105,20 +105,16 @@ function FilterBar() {
               { type: 'updateFilterForm', payload: { name: 'trangThai', value } },
               { type: 'updateSelectedRows', payload: [] }
             ])}
-            options={[
-              { value: 'all', label: 'Tất cả trạng thái' },
-              { value: 'no', label: 'Chưa phân công' },
-              { value: 'yes', label: 'Đã phân công' },
-            ]} />
-        </Col> */}
-        <Col span={6}>
+            options={trangThaiFilter} />
+        </Col>}
+        {searchFilter && <Col span={6}>
           <Search
             value={lop}
             onChange={(e) => dispatch([{ type: 'updateFilterForm', payload: { name: 'lop', value: e.target.value } }])}
             placeholder="Tìm kiếm theo tên lớp, mã lớp..."
             allowClear
             style={{ width: '100%' }} />
-        </Col>
+        </Col>}
       </Row>
     </Card>
   )

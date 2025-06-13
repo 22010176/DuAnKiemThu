@@ -18,7 +18,7 @@ export const initialState = {
 
   filterForm: {
     khoaId: 'all',
-    namHoc: 'all',
+    namHoc: new Date().getFullYear(),
     hocKiId: 'all',
     trangThai: 'all',
     hocPhan: 'all',

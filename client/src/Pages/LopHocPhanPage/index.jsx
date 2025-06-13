@@ -1,5 +1,5 @@
-import { Card, Tabs } from 'antd';
-import { useEffect, useReducer } from 'react';
+import { Card, ConfigProvider, Tabs } from 'antd';
+import { useEffect, useReducer, useState } from 'react';
 
 import { GetHocKyList } from '@/api/hocKiApi';
 import { GetHocPhan } from '@/api/hocphanApi';
@@ -20,6 +20,7 @@ import HocPhanDataTable from './HocPhanDataTable';
 
 const LopHocPhanPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [activeKey, setActiveKey] = useState('1');
 
   useEffect(function () {
     Promise.all([
@@ -40,49 +41,79 @@ const LopHocPhanPage = () => {
   }, [])
 
   return (
-    <div className='px-2'>
+    <div className='m-2'>
 
       <Context.Provider value={[state, dispatch]}>
-        <Tabs
-          items={[
-            {
-              key: '1', label: 'Học Phần',
-              children: (
-                <>
-                  <FilterBar />
-
-                  <HocPhanDataTable />
-                </>
-              )
+        <ConfigProvider
+          theme={{
+            components: {
+              Tabs: {
+                cardBg: "#2A7ED7",
+                inkBarColor: "#00000000"
+              },
             },
-            {
-              key: '2', label: 'Lớp học phần và phân công',
-              children: (
-                <>
-                  {/* <div> */}
-                  {/* <Card> */}
-                  <FunctionBar />
+          }}>
+          <Tabs
+            tabBarGutter={10}
+            activeKey={activeKey}
+            onChange={setActiveKey}
+            // animated={{ inkBar: true, tabPane: true, }}
+            items={[
+              {
+                key: '1',
+                label:
+                  <p className={['px-10 py-2 rounded ', activeKey == 1 ? 'bg-blue-500 text-white border-0' : 'border'].join(' ')}>
+                    Học Phần
+                  </p>,
+                children: (
+                  <>
+                    <FilterBar trangThaiFilter={[
+                      { value: 'all', label: 'Tất cả trạng thái' },
+                      { value: 'no', label: 'Chưa mở lớp' },
+                      { value: 'yes', label: 'Đã mở lớp' },
+                    ]} />
 
-                  <FilterBar />
+                    <HocPhanDataTable />
+                  </>
+                )
+              },
+              {
+                key: '2',
+                label:
+                  <p className={['px-10 py-2 rounded ', activeKey == 2 ? 'bg-blue-500 text-white border-0' : 'border'].join(' ')}>
+                    Lớp học phần và phân công
+                  </p>,
+                children: (
+                  <>
+                    {/* <div> */}
+                    {/* <Card> */}
+                    <FunctionBar />
 
-                  <DataTable />
-                  {/* </Card> */}
-                  {/* </div> */}
+                    <FilterBar hocPhanFilter searchFilter trangThaiFilter={[
+                      { value: 'all', label: 'Tất cả trạng thái' },
+                      { value: 'no', label: 'Chưa phân công' },
+                      { value: 'yes', label: 'Đã phân công' },
+                    ]} />
 
-                  {/* Add/Edit Modal */}
-                  <FormModal />
+                    <DataTable />
+                    {/* </Card> */}
+                    {/* </div> */}
 
-                  {/* Bulk Add Modal */}
-                  <BulkAddModal />
+                    {/* Add/Edit Modal */}
+                    <FormModal />
 
-                  {/* Assignment Modal */}
-                  <PhanCongGiangVienModal />
+                    {/* Bulk Add Modal */}
+                    <BulkAddModal />
 
-                  <ClassSelectionModal />
-                </>
-              )
-            }
-          ]} />
+                    {/* Assignment Modal */}
+                    <PhanCongGiangVienModal />
+
+                    <ClassSelectionModal />
+                  </>
+                )
+              }
+            ]} />
+        </ConfigProvider>
       </Context.Provider>
     </div>
   );
