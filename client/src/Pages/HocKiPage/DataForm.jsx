@@ -16,10 +16,10 @@ function DataForm() {
   async function onSubmit() {
     // console.log(thoiGianBatDau, thoiGianKetThuc)
 
-    if (!thoiGianBatDau) return message.error("Thời gian bắt đầu không được để trống!")
-    if (!thoiGianKetThuc) return message.error("Thời gian kết thúc không được để trống!")
-    if (!tenKi) return message.error("Tên kì không được để trống!")
-    if (thoiGianKetThuc.month() - thoiGianBatDau.month() < 4) return message.error("Thời gian kết thúc phải cách thời gian bắt đầu 4 tháng!")
+    if (!thoiGianBatDau) return message.error("Nhập thiếu thông tin!")
+    if (!thoiGianKetThuc) return message.error("Nhập thiếu thông tin!")
+    if (!tenKi) return message.error("Nhập thiếu thông tin!")
+    if (thoiGianKetThuc.diff(thoiGianBatDau, 'month') < 4) return message.error("Thời gian kết thúc phải cách thời gian bắt đầu 4 tháng!")
     // const _bd = thoiGianBatDau.toDate(), _kt = thoiGianKetThuc.toDate();
 
     let result;
@@ -49,6 +49,7 @@ function DataForm() {
       { type: "updateKyData", payload: data },
       { type: "updateSelectedYear", payload: 'all' }
     ])
+    message.success("Thêm học kì thành công!")
   }
 
   return (

@@ -7,7 +7,7 @@ import { useData } from "./context";
 
 function isValidString(str) {
   // Chỉ cho phép chữ cái và số, KHÔNG chứa ký tự đặc biệt
-  return /^[a-zA-Z0-9_-]+$/.test(str);
+  return /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÊÔƯƠâêôơưĂÂÊÔƯ\s\-_]+$/.test(str);
 }
 
 
@@ -18,12 +18,15 @@ function FormModal() {
   async function onFormSubmit(e) {
     e.preventDefault()
     if (!tenHocPhan) return message.error("Nhập thiếu thông tin!")
-    if (!isValidString(tenHocPhan)) return message.error("Mã học phần không được chứa kí tự đặc biệt!")
+    if (!isValidString(tenHocPhan)) {
+      // console.log(tenHocPhan)
+      return message.error("Mã học phần không được chứa kí tự đặc biệt!")
+    }
 
     if (modalMode == 'add') {
       try {
-
-        await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+        // console.log(selectedKhoa)
+        await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId: selectedKhoa.id, soTinChi, soTiet, heSoHocPhan })
       } catch (err) {
         console.error(err)
         message.error("Tên học phần không được chứa kí tự đặc biệt!")
