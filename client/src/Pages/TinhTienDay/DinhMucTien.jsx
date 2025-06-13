@@ -1,6 +1,6 @@
 import { faCheck, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Form, Input, InputNumber, message, Modal, Table } from 'antd';
+import { Button, Card, Form, Input, InputNumber, message, Modal, Table, Tag } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 
@@ -22,6 +22,7 @@ function DinhMucTien() {
   const dinhMucColumns = [
     { title: 'Loại tiết', dataIndex: 'loaiTiet', key: 'loaiTiet', render: (text) => "Tiết chuẩn" },
     { title: 'Số tiền (VNĐ)', dataIndex: 'soTien', key: 'soTien', render: (value) => value?.toLocaleString('vi-VN') },
+
     { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat', render: (date) => new Date(date)?.toLocaleDateString('vi-VN') },
     {
       title: 'Thao tác', key: 'action',
@@ -38,6 +39,10 @@ function DinhMucTien() {
   const lichSuColumns = [
     { title: 'Số tiền (VNĐ)', dataIndex: 'soTien', key: 'soTien', render: (value) => value.toLocaleString('vi-VN') },
     { title: 'Ngày cập nhật', dataIndex: 'ngayCapNhat', key: 'ngayCapNhat', render: (date) => new Date(date).toLocaleDateString('vi-VN') },
+    {
+      title: 'Trạng thái', dataIndex: 'soTien', key: 'soTien',
+      render: (value, entry, i) => i == 0 ? <Tag color='green'>Đang áp dụng</Tag> : <Tag color='red'>Dừng áp dụng</Tag>
+    },
     { title: 'Lý do', dataIndex: 'lyDo', key: 'lyDo', }
   ];
 

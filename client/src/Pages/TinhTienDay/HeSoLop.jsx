@@ -55,7 +55,7 @@ function HeSoLop() {
 
     GetHeSoBangCapNam({ nam: new Date().getFullYear() }).then(setHeSoBangCap)
   }, [])
-
+  console.log(selectedNamHoc)
   const heSoColumns = [
     { title: 'Số sinh viên', dataIndex: 'soHocSinhToiThieu', key: 'soHocSinhToiThieu', },
     {
@@ -70,7 +70,7 @@ function HeSoLop() {
       title: 'Thao tác', key: 'action',
       render: (_, item) => (
         <Space>
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
+          <Button disabled={selectedNamHoc < new Date().getFullYear()} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
             form.setFieldValue('heSo', item.heSo)
             form.setFieldValue('soHocSinhToiThieu', item.soHocSinhToiThieu)
 
@@ -84,7 +84,7 @@ function HeSoLop() {
               GetHeSoLopHocPhan().then(setHeSoLop)
               message.info("Xoá hệ số thành công!")
             }}>
-            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+            <Button disabled={selectedNamHoc < new Date().getFullYear()} variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </Space >
       ),
@@ -109,7 +109,7 @@ function HeSoLop() {
               message.info("Cập nhật hệ số bằng cấp thành công")
               setEditHeSoBangCap()
             }}>Lưu</Button> :
-            <Button disabled={editHeSoBangCap != null} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
+            <Button disabled={selectedNamHoc < new Date().getFullYear() || editHeSoBangCap != null} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
               setEditHeSoBangCap(entry)
               setHeSo(entry.heSo)
             }} />}

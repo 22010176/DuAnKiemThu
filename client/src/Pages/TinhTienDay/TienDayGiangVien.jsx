@@ -96,6 +96,7 @@ function TienDayGiangVien() {
 }
   */
   // console.log(tienDayData)
+  console.log(selectedTeacher)
   const tinhTienTableData = useMemo(() => {
     const result = {}
 
@@ -195,6 +196,7 @@ function TienDayGiangVien() {
     },
   ];
   const chiTietColumns = [
+    { title: 'STT', render: (_, record, index) => index + 1, },
     { title: 'Mã lớp', dataIndex: 'maLop', key: 'maLop', },
     { title: 'Tên học phần', dataIndex: 'tenHocPhan', key: 'tenHocPhan', },
     { title: 'Số tiết', dataIndex: 'soTiet', key: 'soTiet', },
@@ -310,31 +312,36 @@ function TienDayGiangVien() {
 
       {/* Modal chi tiết tính tiền */}
       <Modal
-        title={`Chi tiết tính tiền - ${selectedTeacher?.tenGV}`}
-        width={1000}
+        title={<p className='font-bold uppercase text-blue-900 text-xl'>Chi tiết tiền dạy - {selectedTeacher?.tenGiangVien}</p>}
+        width={900}
         open={detailModalVisible}
         onCancel={() => {
           setDetailModalVisible(false)
           setSelectedTeacher(null)
         }}
         footer={[
-          <Button key="close"
+          <Button key="close" variant='solid' color='orange'
             onClick={() => setDetailModalVisible(false)}>
             Đóng
           </Button>
         ]}>
         {selectedTeacher && (
           <>
-            <Row gutter={16} style={{ marginBottom: '16px' }}>
+            <Row className='bg-green-100 border-green-600 border my-10 p-5 rounded-xl' gutter={16} style={{ marginBottom: '16px' }}>
               <Col span={12}>
-                <Card size="small">
-                  <Statistic title="Bằng cấp" value={selectedTeacher.tenBangCap} valueStyle={{ fontSize: '16px' }} />
-                </Card>
+                {/* <Card size="small"> */}
+                <Statistic title={<p className='font-bold text-black'>Bằng cấp</p>}
+                  value={selectedTeacher.tenBangCap}
+                  valueStyle={{ fontSize: '16px' }} />
+                {/* </Card> */}
               </Col>
               <Col span={12}>
-                <Card size="small">
-                  <Statistic title="Tổng tiền" value={selectedTeacher.chiTiet.reduce((prev, curr) => prev + curr.tienDay, 0)} formatter={(value) => value?.toLocaleString('vi-VN') + ' VNĐ'} valueStyle={{ color: '#1890ff', fontSize: '16px' }} />
-                </Card>
+                {/* <Card size="small"> */}
+                <Statistic title={<p className='font-bold text-black'>Tổng tiền</p>}
+                  value={selectedTeacher.chiTiet.reduce((prev, curr) => prev + curr.tienDay, 0)}
+                  formatter={(value) => value?.toLocaleString('vi-VN') + ' VNĐ'}
+                  valueStyle={{ color: 'black', fontSize: '16px' }} />
+                {/* </Card> */}
               </Col>
             </Row>
 
