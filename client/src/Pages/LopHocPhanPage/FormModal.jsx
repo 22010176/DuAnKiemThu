@@ -13,8 +13,8 @@ function FormModal() {
   const { hocPhanId, hocKiId, giangVienId, soLuongSinhVien, khoaId, nam, id } = form;
 
   const handleSubmit = async () => {
-    if (!hocPhanId) return message.error("Học phần không được để trống!")
-    if (!hocKiId) return message.error("Học kì không được để trống!")
+    if (!hocPhanId) return message.error("Nhập thiếu thông tin!")
+    if (!hocKiId) return message.error("Nhập thiếu thông tin!")
     if (soLuongSinhVien <= 0) return message.error("Số lượng sinh viên phải lớn hơn 0!")
     if (!id && formMode == 'edit') return message.error("Sửa học phần thất bại!")
 

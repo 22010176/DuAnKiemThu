@@ -1,6 +1,6 @@
 import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, InputNumber, Modal, Select } from 'antd';
+import { Button, InputNumber, message, Modal, Select } from 'antd';
 import { useState } from 'react';
 
 import { CreateLopHocPhan, GetLopHocPhanList } from "@/api/lopHocPhanApi";
@@ -19,6 +19,10 @@ function BulkAddModal() {
   const [nam, setNam] = useState()
 
   const handleSubmit = async () => {
+    if (!hocPhanId) return message.error("Nhập thiếu thông tin!")
+    if (!hocKiId) return message.error("Nhập thiếu thông tin!")
+    if (soLuongSinhVien <= 0) return message.error("Số lượng sinh viên phải lớn hơn 0!")
+
     const result = []
 
     for (let i = 0; i < soLop; ++i) {
