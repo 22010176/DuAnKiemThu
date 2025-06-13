@@ -190,11 +190,13 @@ function TienDayGiangVien() {
             <Col span={6}>
               <Select placeholder="Năm học" style={{ width: '100%' }}
                 value={filterForm.namHoc}
-                onChange={(value) => setFilterForm({
-                  ...filterForm,
-                  namHoc: value,
-                  kyHoc: null
-                })}
+                onChange={(value) => {
+                  setFilterForm({
+                    ...filterForm,
+                    namHoc: value,
+                    kyHoc: kyHoc.find(i => GetYear(i.thoiGianBatDau) == value)?.id || null
+                  })
+                }}
                 options={[
                   ...namHoc.map(i => ({ value: i.nam, label: `${i.nam} - ${i.nam + 1}` }))
                 ]} />

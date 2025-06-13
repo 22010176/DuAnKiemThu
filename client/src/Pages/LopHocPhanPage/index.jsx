@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Card, Tabs } from 'antd';
 import { useEffect, useReducer } from 'react';
 
 import { GetHocKyList } from '@/api/hocKiApi';
@@ -16,6 +16,7 @@ import FunctionBar from './FuntionBar';
 import PhanCongGiangVienModal from './PhanCongGiangVienModal';
 import { Context, initialState, reducer } from './context';
 import ClassSelectionModal from './BulkAddSuccessModal';
+import HocPhanDataTable from './HocPhanDataTable';
 
 const LopHocPhanPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -39,27 +40,51 @@ const LopHocPhanPage = () => {
   }, [])
 
   return (
-    <Context.Provider value={[state, dispatch]}>
-      <div className='p-5 bg-gray-100 grow'>
-        <Card>
-          <FunctionBar />
+    <div className='px-2'>
 
-          <FilterBar />
+      <Context.Provider value={[state, dispatch]}>
+        <Tabs
+          items={[
+            {
+              key: '1', label: 'Học Phần',
+              children: (
+                <>
+                  <FilterBar />
 
-          <DataTable />
-        </Card>
-      </div>
-      {/* Add/Edit Modal */}
-      <FormModal />
+                  <HocPhanDataTable />
+                </>
+              )
+            },
+            {
+              key: '2', label: 'Lớp học phần và phân công',
+              children: (
+                <>
+                  {/* <div> */}
+                  {/* <Card> */}
+                  <FunctionBar />
 
-      {/* Bulk Add Modal */}
-      <BulkAddModal />
+                  <FilterBar />
 
-      {/* Assignment Modal */}
-      <PhanCongGiangVienModal />
+                  <DataTable />
+                  {/* </Card> */}
+                  {/* </div> */}
 
-      <ClassSelectionModal />
-    </Context.Provider>
+                  {/* Add/Edit Modal */}
+                  <FormModal />
+
+                  {/* Bulk Add Modal */}
+                  <BulkAddModal />
+
+                  {/* Assignment Modal */}
+                  <PhanCongGiangVienModal />
+
+                  <ClassSelectionModal />
+                </>
+              )
+            }
+          ]} />
+      </Context.Provider>
+    </div>
   );
 };
 

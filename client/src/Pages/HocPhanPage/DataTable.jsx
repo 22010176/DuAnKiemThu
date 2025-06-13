@@ -56,8 +56,8 @@ function DataTable() {
   return (
     <div className='rounded bg-white shadow'>
       <Table
-        columns={columns}
         dataSource={hocPhanList.filter(i => (selectedKhoaId == 'all' || i.khoaId == selectedKhoaId))}
+        columns={columns}
         size="small"
         bordered
         scroll={{ x: 800 }}

@@ -25,3 +25,8 @@ export async function UpdateHocPhan(id, data) {
   return result.data;
 }
 // export async function
+
+export async function GetHocPhanTinhTrang() {
+  const result = await axios.get("http://localhost:5249/HocPhan/tinh-trang-hoc-phan")
+  return result.data;
+}

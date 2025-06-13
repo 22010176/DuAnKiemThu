@@ -1,7 +1,7 @@
 using System.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Npgsql;
 using server.Models;
 
 using server.Repositories;
@@ -10,9 +10,11 @@ namespace server.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class HocPhanController(AppDbContext context) : ControllerBase
+public class HocPhanController(AppDbContext context, IConfiguration configuration) : ControllerBase
 {
   readonly AppDbContext context = context;
+  readonly string connectionString = configuration.GetConnectionString("DefaultConnection")!;
+
 
   [HttpGet]
   public ActionResult<ICollection> Get()
@@ -34,6 +36,69 @@ public class HocPhanController(AppDbContext context) : ControllerBase
         k.MaKhoa
       };
     return Ok(result.ToList());
+  }
+
+  [HttpGet("tinh-trang-hoc-phan")]
+  public async Task<ActionResult> GetTheoThoiGianAsync()
+  {
+    using NpgsqlConnection conn = new(connectionString);
+    await conn.OpenAsync();
+
+    var query = """
+SELECT 
+  hp."Id",
+  hp."MaHocPhan",
+  hp."TenHocPhan",
+  hp."SoTinChi",
+  hp."HeSoHocPhan",
+  hp."SoTiet",
+  k."Id" KhoaId,
+  k."TenKhoa",
+  hk."Id" hocKiId,
+  hk."ThoiGianBatDau",
+  hk."ThoiGianKetThuc",
+  COUNT(lhp."Id")
+FROM "HocPhan" hp
+INNER JOIN "Khoa" k ON k."Id" = hp."KhoaId"
+LEFT JOIN "LopHocPhan" lhp ON lhp."HocPhanId" = hp."Id"
+LEFT JOIN "HocKi" hk ON hk."Id" = lhp."HocKiId"
+GROUP BY hp."Id", hk."Id", k."Id"
+ORDER BY COUNT(lhp."Id")
+""";
+    using var cmd = new NpgsqlCommand(query, conn);
+    using var reader = cmd.ExecuteReader();
+    List<object> items = [];
+    while (reader.Read())
+    {
+      bool isKyNull = reader.IsDBNull(10);
+      items.Add(new
+      {
+        Id = reader.GetGuid(0),
+        MaHocPhan = reader.GetString(1),
+        TenHocPhan = reader.GetString(2),
+        SoTinChi = reader.GetInt32(3),
+        HeSoHocPhan = reader.GetDouble(4),
+        SoTiet = reader.GetInt32(5),
+        KhoaId = reader.GetGuid(6),
+        TenKhoa = reader.GetString(7),
+        HocKiId = isKyNull ? new Guid() : reader.GetGuid(8),
+        ThoiGianBatDau = isKyNull ? new DateTime() : reader.GetDateTime(9),
+        ThoiGianKetThuc = isKyNull ? new DateTime() : reader.GetDateTime(10),
+        SoLopHocPhan = reader.GetInt32(11)
+      });
+    }
+    await conn.CloseAsync();
+
+    return Ok(items);
+
+    // var result =
+    // from c in context.HocPhan
+    // join k in context.Khoa on c.KhoaId equals k.Id
+    // join lhp in context.LopHocPhan on  c.Id equals lhp.HocPhanId 
+    // join hk in context.HocKi on lhp.HocKiId equals hk.Id
+    // where hk.ThoiGianBatDau <= 
+
+    return Ok();
   }
 
   [HttpPut("sua-hoc-phan/{id}")]
