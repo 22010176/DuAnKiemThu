@@ -115,10 +115,15 @@ function BangCapPage() {
         footer={[]}>
         <form
           ref={createFormRef} className="flex flex-col gap-5"
+          onAbort={e => {
+            console.log(e)
+          }}
           onSubmit={async function (e) {
             e.preventDefault()
             const elem = e.target;
             const data = Object.fromEntries(new FormData(elem))
+            if (form.tenBangCap.length === 0 || form.tenVietTat.length === 0) message.error("Nhập thiếu thông tin!")
+
             data.maBangCap = ""
             if (mode === 'create')
               await axios.post('http://localhost:5249/BangCap', data)
@@ -147,11 +152,11 @@ function BangCapPage() {
           </div> */}
           <div>
             <label className="font-semibold">Tên bằng cấp</label>
-            <Input required name="tenBangCap" value={form.tenBangCap} onChange={e => setForm(d => ({ ...d, tenBangCap: e.target.value }))} />
+            <Input name="tenBangCap" value={form.tenBangCap} onChange={e => setForm(d => ({ ...d, tenBangCap: e.target.value }))} />
           </div>
           <div>
             <label className="font-semibold">Tên viết tắt</label>
-            <Input maxLength={10} showCount required name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
+            <Input maxLength={10} showCount name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
           </div>
           <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành

@@ -1,10 +1,11 @@
-import axios from "axios"
 import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Input, message, Radio, Select } from "antd"
+import { Button, DatePicker, Input, message, Radio, Select } from "antd"
+import axios from "axios"
+import dayjs from 'dayjs'
 import { useContext, useEffect } from "react"
 
-import { convertDateToInput, getNextIdNumber, parseDateFromInput } from "@/Utils/FormUtils"
+import { getNextIdNumber } from "@/Utils/FormUtils"
 import Context from "./context"
 
 function CreateForm() {
@@ -71,7 +72,9 @@ function CreateForm() {
         <div >
           <label className="font-semibold">Khoa</label>
           <br />
-          <Select className="w-full" name="khoaId" onChange={e => dispatch({ type: "updateKhoaInput", payload: e })} value={state.formValue.khoaId}
+          <Select className="w-full" name="khoaId"
+            onChange={e => dispatch({ type: "updateKhoaInput", payload: e })}
+            value={state.formValue.khoaId || undefined}
             options={state.khoaData.map(i => ({ value: i.id, label: i.tenKhoa }))} />
         </div>
 
@@ -85,9 +88,14 @@ function CreateForm() {
         <div>
           <label className="font-semibold">Ngày sinh</label>
           <br />
-          <input required className="w-full border-1 rounded border-gray-300 p-1" type="date" name="sinhNhat"
+          <DatePicker
+            className="w-full"
+            name="sinhNhat"
+            value={dayjs(state.formValue?.giangVien?.sinhNhat)}
+            onChange={e => dispatch({ type: "updateGVInput", payload: { name: 'sinhNhat', value: e.toDate() } })} />
+          {/* <input required className="w-full border-1 rounded border-gray-300 p-1" type="date" name="sinhNhat"
             value={convertDateToInput(state.formValue.giangVien.sinhNhat)}
-            onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: parseDateFromInput(e.target.value) } })} />
+            onChange={e => dispatch({ type: "updateGVInput", payload: { name: e.target.name, value: parseDateFromInput(e.target.value) } })} /> */}
         </div>
         <div>
           <label className="font-semibold">Số điện thoại</label>

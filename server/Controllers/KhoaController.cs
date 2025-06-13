@@ -28,7 +28,8 @@ public class KhoaController(IRepository<Khoa> repo, AppDbContext context) : Temp
         c.TenVietTat,
         c.MoTa,
         c.ViTri,
-        soLop = _ct.HocPhan.Count(i => i.KhoaId == c.Id)
+        soLop = _ct.HocPhan.Count(i => i.KhoaId == c.Id),
+        soGiangVien = _ct.Khoa_GiangVien.Count(i => i.KhoaId == c.Id)
       };
 
     return Ok(await result.ToListAsync());

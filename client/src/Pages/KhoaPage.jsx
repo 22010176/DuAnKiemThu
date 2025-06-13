@@ -1,10 +1,11 @@
-import TableHeader from "@/Components/TableHeader";
-import { getNextIdNumber } from "@/Utils/FormUtils";
 import { faArrowRotateRight, faCheck, faPen, faPlus, faSearch, faTrash, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Input, message, Modal, Popconfirm, Table } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+
+import TableHeader from "@/Components/TableHeader";
+import { getNextIdNumber } from "@/Utils/FormUtils";
 
 function KhoaPage() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -18,13 +19,6 @@ function KhoaPage() {
   const success = m => messageApi.open({ type: 'success', content: m, });
   const error = m => messageApi.open({ type: 'error', content: m, });
 
-  // const warning = () => {
-  //   messageApi.open({
-  //     type: 'warning',
-  //     content: 'This is a warning message',
-  //   });
-  // };
-
   const { current: columns } = useRef([
     { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 50, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
     { title: <TableHeader>Mã khoa</TableHeader>, dataIndex: 'maKhoa', key: 'maKhoa', width: 70, render: i => <div className="text-lg text-center">{i}</div> },
@@ -36,7 +30,9 @@ function KhoaPage() {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 20,
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
+          <Button variant="outlined" color="blue"
+            disabled={entry.soGiangVien > 0 || entry.soLop > 0}
+            icon={<FontAwesomeIcon icon={faPen} />}
             onClick={function () {
               setMode("update")
               setCreateForm(true)
@@ -71,7 +67,6 @@ function KhoaPage() {
   useEffect(function () {
     updateData()
   }, [])
-
 
   return (
     <>
