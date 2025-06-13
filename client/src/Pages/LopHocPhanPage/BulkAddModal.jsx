@@ -1,4 +1,4 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Col, Form, InputNumber, Modal, Row, Select, message } from 'antd';
 import { useState } from 'react';
@@ -10,20 +10,24 @@ function BulkAddModal() {
   const [{
     addBulkModal, khoaData, hocPhanData, hocKiData, namHocData, bulkForm
   }, dispatch] = useData()
-  const { hocPhanId, hocKiId, soLuongSinhVien, soLop } = bulkForm
+  const { hocPhanId, hocKiId, soLuongSinhVien, soLop, khoaId } = bulkForm
 
+  const [classes, setClasses] = useState([])
+  const [successModal, setSuccessModal] = useState(false)
 
-  const [khoaId, setKhoaId] = useState()
+  // const [khoaId, setKhoaId] = useState()
   const [nam, setNam] = useState()
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
     const result = []
+
     for (let i = 0; i < soLop; ++i) {
       const res = await CreateLopHocPhan({ hocPhanId, hocKiId, soLuongSinhVien })
       result.push(res)
     }
-    message.info(`Thêm thành công \n` + result.map(i => i.tenLop).join('\t'))
-    // console.log({ hocPhanId, hocKiId, giangVienId, soLuongSinhVien, soLop })
+    setClasses(result)
+    setSuccessModal(true)
+
     dispatch([
       { type: 'updateAddBulkModal', payload: false },
       { type: 'updateLopHocPhanData', payload: await GetLopHocPhanList() },
@@ -32,34 +36,76 @@ function BulkAddModal() {
   };
 
   return (
-    <Modal
-      title={<h1 className="text-xl font-bold text-blue-900 uppercase">Tạo hàng loạt lớp học phần</h1>}
-      open={addBulkModal}
-      // open={true}
-      onCancel={() => dispatch([
-        { type: 'updateAddBulkModal', payload: false }
+    <>
+      <Modal open={successModal} width={600} centered footer={[]}
+        onCancel={() => {
+          setSuccessModal(false)
+          setClasses([])
+        }}
+        title={<p className='text-xl font-bold uppercase text-center' style={{ color: '#0A34A0' }}>THÊM LỚP HỌC PHẦN THÀNH CÔNG!</p>}
+        closeIcon={<FontAwesomeIcon icon={faX} className='scale-120 text-orange-400' />}>
 
-      ])}
-      footer={[
-        <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" onClick={handleSubmit} key="submit">
-          Hoàn thành
-          {<FontAwesomeIcon icon={faCheck} />}
-        </Button>
-      ]}
-      width={600}>
-      <Form layout="vertical">
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item name="khoa" label="Khoa" rules={[{ required: true }]}>
+        {/* Content */}
+        <h3 className="text-lg font-semibold mb-4" style={{ color: '#0A34A0' }}>
+          Danh sách lớp học phần vừa tạo (10):
+        </h3>
+
+        {/* Class List */}
+        <div className="space-y-3 h-100 overflow-y-auto">
+          {classes.map((classItem, index) => (
+            <div key={index} className="flex items-center bg-gray-50 rounded-lg p-1 hover:bg-gray-100 transition-colors" >
+              <div className="border border-blue-300 rounded px-4 py-2 min-w-[120px] text-center" style={{ backgroundColor: '#E9FAFF' }}>
+                <span className="text-blue-700 font-medium" >
+                  {classItem.maLop}
+                </span>
+              </div>
+              <div className="ml-4 flex-1">
+                <span className="text-gray-800">
+                  {classItem.tenLop} ({classItem.soLuongSinhVien} sinh viên)
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Modal>
+
+      <Modal
+        centered
+        title={<h1 className="text-xl font-bold text-blue-900 uppercase">Tạo hàng loạt lớp học phần</h1>}
+        open={addBulkModal}
+        onCancel={() => {
+          // setKhoaId()
+          setNam()
+          dispatch([
+            { type: 'updateAddBulkModal', payload: false },
+            { type: 'resetBulkForm' }
+          ])
+        }}
+        footer={[
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" onClick={handleSubmit} key="submit">
+            Hoàn thành
+            {<FontAwesomeIcon icon={faCheck} />}
+          </Button>
+        ]}
+        width={600}>
+        <form className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Khoa</label>
               <Select
                 placeholder="Chọn khoa"
                 value={khoaId}
-                onChange={(value) => setKhoaId(value)}
+                onChange={(value) => {
+                  dispatch([
+                    { type: 'updateBulkForm', payload: { name: 'khoaId', value } },
+                    { type: 'updateBulkForm', payload: { name: 'hocPhanId' } }
+                  ])
+                }}
                 options={khoaData.map(khoa => ({ value: khoa.id, label: khoa.tenKhoa }))} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="maHocPhan" label="Học phần" rules={[{ required: true }]}>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Học phần</label>
               <Select
                 placeholder="Chọn học phần"
                 disabled={!khoaId}
@@ -68,23 +114,26 @@ function BulkAddModal() {
                   { type: 'updateBulkForm', payload: { name: 'hocPhanId', value } }
                 ])}
                 options={hocPhanData.filter(hp => hp.khoaId == khoaId).map(hp => ({ value: hp.id, label: `${hp.maHocPhan}-${hp.tenHocPhan} (${hp.soTinChi} TC)` }))} />
-            </Form.Item>
-          </Col>
+            </div>
+          </div>
 
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item name="namHoc" label="Năm học" rules={[{ required: true }]}>
+          <div className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Năm học</label>
               <Select
                 placeholder="Chọn năm học"
                 value={nam}
-                onChange={(value) => setNam(value)}
+                onChange={(value) => {
+                  setNam(value)
+                  dispatch([
+                    { type: 'updateBulkForm', payload: { name: 'hocKiId' } }
+                  ])
+                }}
                 options={namHocData.map(nam => ({ value: nam.nam, label: `${nam.nam} - ${nam.nam + 1}` }))} />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="ky" label="Kỳ học" rules={[{ required: true }]}>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Kỳ học</label>
               <Select
                 placeholder="Chọn kỳ"
                 disabled={!nam}
@@ -93,35 +142,31 @@ function BulkAddModal() {
                   { type: 'updateBulkForm', payload: { name: 'hocKiId', value } }
                 ])}
                 options={hocKiData.filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == nam).map(ky => ({ value: ky.id, label: ky.tenKi }))} />
-            </Form.Item>
-          </Col>
+            </div>
+          </div>
 
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item name="soLop" label="Số lớp cần tạo" rules={[{ required: true }]}>
+          <div className="grid grid-cols-2 gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Số lớp cần tạo</label>
               <InputNumber min={1} max={20} placeholder="3" style={{ width: '100%' }}
                 value={soLop}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'soLop', value } }
                 ])} />
-            </Form.Item>
-          </Col>
+            </div>
 
-          <Col span={12}>
-            <Form.Item name="soSinhVien" label="Số sinh viên mỗi lớp" rules={[{ required: true }]}>
+            <div className="flex flex-col gap-2">
+              <label className="font-semibold">Số sinh viên mỗi lớp</label>
               <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }}
                 value={soLuongSinhVien}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'soLuongSinhVien', value } }
                 ])} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-      </Form>
-    </Modal>
+            </div>
+          </div>
+        </form>
+      </Modal >
+    </>
   )
 }
 

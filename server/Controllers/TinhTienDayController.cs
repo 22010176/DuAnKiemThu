@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Npgsql;
 
 namespace server.Controllers;
@@ -63,6 +62,7 @@ INNER JOIN "Khoa_GiangVien" kgv ON kgv."GiangVienId" = gv."Id"
 INNER JOIN "Khoa" k ON k."Id" = kgv."KhoaId"
 INNER JOIN "HocKi" hk ON hk."Id" = lhp."HocKiId"
 INNER JOIN "HocPhan" hp ON hp."Id" = lhp."HocPhanId"
+WHERE hk."ThoiGianKetThuc" < NOW()
 ORDER BY hk."ThoiGianBatDau"
 """, conn);
     using var reader = command.ExecuteReader();

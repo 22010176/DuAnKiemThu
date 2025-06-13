@@ -17,12 +17,8 @@ export default function ClassSelectionModal() {
     <Modal open={false} width={600} centered footer={[]}
       title={<p className='text-xl font-bold uppercase text-center' style={{ color: '#0A34A0' }}>THÊM LỚP HỌC PHẦN THÀNH CÔNG!</p>}
       closeIcon={<FontAwesomeIcon icon={faX} className='scale-120 text-orange-400' />}>
-      {/* <div className="inset-0 bg-opacity-50 flex items-center justify-center p-4"> */}
-      {/* <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"> */}
-      {/* Header */}
 
       {/* Content */}
-      {/* <div className="p-6"> */}
       <h3 className="text-lg font-semibold mb-4" style={{ color: '#0A34A0' }}>
         Danh sách lớp học phần vừa tạo (10):
       </h3>
@@ -44,9 +40,6 @@ export default function ClassSelectionModal() {
           </div>
         ))}
       </div>
-      {/* </div> */}
-      {/* </div> */}
-      {/* </div> */}
     </Modal>
   );
 }

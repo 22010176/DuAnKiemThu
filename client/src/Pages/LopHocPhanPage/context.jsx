@@ -33,6 +33,8 @@ export const initialState = {
     soLuongSinhVien: 0
   },
   bulkForm: {
+    khoaId: '',
+    nam: '',
     hocPhanId: '',
     hocKiId: '',
     giangVienId: '',
@@ -71,7 +73,15 @@ export const reducer = (state, action) => {
         break
 
       case 'resetBulkForm':
-        _state.bulkForm = { ...initialState.bulkForm }
+        _state.bulkForm = {
+          khoaId: '',
+          nam: '',
+          hocPhanId: '',
+          hocKiId: '',
+          giangVienId: '',
+          soLuongSinhVien: 0,
+          soLop: 0
+        }
         break
       // _payload = []
       case 'updateFilterLopHocPhan':

@@ -28,7 +28,7 @@ function TienDayGiangVien() {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
 
-  console.log(selectedTeacher)
+  // console.log(selectedTeacher)
 
   // data
   const [tienDayData, setTienDayData] = useState([])
@@ -37,9 +37,9 @@ function TienDayGiangVien() {
   const [namHoc, setNamHoc] = useState([])
   const [heSoLopHocPhan, setHeSoLopHocPhan] = useState([])
   const [dinhMucSoTietChuan, setDinhMucSoTienChuan] = useState([])
-  console.log(dinhMucSoTietChuan)
+  // console.log(kyHoc)
   // form
-  const [filterForm, setFilterForm] = useState({ khoa: 'all', kyHoc: null, namHoc: 'all' })
+  const [filterForm, setFilterForm] = useState({ khoa: 'all', kyHoc: null, namHoc: null })
   /*
 {
     "id": "39c566e4-7dba-48d9-a5b9-60eef656590a",
@@ -68,18 +68,21 @@ function TienDayGiangVien() {
   // console.log(tienDayData)
   const tinhTienTableData = useMemo(() => {
     const result = {}
-
+    // console.log({ tienDayData })
+    // console.log(tienDayData.filter(i => i.maHocKi == filterForm.kyHoc), filterForm)
     for (const item of tienDayData) {
+      const namHoc = new Date(item.thoiGianBatDau).getFullYear()
+      // console.log(item.thoiGianBatDau, namHoc)
       // console.log(filterForm.khoa == item.khoaId)
       if (filterForm.khoa != 'all' && item.khoaId != filterForm.khoa) continue
-      if (filterForm.namHoc != 'all' && new Date(item.thoiGianBatDau).getFullYear() != filterForm.namHoc) continue
+      if (namHoc != filterForm.namHoc) continue
       if (filterForm.kyHoc != null && item.maHocKi != filterForm.kyHoc) continue
 
       if (result[item.id] != null) {
         result[item.id].soLop += 1;
         continue
       }
-      const namHoc = new Date(item.thoiGianBatDau).getFullYear()
+
       result[item.id] = {
         id: item.id,
         khoaId: item.khoaId,
@@ -100,15 +103,23 @@ function TienDayGiangVien() {
       }
     }
     return Object.values(result)
-  }, [dinhMucSoTietChuan, filterForm.khoa, filterForm.kyHoc, filterForm.namHoc, heSoLopHocPhan, tienDayData])
+  }, [dinhMucSoTietChuan, filterForm, heSoLopHocPhan, tienDayData])
   // filterForm
 
 
   useEffect(function () {
     // fetch data
     GetKhoaList().then(setKhoa)
-    GetNamHocList().then(setNamHoc)
-    GetHocKyList().then(setKyHoc)
+    GetNamHocList().then(data => {
+      const filterData = data.filter(i => i.nam <= new Date().getFullYear())
+      setNamHoc(filterData)
+      setFilterForm({ ...filterForm, namHoc: filterData[0].nam })
+    })
+    GetHocKyList().then(data => {
+      const filterData = data.filter(i => new Date(i.thoiGianKetThuc) < new Date())
+      setKyHoc(filterData)
+      // setFilterForm({ ...filterForm, kyHoc: filterData[0].id })
+    })
     TinhTienDay().then(setTienDayData)
     GetDinhMuc().then(setDinhMucSoTienChuan)
     GetHeSoLopHocPhan().then(setHeSoLopHocPhan)
@@ -136,7 +147,7 @@ function TienDayGiangVien() {
       render: (_, record) => (
         <Button type="link"
           onClick={() => {
-
+            console.log(record)
             setSelectedTeacher({
               ...record,
               chiTiet: tienDayData
@@ -186,7 +197,6 @@ function TienDayGiangVien() {
                 value={filterForm.namHoc}
                 onChange={(value) => setFilterForm({ ...filterForm, namHoc: value, kyHoc: null })}
                 options={[
-                  { value: "all", label: "Toàn thời gian" },
                   ...namHoc.map(i => ({ value: i.nam, label: `${i.nam} - ${i.nam + 1}` }))
                 ]} />
             </Col>
@@ -194,7 +204,10 @@ function TienDayGiangVien() {
               <Select placeholder="Kì học" style={{ width: '100%' }} disabled={filterForm.namHoc === 'all'}
                 value={filterForm.kyHoc}
                 onChange={(value) => setFilterForm({ ...filterForm, kyHoc: value })}
-                options={kyHoc.filter(i => new Date(i.thoiGianBatDau).getFullYear() === filterForm.namHoc).map(i => ({ value: i.id, label: i.tenHocKy }))} />
+                options={[
+                  { value: null, label: "Tất cả" },
+                  ...kyHoc.map(i => ({ value: i.id, label: i.tenKi }))
+                ]} />
             </Col>
             <Col span={3}>
               <Button variant='solid' color='green' icon={<FontAwesomeIcon icon={faFileExcel} />} style={{ width: '100%' }}>
