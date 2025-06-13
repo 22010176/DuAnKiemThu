@@ -2,6 +2,9 @@ import { faChalkboardTeacher, faMoneyBillWave, faUserTie } from '@fortawesome/fr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Col, Divider, Modal, Row, Select, Statistic, Table, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 import { GetHocKyList } from '@/api/hocKiApi';
 import { GetKhoaList } from '@/api/khoaApi';
@@ -22,6 +25,33 @@ function LayDinhMuc(danhSachDinhMuc, namHoc) {
 function GetYear(str) {
   return new Date(str).getFullYear();
 }
+
+const exportToExcel = (data, fileName = 'export.xlsx') => {
+  // Chuyển dữ liệu thành worksheet
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  const colWidths = Object.keys(data[0]).map(key => {
+    const maxLength = Math.max(
+      key.length,
+      ...data.map(row => (row[key] ? row[key].toString().length : 0))
+    );
+    return { wch: maxLength + 2 }; // +2 cho thoáng
+  });
+
+  worksheet['!cols'] = colWidths;
+
+
+  // Tạo workbook
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+  // Ghi file vào blob
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+  // Lưu file
+  saveAs(dataBlob, fileName);
+};
 
 function TienDayGiangVien() {
   // modal
@@ -72,7 +102,7 @@ function TienDayGiangVien() {
     for (const item of tienDayData) {
       const namHoc = new Date(item.thoiGianBatDau).getFullYear()
       if (filterForm.khoa != 'all' && item.khoaId != filterForm.khoa) continue
-      if (namHoc != filterForm.namHoc) continue
+      if (namHoc != filterForm?.namHoc) continue
       if (!JSON.stringify(item).includes(filterForm.kyHoc)) continue
 
       if (result[item.id] != null) {
@@ -109,12 +139,12 @@ function TienDayGiangVien() {
     GetNamHocList().then(data => {
       const filterData = data.filter(i => i.nam < new Date().getFullYear())
       setNamHoc(filterData)
-      setFilterForm(e => ({ ...e, namHoc: filterData[0].nam }))
+      setFilterForm(e => ({ ...e, namHoc: filterData[0]?.nam || new Date().getFullYear() }))
     })
     GetHocKyList().then(data => {
       const filterData = data.filter(i => new Date(i.thoiGianKetThuc) < new Date())
       setKyHoc(filterData)
-      setFilterForm(e => ({ ...e, kyHoc: filterData[0].id }))
+      setFilterForm(e => ({ ...e, kyHoc: filterData[0]?.id }))
     })
     TinhTienDay().then(setTienDayData)
     GetDinhMuc().then(setDinhMucSoTienChuan)
@@ -214,7 +244,40 @@ function TienDayGiangVien() {
                 ]} />
             </Col>
             <Col span={3}>
-              <Button variant='solid' color='green' icon={<FontAwesomeIcon icon={faFileExcel} />} style={{ width: '100%' }}>
+              <Button variant='solid' color='green' style={{ width: '100%' }}
+                icon={<FontAwesomeIcon icon={faFileExcel} />}
+                onClick={() => {
+                  const mapping = {
+
+                    "id": "Mã giảng viên",
+                    // "khoaId": "Mã khoa",
+                    "maKhoa": "Mã khoa",
+                    "tenKhoa": "Tên khoa",
+                    // "maHocKi": "ddd2503b-df17-4a92-a280-cbdc3a0bffa0",
+                    "namHoc": "Năm học",
+                    "soLop": "Số lớp dạy",
+                    "maGiangVien": "Mã giảng viên",
+                    "tenGiangVien": "Họ tên giảng viên",
+                    "maBangCap": "Mã bằng cấp",
+                    "tenBangCap": "Tên bằng cấp",
+                    "tienDay": "Tiền dạy"
+
+                  }
+                  console.log(tinhTienTableData
+                    .map(i => Object.fromEntries(Object
+                      .entries(i)
+                      .map(([key, value]) => [mapping[key], value])
+                      .filter(([key]) => key)
+                    )))
+                  exportToExcel(
+                    tinhTienTableData
+                      .map(i => Object.fromEntries(Object
+                        .entries(i)
+                        .map(([key, value]) => [mapping[key], value])
+                        .filter(([key]) => key)
+                      )),
+                    'tinh-tien-day.xlsx')
+                }}>
                 Xuất file excel
               </Button>
             </Col>
