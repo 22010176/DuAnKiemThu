@@ -32,7 +32,7 @@ function OverallMajor() {
         </div>
 
         <div className='w-250 m-auto overflow-auto'>
-          <div className='w-400'>
+          <div className='w-450'>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart width="100%" height={400} data={Object.values(temp)} >
                 <CartesianGrid strokeDasharray="1 0" />

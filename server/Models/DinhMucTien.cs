@@ -8,7 +8,7 @@ public class DinhMucTien
   {
     Random rand = new();
     return new DateTime(
-      1950 + rand.Next() % 80,
+      2000 + rand.Next(30),
       rand.Next() % 12 + 1,
       rand.Next() % 28 + 1,
       rand.Next(24),

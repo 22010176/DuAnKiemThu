@@ -20,6 +20,7 @@ export const initialState = {
     namHoc: 'all',
     hocKiId: 'all',
     trangThai: 'all',
+    hocPhan: 'all',
     lop: ''
   },
   form: {
@@ -133,7 +134,10 @@ export const reducer = (state, action) => {
         break
 
       case 'resetForm':
-        _state.form = { ...initialState.form }
+        _state.form = {
+          ...initialState.form,
+          khoaId: _state.filterForm.khoaId
+        }
         break
 
       // _payload = [ {}, {}, ... ]

@@ -5,15 +5,31 @@ import { Button, Input, InputNumber, message, Modal } from 'antd';
 import { CreateHocPhan, GetHocPhan, UpdateHocPhan } from "@/api/hocphanApi";
 import { useData } from "./context";
 
+function isValidString(str) {
+  // Chỉ cho phép chữ cái và số, KHÔNG chứa ký tự đặc biệt
+  return /^[a-zA-Z0-9_-]+$/.test(str);
+}
+
+
 function FormModal() {
   const [{ showModal, modalMode, selectedKhoa, form }, dispatch] = useData()
   const { id, maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan } = form
 
   async function onFormSubmit(e) {
     e.preventDefault()
-    if (!tenHocPhan) return message.error("Mã học phần không được để trống!")
+    if (!tenHocPhan) return message.error("Nhập thiếu thông tin!")
+    if (!isValidString(tenHocPhan)) return message.error("Mã học phần không được chứa kí tự đặc biệt!")
 
-    if (modalMode == 'add') await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    if (modalMode == 'add') {
+      try {
+
+        await CreateHocPhan({ maHocPhan, tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+      } catch (err) {
+        console.error(err)
+        message.error("Tên học phần không được chứa kí tự đặc biệt!")
+        return
+      }
+    }
     else if (modalMode == 'edit') await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
 
     const data = await GetHocPhan().then(data => data)
@@ -22,7 +38,7 @@ function FormModal() {
       { type: "resetFormData" },
       { type: "updateFormMode" },
       { type: "updateHocPhanList", payload: data },
-      { type: "updateSelectedKhoa", payload: 'all' }
+      // { type: "updateSelectedKhoa", payload: 'all' }
     ])
   }
 
@@ -75,7 +91,7 @@ function FormModal() {
               Hệ số <span style={{ color: 'red' }}>*</span>
             </label>
             <InputNumber min={0.1} max={3.0} step={0.1} placeholder="1.5" style={{ width: '100%' }}
-              value={heSoHocPhan || 1}
+              value={heSoHocPhan || undefined}
               onChange={e => dispatch({ type: 'updateForm', payload: { name: "heSoHocPhan", value: e } })} />
           </div>
 
@@ -85,7 +101,7 @@ function FormModal() {
                 Số tín chỉ <span style={{ color: 'red' }}>*</span>
               </label>
               <InputNumber min={1} max={10} placeholder="3" style={{ width: '100%' }}
-                value={soTinChi || 3}
+                value={soTinChi || undefined}
                 onChange={e => dispatch({ type: 'updateForm', payload: { name: "soTinChi", value: e } })} />
             </div>
             <div style={{ flex: 1 }}>
@@ -93,7 +109,7 @@ function FormModal() {
                 Số tiết <span style={{ color: 'red' }}>*</span>
               </label>
               <InputNumber min={15} max={150} placeholder="45" style={{ width: '100%' }}
-                value={soTiet || 45}
+                value={soTiet || undefined}
                 onChange={e => dispatch({ type: 'updateForm', payload: { name: "soTiet", value: e } })} />
             </div>
           </div>

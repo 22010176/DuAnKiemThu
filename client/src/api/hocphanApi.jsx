@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function CreateHocPhan({ maHocPhan, tenHocPhan, heSoHocPhan, soTinChi, soTiet, khoaId }) {
   const result = await axios.post("http://localhost:5249/HocPhan", {
-    maHocPhan, tenHocPhan, heSoHocPhan, soTinChi, soTiet, khoaId
+    maHocPhan, tenHocPhan, heSoHocPhan, soTinChi, soTiet, khoaId: khoaId ?? ''
   })
   return result.data;
 }

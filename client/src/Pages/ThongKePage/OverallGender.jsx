@@ -7,7 +7,18 @@ import { Context } from './context';
 
 const { Title } = Typography;
 
-const COLORS = ['#0088FE', '#FF8042', '#FFBB28'];
+const COLORS = [
+  '#FF6384', // Hồng đỏ
+  '#36A2EB', // Xanh dương sáng
+  '#FFCE56', // Vàng sáng
+  '#4BC0C0', // Xanh ngọc
+  '#9966FF', // Tím
+  '#FF9F40', // Cam
+  '#C9CBCF', // Xám sáng
+  '#00A950', // Xanh lá đậm
+  '#E74C3C', // Đỏ tươi
+  '#2ECC71'  // Xanh lá tươi
+];
 
 function OverallGender() {
   const [state,] = useContext(Context);

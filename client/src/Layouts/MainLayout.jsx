@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 
 function MainLayout() {
   return (
-    <div className="w-screen h-screen overflow-hidden grid grid-cols-[1fr_4fr]" >
+    <div className="w-screen h-screen overflow-hidden grid grid-cols-[1fr_5fr]" >
       {/* Sidebar */}
       <Sidebar />
 

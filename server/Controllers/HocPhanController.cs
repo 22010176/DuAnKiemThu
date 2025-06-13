@@ -68,7 +68,7 @@ public class HocPhanController(AppDbContext context) : ControllerBase
   }
 
   [HttpPost]
-  public async Task<IActionResult> Create(HocPhanDto item)
+  public IActionResult Create(HocPhanDto item)
   {
     HocPhan hocPhan = HocPhan.FormatInput(context, item);
     List<string> strings = [

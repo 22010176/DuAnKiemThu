@@ -11,6 +11,10 @@ function TableHeader({ children }) {
   return <p className='text-lg font-semibold'>{children}</p>
 }
 
+function getYear(str) {
+  return new Date(str).getFullYear()
+}
+
 function DataTable() {
   const [{
     data, kyData, selectedYear
@@ -23,18 +27,33 @@ function DataTable() {
   }, [dispatch])
 
   const columns = [
-    { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', key: 'stt', width: 150, render: (text, _, i) => <span className='text-lg'>{i + 1}</span> },
+    { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', key: 'stt', width: 50, render: (text, _, i) => <span className='text-lg'>{i + 1}</span> },
     { title: <TableHeader>Tên học kỳ</TableHeader>, dataIndex: 'tenKi', key: 'tenKi', width: 150, render: (text) => <span className='text-lg'>{text}</span> },
-    { title: <TableHeader>Năm học</TableHeader>, dataIndex: 'namHoc', key: 'namHoc', width: 120, align: 'center', render: (_, i) => <span className='text-lg'>{new Date(i.thoiGianBatDau).getFullYear()}</span> },
+    { title: <TableHeader>Năm học</TableHeader>, dataIndex: 'namHoc', key: 'namHoc', width: 120, align: 'center', render: (_, i) => <span className='text-lg'>{getYear(i.thoiGianBatDau)}-{getYear(i.thoiGianBatDau) + 1}</span> },
     { title: <TableHeader>Ngày bắt đầu</TableHeader>, dataIndex: 'thoiGianBatDau', key: 'thoiGianBatDau', width: 120, align: 'center', render: (date) => <span className='text-lg'>{dayjs(date).format('DD/MM/YYYY')}</span> },
     { title: <TableHeader>Ngày kết thúc</TableHeader>, dataIndex: 'thoiGianKetThuc', key: 'thoiGianKetThuc', width: 120, align: 'center', render: (date) => <span className='text-lg'>{dayjs(date).format('DD/MM/YYYY')}</span> },
     {
       title: <TableHeader>Trạng thái</TableHeader>, dataIndex: 'trangThai', key: 'trangThai', width: 120, align: 'center',
-      render: status => {
+      render: (_, entry) => {
+        console.log(entry)
         let color = 'default';
-        if (status === 'Đang diễn ra') color = 'green';
-        else if (status === 'Sắp diễn ra') color = 'blue';
-        else if (status === 'Đã kết thúc') color = 'red';
+        const tgBatDau = new Date(entry.thoiGianBatDau);
+        const tgKetThuc = new Date(entry.thoiGianKetThuc);
+        const tgHienTai = new Date();
+        let status;
+        if (tgBatDau <= tgHienTai && tgHienTai <= tgKetThuc) {
+          color = 'green';
+          status = 'Đang diễn ra'
+        }
+        else if (tgBatDau > tgHienTai) {
+          color = 'blue';
+          status = 'Sắp diễn ra'
+        }
+        else if (tgKetThuc < tgHienTai) {
+          color = 'red';
+          status = 'Đã kết thúc'
+        }
+        console.log(status, entry, { tgBatDau, tgKetThuc, tgHienTai }, tgKetThuc < tgHienTai)
         return <Tag color={color}>{status}</Tag>;
       }
     },

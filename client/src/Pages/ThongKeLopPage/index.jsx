@@ -35,7 +35,7 @@ const ThongKeLopPage = () => {
         <Card className='mb-10'>
           <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#2A7ED7' }}>
             <BarChartOutlined style={{ marginRight: '8px' }} />
-            Chi tiết thống kê theo học phần
+            Thống kê lớp học phần
           </span>
         </Card>
 

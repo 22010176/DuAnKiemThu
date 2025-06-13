@@ -14,6 +14,7 @@ public class TestController(AppDbContext context) : ControllerBase
   [HttpDelete]
   public async Task<ActionResult> Delete()
   {
+    _ct.DinhMucTien.RemoveRange(await _ct.DinhMucTien.ToListAsync());
     _ct.HeSoBangCap.RemoveRange(await _ct.HeSoBangCap.ToListAsync());
     _ct.HeSoLop.RemoveRange(await _ct.HeSoLop.ToListAsync());
     _ct.Khoa_GiangVien.RemoveRange(await _ct.Khoa_GiangVien.ToListAsync());
@@ -195,7 +196,7 @@ public class TestController(AppDbContext context) : ControllerBase
   public async Task<ActionResult> AddHocKi()
   {
     List<HocKi> hocKis = [];
-    for (int i = 0; i < 1000; ++i) hocKis.Add(HocKi.Generate());
+    for (int i = 0; i < 200; ++i) hocKis.Add(HocKi.Generate());
 
     await _ct.HocKi.AddRangeAsync(hocKis);
     await _ct.SaveChangesAsync();
@@ -215,7 +216,7 @@ public class TestController(AppDbContext context) : ControllerBase
     var random = new Random();
     int lhp_ = await _ct.LopHocPhan.CountAsync();
     List<LopHocPhan> lopHocPhans = [];
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 10000; ++i)
     {
       try
       {

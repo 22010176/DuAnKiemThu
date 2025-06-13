@@ -75,7 +75,7 @@ function DataForm() {
             placeholder="Chọn năm học"
             required
             value={year}
-            options={yearList.map(nam => ({ value: nam.nam, label: `${nam.nam}-${nam.nam + 1}` }))}
+            options={new Array(5).fill().map((_, i) => ({ value: new Date().getFullYear() + i, label: `${new Date().getFullYear() + i}-${new Date().getFullYear() + i + 1}` }))}
             onChange={e => dispatch([
               { type: "updateFormData", payload: { name: "year", value: e } }
             ])} />

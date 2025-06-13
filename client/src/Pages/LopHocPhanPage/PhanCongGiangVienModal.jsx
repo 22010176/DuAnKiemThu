@@ -57,7 +57,7 @@ function PhanCongGiangVienModal() {
   return (
     <>
       {contextHolder}
-      <Modal title="Phân công giảng viên" open={giangVienModal} footer={null} width={1000}
+      <Modal title={<p className='text-2xl uppercase font-bold' style={{ color: '#0A34A0' }}>Phân công giảng viên</p>} open={giangVienModal} footer={null} width={700}
         onCancel={() => {
           setTeacherOptions([])
           setSelectedTeacher(null)
@@ -68,7 +68,7 @@ function PhanCongGiangVienModal() {
           ])
         }}>
         <div style={{ marginBottom: '16px' }}>
-          <Title level={4}>Danh sách lớp được chọn:</Title>
+          <Title level={4} style={{ color: '#0A34A0' }}>Danh sách lớp được chọn:</Title>
           <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #d9d9d9', padding: '8px', borderRadius: '4px' }}>
             {selectedLopHocPhan.map(cls => (
               <div key={cls.id} style={{ padding: '4px 0', borderBottom: '1px solid #f0f0f0' }}>
@@ -85,7 +85,7 @@ function PhanCongGiangVienModal() {
         <Divider />
 
         <div style={{ marginBottom: '16px' }}>
-          <Title level={4}>Chọn giảng viên:</Title>
+          <Title level={4} style={{ color: '#0A34A0' }}>Chọn giảng viên:</Title>
           <AutoComplete
             style={{ width: '100%' }}
             options={teacherOptions}

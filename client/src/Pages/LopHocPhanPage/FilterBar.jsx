@@ -8,8 +8,8 @@ function FilterBar() {
   const [{
     hocPhanData, lopHocPhanData, hocKiData, filterForm, giangVienData, khoaData, namHocData
   }, dispatch] = useData()
-  const { khoaId, hocKiId, namHoc, trangThai, lop } = filterForm
-
+  const { khoaId, hocKiId, namHoc, trangThai, lop, hocPhan } = filterForm
+  console.log(hocPhanData[0], khoaId)
   return (
     <Card size="small" style={{ marginBottom: '16px', backgroundColor: '#fafafa' }}>
       <Row gutter={16} align="middle">
@@ -21,6 +21,7 @@ function FilterBar() {
             value={khoaId}
             onChange={(value) => dispatch([
               { type: 'updateFilterForm', payload: { name: 'khoaId', value } },
+              { type: 'updateFilterForm', payload: { name: 'hocPhan', value: 'all' } },
               { type: 'updateSelectedRows', payload: [] }
             ])}
             options={[
@@ -62,7 +63,7 @@ function FilterBar() {
                 .map(ky => ({ value: ky.id, label: ky.tenKi }))
             ]} />
         </Col>
-        <Col span={4}>
+        {/* <Col span={4}>
           <Select
             placeholder="Chọn trạng thái"
             allowClear
@@ -76,6 +77,24 @@ function FilterBar() {
               { value: 'all', label: 'Tất cả trạng thái' },
               { value: 'no', label: 'Chưa phân công' },
               { value: 'yes', label: 'Đã phân công' },
+            ]} />
+        </Col> */}
+        <Col span={4}>
+          <Select
+            placeholder="Chọn học phần"
+            allowClear
+            style={{ width: '100%' }}
+            value={hocPhan}
+            onChange={(value) => dispatch([
+              { type: 'updateFilterForm', payload: { name: 'hocPhan', value } },
+              { type: 'updateSelectedRows', payload: [] }
+            ])}
+            options={[
+              { value: 'all', label: 'Tất cả học phần' },
+              ...hocPhanData
+                .filter(hocPhan => hocPhan.khoaId == khoaId)
+
+                .map(hocPhan => ({ value: hocPhan.id, label: hocPhan.tenHocPhan }))
             ]} />
         </Col>
         <Col span={6}>

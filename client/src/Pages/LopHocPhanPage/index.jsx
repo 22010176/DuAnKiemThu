@@ -15,6 +15,7 @@ import FormModal from './FormModal';
 import FunctionBar from './FuntionBar';
 import PhanCongGiangVienModal from './PhanCongGiangVienModal';
 import { Context, initialState, reducer } from './context';
+import ClassSelectionModal from './BulkAddSuccessModal';
 
 const LopHocPhanPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -56,6 +57,8 @@ const LopHocPhanPage = () => {
 
       {/* Assignment Modal */}
       <PhanCongGiangVienModal />
+
+      <ClassSelectionModal />
     </Context.Provider>
   );
 };

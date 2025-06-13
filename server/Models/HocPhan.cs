@@ -36,6 +36,8 @@ public class HocPhan : HocPhanDto, IEntityPostgre
     if (string.IsNullOrWhiteSpace(input.TenHocPhan)) throw new Exception("Tên học phần không được để trống");
     if (input.HeSoHocPhan <= 0) throw new Exception("Hệ số học phần phải lớn hơn 0");
 
+
+    if (input.KhoaId == null) throw new Exception("Không tìm thấy Khoa");
     var khoa = context.Khoa.FirstOrDefault(k => k.Id == input.KhoaId);
     if (khoa is null) throw new Exception("Không tìm thấy Khoa");
 
@@ -48,9 +50,9 @@ public class HocPhan : HocPhanDto, IEntityPostgre
       MaHocPhan = $"{maKhoa}_{stt}",
       TenHocPhan = input.TenHocPhan,
       HeSoHocPhan = input.HeSoHocPhan,
-      Khoa = khoa,
       SoTiet = input.SoTiet,
-      SoTinChi = input.SoTinChi
+      SoTinChi = input.SoTinChi,
+      KhoaId = khoa.Id
     };
   }
   public static HocPhan FormatInput(AppDbContext context, HocPhanInput input)
@@ -72,7 +74,7 @@ public class HocPhan : HocPhanDto, IEntityPostgre
       MaHocPhan = $"{maKhoa}_{stt}",
       TenHocPhan = input.TenHocPhan,
       HeSoHocPhan = input.HeSoHocPhan,
-      Khoa = khoa
+      KhoaId = khoa.Id,
     };
   }
 

@@ -7,6 +7,7 @@ function OverallStats() {
   const [state,] = useContext(Context);
   const data = state.processData.gender;
   const totalLecturers = state.processData.totalLecturers;
+  // console.log(totalLecturers)
 
   return (
     <div className="mb-8 grid grid-cols-3 gap-3">

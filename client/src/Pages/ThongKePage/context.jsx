@@ -17,7 +17,11 @@ export function reducer(state, action) {
   // console.log({ type, payload })
   switch (type) {
     case 'updateData': {
-      let totalLecturers = _state.gioiTinh.reduce((acc, item) => acc + item.soGiangVien, 0);
+      console.log(_state.gioiTinh)
+      let totalLecturers = payload.gioiTinh.reduce((acc, item) => {
+        console.log({ acc, item })
+        return acc + (item.soGiangVien ?? 0)
+      }, 0);
 
       _state.bangCap = payload.bangCap
       _state.gioiTinh = payload.gioiTinh
@@ -27,11 +31,11 @@ export function reducer(state, action) {
       _state.processData = {
         totalLecturers: totalLecturers,
         gender: {
-          femaleCount: _state.gioiTinh.reduce((acc, item) => acc + (item.gioiTinh === 1 ? item.soGiangVien : 0), 0),
-          maleCount: _state.gioiTinh.reduce((acc, item) => acc + (item.gioiTinh === 0 ? item.soGiangVien : 0), 0),
+          femaleCount: payload.gioiTinh.reduce((acc, item) => acc + (item.gioiTinh === 1 ? item.soGiangVien : 0), 0),
+          maleCount: payload.gioiTinh.reduce((acc, item) => acc + (item.gioiTinh === 0 ? item.soGiangVien : 0), 0),
         },
         degree: {
-          ...state.bangCap.reduce((acc, item) => {
+          ...payload.bangCap.reduce((acc, item) => {
             if (acc[item.maBangCap] == null)
               acc[item.maBangCap] = { name: item.tenBangCap, value: 0 }
             acc[item.maBangCap].value += item.soGiangVien

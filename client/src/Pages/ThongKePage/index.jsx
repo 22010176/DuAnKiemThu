@@ -21,6 +21,7 @@ function ThongKePage() {
       .then(response => {
         // Giả lập dữ liệu trả về từ API
         const data = response.data;
+        console.log(data)
 
         // Cập nhật dữ liệu vào state
         dispatch({ type: 'updateData', payload: data });

@@ -26,7 +26,7 @@ function DataTable() {
     { title: <TableHeader>Số tín chỉ</TableHeader>, dataIndex: 'soTinChi', key: 'soTinChi', width: 100, align: 'center', },
     { title: <TableHeader>Hệ số</TableHeader>, dataIndex: 'heSoHocPhan', key: 'heSoHocPhan', width: 80, align: 'center', },
     { title: <TableHeader>Số tiết</TableHeader>, dataIndex: 'soTiet', key: 'soTiet', width: 80, align: 'center', },
-    { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, },
+    selectedKhoaId == 'all' ? { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, } : null,
     {
       title: <TableHeader>Thao tác</TableHeader>, key: 'action', width: 100, align: 'center', fixed: 'right',
       render: (_, record) => (
@@ -51,7 +51,7 @@ function DataTable() {
         </Space>
       ),
     },
-  ];
+  ].filter(i => !!i);
 
   return (
     <div className='rounded bg-white shadow'>

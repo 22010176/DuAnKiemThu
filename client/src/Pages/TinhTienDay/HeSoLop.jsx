@@ -121,6 +121,13 @@ function HeSoLop() {
   return (
     <>
       <div className='grid grid-cols-2 gap-10 p-5'>
+        <Select className='w-50 col-span-2'
+          value={selectedNamHoc}
+          onChange={e => setSelectedNamHoc(e)}
+          options={namHoc.map(i => ({
+            value: i.nam,
+            label: `${i.nam}-${i.nam + 1}`
+          }))} />
         <ConfigProvider
           theme={{
             components: {
@@ -142,20 +149,13 @@ function HeSoLop() {
               dataSource={heSoLop} />
             {/* <Divider type="vertical" /> */}
           </Card>
-          <div className='flex flex-col gap-5'>
-            <Select className='w-50'
-              value={selectedNamHoc}
-              onChange={e => setSelectedNamHoc(e)}
-              options={namHoc.map(i => ({
-                value: i.nam,
-                label: `${i.nam}-${i.nam + 1}`
-              }))} />
-            <Card>
-              <Table bordered size="small" pagination={false}
-                columns={bangCapColumns}
-                dataSource={heSoBangCap?.filter(i => i.nam == selectedNamHoc)} />
-            </Card>
-          </div>
+          {/* <div className='flex flex-col gap-5'> */}
+          <Card>
+            <Table bordered size="small" pagination={false}
+              columns={bangCapColumns}
+              dataSource={heSoBangCap?.filter(i => i.nam == selectedNamHoc)} />
+          </Card>
+          {/* </div> */}
         </ConfigProvider>
       </div>
       <Modal
