@@ -81,7 +81,7 @@ function KhoaPage() {
           <Input placeholder="Tìm kiếm" style={{ width: "200px" }} value={search} onChange={e => setSearch(e.target.value)} />
           <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
             const response = await axios.get("http://localhost:5249/Khoa")
-            const result = response.data.filter(i => JSON.stringify(i).includes(search.toLowerCase()))
+            const result = response.data.filter(i => JSON.stringify(i).toLowerCase().includes(search.toLowerCase()))
             if (result.length === 0) error("Không tìm thấy kết quả!!")
             setData(result)
           }} />
