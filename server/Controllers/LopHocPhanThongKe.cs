@@ -75,7 +75,7 @@ GROUP BY k."Id";
         TenVietTat = reader.GetString(3),
         SoHocPhan = reader.GetInt32(4),
         SoLopHocPhan = reader.GetInt32(5),
-        TongSoSinhVien = reader.GetInt32(6),
+        TongSoSinhVien = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
         TrungBinhSinhVienLop = reader.GetDouble(7)
       });
     }
