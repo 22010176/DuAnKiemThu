@@ -14,7 +14,7 @@ export const initialState = {
   formData: {
     id: '',
     tenKi: '',
-    year: 2024,
+    year: new Date().getFullYear(),
     thoiGianBatDau: undefined,
     thoiGianKetThuc: undefined,
   }

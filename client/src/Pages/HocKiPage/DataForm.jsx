@@ -9,13 +9,12 @@ const { RangePicker } = DatePicker;
 
 function DataForm() {
   const [{
-    showModal, modelMode, yearList, formData },
+    showModal, modelMode, formData },
     dispatch] = useData();
   const { id, tenKi, year, thoiGianBatDau, thoiGianKetThuc } = formData
 
   async function onSubmit() {
-    console.log(thoiGianBatDau, thoiGianKetThuc)
-
+    // console.log(thoiGianBatDau, thoiGianKetThuc)
 
     if (!thoiGianBatDau) return message.error("Thời gian bắt đầu không được để trống!")
     if (!thoiGianKetThuc) return message.error("Thời gian kết thúc không được để trống!")
@@ -74,8 +73,13 @@ function DataForm() {
           <Select
             placeholder="Chọn năm học"
             required
-            value={year}
-            options={new Array(5).fill().map((_, i) => ({ value: new Date().getFullYear() + i, label: `${new Date().getFullYear() + i}-${new Date().getFullYear() + i + 1}` }))}
+            value={year || undefined}
+            options={new Array(5)
+              .fill()
+              .map((_, i) => {
+                const nam = new Date().getFullYear() + i;
+                return { value: nam, label: `${nam}-${nam + 1}` }
+              })}
             onChange={e => dispatch([
               { type: "updateFormData", payload: { name: "year", value: e } }
             ])} />

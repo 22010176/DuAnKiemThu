@@ -1,4 +1,4 @@
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, Form, Input, InputNumber, message, Modal, Table } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
@@ -43,15 +43,15 @@ function DinhMucTien() {
 
   const handleModalOk = () => {
     form.validateFields().then(async () => {
-      setModalVisible(false);
+      if (customValue.soTien == null || !customValue.lyDo?.length) return message.error("Nhập thiếu thông tin!")
+      if (customValue.soTien <= 0) return message.error("Số tiền phải lớn hơn 0!")
 
-      const result = await UpdateDinhMucTien(customValue);
-      console.log('Update result:', result);
+      await UpdateDinhMucTien(customValue);
+
       message.success('Cập nhật định mức tiền thành công!');
-      GetDinhMucTien().then(response => {
-        setData(response);
-      })
+      GetDinhMucTien().then(response => setData(response))
       form.resetFields();
+      setModalVisible(false);
     });
   };
 
@@ -76,18 +76,28 @@ function DinhMucTien() {
 
       <Modal
         open={modalVisible}
-        onOk={handleModalOk}
-        title={'Cập nhật định mức tiền'}
+        centered
+        width={500}
+        title={
+          <h1 className="text-xl font-bold text-blue-900 uppercase">
+            Cập nhật định mức tiền
+          </h1>}
         onCancel={() => {
           setModalVisible(false);
           form.resetFields();
         }}
-        width={500}>
+        footer={[
+          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange"
+            icon={<FontAwesomeIcon icon={faCheck} />}
+            onClick={handleModalOk}>
+            Hoàn thành
+          </Button>
+        ]}>
         <Form form={form} layout="vertical" onFinish={OnSubmit}>
-          <Form.Item label="Số tiền cho 1 tiết chuẩn (VNĐ)" name="soTien" rules={[{ required: true, message: 'Vui lòng nhập số tiền!' }]}>
+          <Form.Item className='font-semibold' label="Số tiền cho 1 tiết chuẩn (VNĐ)" name="soTien" >
             <InputNumber style={{ width: '100%' }} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} parser={value => value.replace(/\$\s?|(,*)/g, '')} />
           </Form.Item>
-          <Form.Item label="Lý do cập nhật" name="lyDo" rules={[{ required: true, message: 'Vui lòng nhập lý do!' }]}>
+          <Form.Item className='font-semibold' label="Lý do cập nhật" name="lyDo" >
             <Input.TextArea rows={4} />
           </Form.Item>
         </Form>
