@@ -61,9 +61,10 @@ function DataTable() {
       title: <TableHeader>Thao tác</TableHeader>, key: 'action', width: 120, align: 'center',
       render: (_, record) => (
         <Space size="small">
-          <Button type="primary" size="small" icon={<EditOutlined />}
+          <Button
+            disabled={new Date(record.thoiGianBatDau) <= new Date()}
+            type="primary" size="small" icon={<EditOutlined />}
             onClick={() => {
-              console.log(record)
               dispatch([
                 { type: "updateModelMode", payload: "edit" },
                 { type: "updateModel", payload: true },
@@ -78,7 +79,7 @@ function DataTable() {
                 // { type: "updateSelectedYear", payload: 'all' }
               ])
             }}>
-            <Button type="primary" danger size="small" icon={<DeleteOutlined />} />
+            <Button disabled={new Date(record.thoiGianBatDau) <= new Date()} type="primary" danger size="small" icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),

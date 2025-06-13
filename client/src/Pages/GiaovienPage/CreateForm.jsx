@@ -36,7 +36,7 @@ function CreateForm() {
         onSubmit={async function (e) {
           e.preventDefault()
           // const data = Object.fromEntries(new FormData(e.target))
-          console.log(JSON.stringify(state.formValue))
+          // console.log(JSON.stringify(state.formValue))
           // await axios.post('http://localhost:5249/Khoa', data)
           if (state.mode === 'create') {
 

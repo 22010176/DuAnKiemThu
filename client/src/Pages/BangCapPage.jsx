@@ -81,7 +81,7 @@ function BangCapPage() {
     axios.get('http://localhost:5249/BangCap')
       .then(function (reponse) {
         setData(reponse.data.map((i, j) => ({ ...i, key: j })))
-        console.log(reponse.data)
+        // console.log(reponse.data)
       })
   }
 

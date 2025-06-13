@@ -1,6 +1,6 @@
-import { Button, Card, Col, Divider, Modal, Row, Select, Statistic, Table, Tag } from 'antd';
 import { faChalkboardTeacher, faMoneyBillWave, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Card, Col, Divider, Modal, Row, Select, Statistic, Table, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
 import { GetHocKyList } from '@/api/hocKiApi';
@@ -16,7 +16,7 @@ function LayHeSoDinhMucSinhVien(danhSachHeSoLop, soHocSinhToiThieu, namHoc) {
 
 function LayDinhMuc(danhSachDinhMuc, namHoc) {
   const result = danhSachDinhMuc.filter(i => new Date(i.ngayCapNhat).getFullYear() <= namHoc)
-  return (result.length > 0 ? result[result.length - 1] : danhSachDinhMuc[0]).soTien;
+  return (result.length > 0 ? result[result.length - 1] : danhSachDinhMuc[0])?.soTien || 1;
 }
 
 function GetYear(str) {
@@ -68,15 +68,12 @@ function TienDayGiangVien() {
   // console.log(tienDayData)
   const tinhTienTableData = useMemo(() => {
     const result = {}
-    // console.log({ tienDayData })
-    // console.log(tienDayData.filter(i => i.maHocKi == filterForm.kyHoc), filterForm)
+
     for (const item of tienDayData) {
       const namHoc = new Date(item.thoiGianBatDau).getFullYear()
-      // console.log(item.thoiGianBatDau, namHoc)
-      // console.log(filterForm.khoa == item.khoaId)
       if (filterForm.khoa != 'all' && item.khoaId != filterForm.khoa) continue
       if (namHoc != filterForm.namHoc) continue
-      if (filterForm.kyHoc != null && item.maHocKi != filterForm.kyHoc) continue
+      if (!JSON.stringify(item).includes(filterForm.kyHoc)) continue
 
       if (result[item.id] != null) {
         result[item.id].soLop += 1;
@@ -106,19 +103,18 @@ function TienDayGiangVien() {
   }, [dinhMucSoTietChuan, filterForm, heSoLopHocPhan, tienDayData])
   // filterForm
 
-
   useEffect(function () {
     // fetch data
     GetKhoaList().then(setKhoa)
     GetNamHocList().then(data => {
-      const filterData = data.filter(i => i.nam <= new Date().getFullYear())
+      const filterData = data.filter(i => i.nam < new Date().getFullYear())
       setNamHoc(filterData)
-      setFilterForm({ ...filterForm, namHoc: filterData[0].nam })
+      setFilterForm(e => ({ ...e, namHoc: filterData[0].nam }))
     })
     GetHocKyList().then(data => {
       const filterData = data.filter(i => new Date(i.thoiGianKetThuc) < new Date())
       setKyHoc(filterData)
-      // setFilterForm({ ...filterForm, kyHoc: filterData[0].id })
+      setFilterForm(e => ({ ...e, kyHoc: filterData[0].id }))
     })
     TinhTienDay().then(setTienDayData)
     GetDinhMuc().then(setDinhMucSoTienChuan)
@@ -147,7 +143,6 @@ function TienDayGiangVien() {
       render: (_, record) => (
         <Button type="link"
           onClick={() => {
-            console.log(record)
             setSelectedTeacher({
               ...record,
               chiTiet: tienDayData
@@ -195,7 +190,11 @@ function TienDayGiangVien() {
             <Col span={6}>
               <Select placeholder="Năm học" style={{ width: '100%' }}
                 value={filterForm.namHoc}
-                onChange={(value) => setFilterForm({ ...filterForm, namHoc: value, kyHoc: null })}
+                onChange={(value) => setFilterForm({
+                  ...filterForm,
+                  namHoc: value,
+                  kyHoc: null
+                })}
                 options={[
                   ...namHoc.map(i => ({ value: i.nam, label: `${i.nam} - ${i.nam + 1}` }))
                 ]} />
@@ -203,10 +202,13 @@ function TienDayGiangVien() {
             <Col span={6}>
               <Select placeholder="Kì học" style={{ width: '100%' }} disabled={filterForm.namHoc === 'all'}
                 value={filterForm.kyHoc}
-                onChange={(value) => setFilterForm({ ...filterForm, kyHoc: value })}
+                onChange={(value) => {
+                  setFilterForm({ ...filterForm, kyHoc: value })
+                }}
                 options={[
-                  { value: null, label: "Tất cả" },
-                  ...kyHoc.map(i => ({ value: i.id, label: i.tenKi }))
+                  ...kyHoc
+                    .filter(i => GetYear(i.thoiGianBatDau) == filterForm.namHoc)
+                    .map(i => ({ value: i.id, label: i.tenKi }))
                 ]} />
             </Col>
             <Col span={3}>

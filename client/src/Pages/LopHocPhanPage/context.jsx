@@ -15,6 +15,7 @@ export const initialState = {
   addBulkModal: false,
   giangVienModal: false,
   formMode: '',
+
   filterForm: {
     khoaId: 'all',
     namHoc: 'all',
@@ -69,7 +70,10 @@ export const reducer = (state, action) => {
         break;
       // _payload = { name: '', value }
       case 'updateBulkForm':
-        _state.bulkForm[_payload.name] = _payload.value ?? null
+        _state.bulkForm = {
+          ..._state.bulkForm,
+          [_payload.name]: _payload.value ?? null
+        }
         break
 
       case 'resetBulkForm':
@@ -83,6 +87,7 @@ export const reducer = (state, action) => {
           soLop: 0
         }
         break
+
       // _payload = []
       case 'updateFilterLopHocPhan':
         _state.filterLopHocPhan = _payload
@@ -125,12 +130,18 @@ export const reducer = (state, action) => {
 
       // _payload = { name: '', value }
       case 'updateForm':
-        _state.form[_payload.name] = _payload.value ?? null
+        _state.form = {
+          ..._state.form,
+          [_payload.name]: _payload.value
+        }
         break
 
       // _payload = { name: '', value }
       case 'updateFilterForm':
-        _state.filterForm[_payload.name] = _payload.value ?? null
+        _state.filterForm = {
+          ..._state.filterForm,
+          [_payload.name]: _payload.value ?? null
+        }
         break
 
       // _payload = []
@@ -146,7 +157,10 @@ export const reducer = (state, action) => {
       case 'resetForm':
         _state.form = {
           ...initialState.form,
-          khoaId: _state.filterForm.khoaId
+          // khoaId: _state.filterForm.khoaId,
+          // nam: _state.filterForm.namHoc,
+          // hocPhanId: _state.filterForm.hocPhan,
+          // hocKiId: _state.filterForm.hocKiId
         }
         break
 

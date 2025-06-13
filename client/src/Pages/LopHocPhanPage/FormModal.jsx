@@ -75,7 +75,9 @@ function FormModal() {
                 disabled={!khoaId}
                 value={hocPhanId || undefined}
                 onChange={a => dispatch([{ type: "updateForm", payload: { name: 'hocPhanId', value: a } }])}
-                options={hocPhanData.filter(hp => hp.khoaId == khoaId).map(hp => ({ value: hp.id, label: `${hp.maHocPhan}-${hp.tenHocPhan} (${hp.soTinChi} TC)` }))} />
+                options={hocPhanData
+                  .filter(hp => hp.khoaId == khoaId)
+                  .map(hp => ({ value: hp.id, label: `${hp.maHocPhan}-${hp.tenHocPhan} (${hp.soTinChi} TC)` }))} />
             </div>
           </div>
           <div className="grid-cols-3 grid gap-5 mb-5 w-full">
@@ -88,7 +90,12 @@ function FormModal() {
                   { type: "updateForm", payload: { name: 'nam', value: a } },
                   { type: "updateForm", payload: { name: 'hocKiId' } }
                 ])}
-                options={namHocData.map(nam => ({ value: nam.nam, label: `${nam.nam} - ${nam.nam + 1}` }))} />
+                options={namHocData
+                  .filter(ky => {
+                    // console.log(ky)
+                    return ky.nam >= new Date().getFullYear()
+                  })
+                  .map(nam => ({ value: nam.nam, label: `${nam.nam} - ${nam.nam + 1}` }))} />
             </div>
             <div className="flex flex-col gap-2" >
               <label className="font-semibold">Kỳ học</label>
@@ -99,7 +106,9 @@ function FormModal() {
                 onChange={a => dispatch([
                   { type: "updateForm", payload: { name: 'hocKiId', value: a } }
                 ])}
-                options={hocKiData.filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == nam).map(ky => ({ value: ky.id, label: ky.tenKi }))} />
+                options={hocKiData
+                  .filter(ky => new Date(ky.thoiGianBatDau).getFullYear() == nam)
+                  .map(ky => ({ value: ky.id, label: ky.tenKi }))} />
             </div>
             <div className="flex flex-col gap-2" >
               <label className="font-semibold">Số sinh viên</label>

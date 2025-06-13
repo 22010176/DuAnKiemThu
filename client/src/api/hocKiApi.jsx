@@ -13,7 +13,7 @@ export async function CreateHocKy({ tenKi, thoiGianBatDau, thoiGianKetThuc }) {
 export async function UpdateHocKy({ id, tenKi, thoiGianBatDau, thoiGianKetThuc }) {
   const res = await axios.put('http://localhost:5249/HocKi',
     { id, tenKi, thoiGianBatDau, thoiGianKetThuc })
-  console.log(res)
+  // console.log(res)
   return res
 }
 

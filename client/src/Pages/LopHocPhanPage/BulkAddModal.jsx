@@ -94,7 +94,7 @@ function BulkAddModal() {
               <label className="font-semibold">Khoa</label>
               <Select
                 placeholder="Chọn khoa"
-                value={khoaId}
+                value={khoaId || undefined}
                 onChange={(value) => {
                   dispatch([
                     { type: 'updateBulkForm', payload: { name: 'khoaId', value } },
@@ -109,7 +109,7 @@ function BulkAddModal() {
               <Select
                 placeholder="Chọn học phần"
                 disabled={!khoaId}
-                value={hocPhanId}
+                value={hocPhanId || undefined}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'hocPhanId', value } }
                 ])}
@@ -122,7 +122,7 @@ function BulkAddModal() {
               <label className="font-semibold">Năm học</label>
               <Select
                 placeholder="Chọn năm học"
-                value={nam}
+                value={nam || undefined}
                 onChange={(value) => {
                   setNam(value)
                   dispatch([
@@ -137,7 +137,7 @@ function BulkAddModal() {
               <Select
                 placeholder="Chọn kỳ"
                 disabled={!nam}
-                value={hocKiId}
+                value={hocKiId || undefined}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'hocKiId', value } }
                 ])}
@@ -149,7 +149,7 @@ function BulkAddModal() {
             <div className="flex flex-col gap-2">
               <label className="font-semibold">Số lớp cần tạo</label>
               <InputNumber min={1} max={20} placeholder="3" style={{ width: '100%' }}
-                value={soLop}
+                value={soLop || undefined}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'soLop', value } }
                 ])} />
@@ -158,7 +158,7 @@ function BulkAddModal() {
             <div className="flex flex-col gap-2">
               <label className="font-semibold">Số sinh viên mỗi lớp</label>
               <InputNumber min={1} max={100} placeholder="45" style={{ width: '100%' }}
-                value={soLuongSinhVien}
+                value={soLuongSinhVien || undefined}
                 onChange={(value) => dispatch([
                   { type: 'updateBulkForm', payload: { name: 'soLuongSinhVien', value } }
                 ])} />

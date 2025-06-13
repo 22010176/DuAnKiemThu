@@ -11,8 +11,8 @@ function DataTable() {
     lopHocPhanData, selectedLopHocPhan, filterLopHocPhan, filterForm
 
   }, dispatch] = useData()
-  const { khoaId, hocKiId, namHoc, trangThai, lop } = filterForm
-
+  const { khoaId, hocKiId, namHoc, trangThai, lop, hocPhan } = filterForm
+  console.log(hocPhan)
   const columns = [
     { title: <p className='text-lg font-semibold'>STT</p>, key: 'stt', width: 70, align: 'center', render: (_, __, index) => index + 1, },
     { title: <p className='text-lg font-semibold'>Mã lớp</p>, dataIndex: 'maLop', key: 'maLop', width: 120, },
@@ -59,15 +59,16 @@ function DataTable() {
       dispatch([{ type: 'updateSelectedRows', payload: [...selectedRows] }])
     },
     getCheckboxProps: (record) => {
-      console.log(record)
+      // console.log(record)
       return {
         disabled: record.giangVienId != null || new Date(record.thoiGianBatDau) < Date.now(),
       }
     },
   };
-  console.log(lopHocPhanData)
+  // console.log(lopHocPhanData)
   return (
     <Table
+      size="small"
       rowKey="id"
       columns={columns}
       scroll={{ x: 1200 }}
@@ -75,7 +76,8 @@ function DataTable() {
       dataSource={lopHocPhanData.filter(i => (khoaId == 'all' || i.khoaId == khoaId)
         && (hocKiId == 'all' || i.hocKiId == hocKiId)
         && (!lop || i.tenLop.toLowerCase().includes(lop?.toLowerCase()))
-        && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc))}
+        && (namHoc == 'all' || new Date(i.thoiGianBatDau).getFullYear() == namHoc)
+        && (hocPhan == 'all' || i.hocPhanId == hocPhan))}
       pagination={{
         pageSize: 10,
         showSizeChanger: true,
