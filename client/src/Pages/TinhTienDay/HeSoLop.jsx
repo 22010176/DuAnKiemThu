@@ -9,8 +9,16 @@ import { CreateHeSoLopHocPhan, DeleteHeSoLopHocPhan, GetHeSoLopHocPhan, GetHeSoL
 import { GetNamHocList } from '@/api/lhpThongKeApi';
 
 const colors = [
-  '#E07502', '#C00EB2', '#19A10A', '#EA1D20'
+  '#60DF52', '#5AA2EE', '#F37A7C', '#F58CCD', '#F8BC7D'
 ]
+
+// const colors = [
+//   '#C5FFC0', '#FFDEBA', '#EDC2DC', '#E9FAFF', '#FCCECE'
+// ]
+
+// const fontColors = [
+//   '#19A10A', '#E07502', '#C00EB2', '#2A7ED7', '#EA1D20'
+// ]
 
 function HeSoBangCap(value, colors = [], range = []) {
   const colorNum = colors.length
@@ -18,6 +26,7 @@ function HeSoBangCap(value, colors = [], range = []) {
   const min = Math.min(...range)
   const steps = new Array(colorNum).fill(0).map((_, i) => min + i * div)
   return steps.findIndex(i => i >= value)
+
 }
 
 function HeSoLop() {

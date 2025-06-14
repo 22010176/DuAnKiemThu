@@ -54,8 +54,8 @@ function FormModal() {
             {<FontAwesomeIcon icon={faCheck} />}
           </Button>
         ]}>
-        <form className="my-10" layout="vertical" onFinish={handleSubmit}>
-          <div className="grid-cols-2 grid gap-x-5 gap-y-10 mb-5 w-full">
+        <form className="my-5" layout="vertical" onFinish={handleSubmit}>
+          <div className="grid-cols-2 grid gap-x-5 gap-y-5 mb-5 w-full">
             <div className=" flex flex-col gap-2" name="khoa">
               <label className="font-semibold">Khoa</label>
               <Select

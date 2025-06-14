@@ -327,7 +327,7 @@ function TienDayGiangVien() {
         ]}>
         {selectedTeacher && (
           <>
-            <Row className='bg-green-100 border-green-600 border my-10 p-5 rounded-xl' gutter={16} style={{ marginBottom: '16px' }}>
+            <Row className='bg-lime-100 border-lime-500 border my-10 p-5 rounded-xl' gutter={16} style={{ margin: '16px 0' }}>
               <Col span={12}>
                 {/* <Card size="small"> */}
                 <Statistic title={<p className='font-bold text-black'>Bằng cấp</p>}
@@ -345,18 +345,18 @@ function TienDayGiangVien() {
               </Col>
             </Row>
 
-            <Divider>Chi tiết các lớp dạy</Divider>
+            <p className='text-center font-bold text-blue-900 text-lg'>Chi tiết các lớp dạy:</p>
 
             <Table columns={chiTietColumns} dataSource={selectedTeacher.chiTiet} size="small" />
 
             <div className='mt-4 p-3 rounded-lg bg-gray-100' >
               <h4>Công thức tính:</h4>
-              <p><strong>Tiền dạy mỗi lớp = Số tiết quy đổi × Hệ số giáo viên × Tiền dạy một tiết</strong></p>
-              <p><strong>Số tiết quy đổi = Số tiết thực tế × (Hệ số học phần + Hệ số lớp)</strong></p>
+              <p className='font-semibold'>Tiền dạy mỗi lớp = Số tiết quy đổi × Hệ số giáo viên × Tiền dạy một tiết</p>
+              <p className='font-semibold'>Số tiết quy đổi = Số tiết thực tế × (Hệ số học phần + Hệ số lớp)</p>
             </div>
           </>
         )}
-      </Modal>
+      </Modal >
     </>
   )
 }
