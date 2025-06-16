@@ -62,7 +62,7 @@ const items = {
     { content: "Thống kê số lớp", to: "/thong-ke-so-lop" }
   ],
   thongKe: [
-    { content: "Định mức tiền", to: "/dinh-muc-tien" },
+    { content: "Thiết lập định mức tiền theo tiết", to: "/dinh-muc-tien" },
     { content: "Hệ số tính tiền", to: "/he-so-tinh-tien" },
     { content: "Tra cứu tiền dạy", to: "/tinh-tien-day" },
   ]
@@ -105,7 +105,7 @@ function Sidebar() {
             },
             {
               key: "4",
-              label: <Header pathname={pathname} links={items.thongKe.map(i => i.to)} icon={faMagnifyingGlass} title="Báo cáo - Tra cứu" />,
+              label: <Header pathname={pathname} links={items.thongKe.map(i => i.to)} icon={faMagnifyingGlass} title="Tính tiền dạy" />,
               children: (
                 <ul className='flex flex-col gap-2 ps-5 relative'>
                   {items.thongKe.map((i, j) => <SubLink active={pathname === i.to} {...i} key={j} />)}

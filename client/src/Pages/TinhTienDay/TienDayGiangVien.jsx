@@ -246,7 +246,7 @@ function TienDayGiangVien() {
                 ]} />
             </Col>
             <Col span={3}>
-              <Button variant='solid' color='green' style={{ width: '100%' }}
+              <Button variant='solid' style={{ width: '100%', backgroundColor: '#19A10A', color: 'white' }}
                 icon={<FontAwesomeIcon icon={faFileExcel} />}
                 onClick={() => {
                   const mapping = {

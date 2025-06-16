@@ -1,4 +1,4 @@
-import { faPen, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faPlus, faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Card, ConfigProvider, Form, InputNumber, message, Modal, Popconfirm, Select, Space, Table, Tag } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { CreateHeSoBangCap, GetHeSoBangCapNam } from '@/api/heSoBangCapApi';
 import { CreateHeSoLopHocPhan, DeleteHeSoLopHocPhan, GetHeSoLopHocPhan, GetHeSoLopHocPhanTheoNam, UpdateHeSoLopHocPhan } from '@/api/heSoLopHocPhan';
 import { GetNamHocList } from '@/api/lhpThongKeApi';
+import FormModal from '../HocPhanPage/FormModal';
 
 const colors = [
-  '#60DF52', '#5AA2EE', '#F37A7C', '#F58CCD', '#F8BC7D'
+  '#60DF52', '#5AA2EE', '#F37A7C', '#F58CCD', '#F8BC7D', '#F4FF19'
 ]
 
 // const colors = [
@@ -70,7 +71,7 @@ function HeSoLop() {
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value) => (
-        <Tag color={colors[HeSoBangCap(value, colors, [-1, 3])]}>
+        <Tag color={colors[HeSoBangCap(value, colors, [-3, 3])]}>
           {value > 0 ? '+' : ''}{value}
         </Tag>
       )
@@ -99,47 +100,155 @@ function HeSoLop() {
       ),
     },
   ];
+  // const bangCapColumns = [
+  //   { title: 'Tên bằng cấp', dataIndex: 'tenBangCap', key: 'tenBangCap', },
+  //   {
+  //     title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
+  //     render: (value, entry) => entry.bangCapId == editHeSoBangCap?.bangCapId ?
+  //       <InputNumber style={{ width: '100%' }} step={0.1} min={-3} max={3} value={heSo} onChange={setHeSo} /> :
+  //       <Tag color={colors[HeSoBangCap(value, colors, [-3, 3])]}>{value > 0 ? '+' : ''}{value == -1 ? value : value}</Tag>
+  //   },
+  //   {
+  //     title: 'Thao tác', key: 'action',
+  //     render: (_, entry) => (
+  //       <Space>
+  //         {(entry.id == editHeSoBangCap?.id) ?
+  //           <Button size="small" onClick={async () => {
+  //             await CreateHeSoBangCap({ id: "", maBangCap: editHeSoBangCap.bangCapId, nam: selectedNamHoc, heSo })
+  //             await GetHeSoBangCapNam({ nam: selectedNamHoc }).then(setHeSoBangCap)
+  //             message.info("Cập nhật hệ số bằng cấp thành công")
+  //             setEditHeSoBangCap()
+
+  //             // Kiểm tra rỗng
+  //             if (heSo === null || heSo === undefined || heSo === "") {
+  //               message.error("Vui lòng nhập hệ số trước khi lưu.");
+  //               return;
+  //             }
+
+  //             // Kiểm tra không phải số
+  //             if (isNaN(heSo)) {
+  //               message.error("Hệ số không hợp lệ. Vui lòng chỉ nhập số.");
+  //               return;
+  //             }
+
+  //             // Kiểm tra khoảng giá trị (nếu cần)
+  //             if (heSo < -3 || heSo > 3) {
+  //               message.error("Hệ số phải nằm trong khoảng từ -3 đến 3.");
+  //               return;
+  //             }
+
+  //           }}>Lưu</Button> :
+  //           <Button disabled={selectedNamHoc < new Date().getFullYear() || editHeSoBangCap != null} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
+  //             setEditHeSoBangCap(entry)
+  //             setHeSo(entry.heSo)
+  //           }} />}
+  //       </Space >
+  //     ),
+  //   },
+  // ];
+
   const bangCapColumns = [
-    { title: 'Tên bằng cấp', dataIndex: 'tenBangCap', key: 'tenBangCap', },
+    { title: 'Tên bằng cấp', dataIndex: 'tenBangCap', key: 'tenBangCap' },
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
-      render: (value, entry) => entry.bangCapId == editHeSoBangCap?.bangCapId ?
-        <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={3} value={heSo} onChange={setHeSo} /> :
-        <Tag color={colors[HeSoBangCap(value, colors, [-1, 3])]}>{value > 0 ? '+' : ''}{value == -1 ? 1 : value}</Tag>
+      render: (value, entry) =>
+        entry.bangCapId == editHeSoBangCap?.bangCapId
+          ? (
+            <InputNumber
+              style={{ width: '100%' }}
+              step={0.1}
+              min={-3}
+              max={3}
+              value={heSo}
+              onChange={(val) => {
+                // Kiểm tra ngay khi nhập
+                if (val === null || val === undefined || val === '') {
+                  message.error("Vui lòng nhập hệ số.");
+                  setHeSo(null);
+                  return;
+                }
+
+                if (isNaN(val)) {
+                  message.error("Hệ số không hợp lệ. Vui lòng chỉ nhập số.");
+                  return;
+                }
+
+                const rounded = Math.round(val * 10) / 10;
+                setHeSo(rounded);
+              }}
+            />
+          )
+          : (
+            <Tag color={colors[HeSoBangCap(value, colors, [-3, 3])]}>
+              {value > 0 ? '+' : ''}{value}
+            </Tag>
+          )
     },
     {
       title: 'Thao tác', key: 'action',
       render: (_, entry) => (
         <Space>
-          {(entry.id == editHeSoBangCap?.id) ?
+          {entry.id == editHeSoBangCap?.id ? (
             <Button size="small" onClick={async () => {
-              await CreateHeSoBangCap({ id: "", maBangCap: editHeSoBangCap.bangCapId, nam: selectedNamHoc, heSo })
-              await GetHeSoBangCapNam({ nam: selectedNamHoc }).then(setHeSoBangCap)
-              message.info("Cập nhật hệ số bằng cấp thành công")
-              setEditHeSoBangCap()
-            }}>Lưu</Button> :
-            <Button disabled={selectedNamHoc < new Date().getFullYear() || editHeSoBangCap != null} variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />} onClick={() => {
-              setEditHeSoBangCap(entry)
-              setHeSo(entry.heSo)
-            }} />}
-        </Space >
+              // ✅ Di chuyển phần validate lên trước
+              if (heSo === null || heSo === undefined || heSo === '') {
+                message.error("Vui lòng nhập hệ số trước khi lưu.");
+                return;
+              }
+
+              if (isNaN(heSo)) {
+                message.error("Hệ số không hợp lệ. Vui lòng chỉ nhập số.");
+                return;
+              }
+
+              // ✅ Gọi API sau khi đã validate
+              await CreateHeSoBangCap({
+                id: "",
+                maBangCap: editHeSoBangCap.bangCapId,
+                nam: selectedNamHoc,
+                heSo
+              });
+
+              await GetHeSoBangCapNam({ nam: selectedNamHoc }).then(setHeSoBangCap);
+              message.success("Cập nhật hệ số bằng cấp thành công");
+              setEditHeSoBangCap();
+            }}>Lưu</Button>
+          ) : (
+            <Button
+              disabled={selectedNamHoc < new Date().getFullYear() || editHeSoBangCap != null}
+              variant="outlined"
+              color="blue"
+              icon={<FontAwesomeIcon icon={faPen} />}
+              onClick={() => {
+                setEditHeSoBangCap(entry);
+                setHeSo(entry.heSo);
+              }}
+            />
+          )}
+        </Space>
       ),
     },
   ];
 
+
   const handleModalOk = () => {
     form.validateFields().then(async () => {
+      if (formData.soHocSinhToiThieu == null || formData.heSo == null) {
+        return message.error("Nhập thiếu thông tin!")
+      } else if (formData.soHocSinhToiThieu < 0) {
+        return message.error("Số sinh viên tối đa phải là số nguyên dương!")
+      }
       setModalVisible(false);
       try {
         if (modalType == 'add') {
           await CreateHeSoLopHocPhan({ ...formData, namHoc: selectedNamHoc })
-          message.info("Tạo hệ số lớp mới thành công!")
+          message.info("Thêm hệ số lớp mới thành công!")
         } else if (modalType == 'edit') {
           await UpdateHeSoLopHocPhan({ id: heSoLopId, ...formData, namHoc: selectedNamHoc })
           message.info("Cập nhật hệ số lớp mới thành công!")
         }
       } catch {
-        message.error("Thao tác thất bại!")
+        message.error("Thêm hệ số lớp mới thất bại!")
       }
       await GetHeSoLopHocPhanTheoNam({ nam: selectedNamHoc }).then(setHeSoLop)
       setHeSoLopId()
@@ -199,18 +308,39 @@ function HeSoLop() {
       <Modal
         open={modalVisible}
         onOk={handleModalOk}
-        title={modalType === 'edit' ? 'Cập nhật hệ số lớp' : 'Thêm hệ số lớp'}
+        width={350}
+        title={<h1 className="text-xl font-bold text-blue-900 uppercase">
+          {modalType === 'edit' ? 'Cập nhật hệ số lớp' : 'Thêm hệ số lớp'}
+        </h1>
+        }
+
         onCancel={() => {
           setModalVisible(false);
           form.resetFields();
         }}
-        width={500}>
+        footer={[
+          <div className="w-full text-center">
+            <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange"
+              icon={<FontAwesomeIcon icon={faCheck} />}
+              onClick={handleModalOk}>
+              Hoàn thành
+            </Button>
+          </div>
+        ]}>
         <Form form={form} layout="vertical">
-          <Form.Item label="Số sinh viên" name="soHocSinhToiThieu" rules={[{ required: true, message: 'Vui lòng nhập khoảng sinh viên!' }]}>
-            <InputNumber style={{ width: '100%' }} min={0} max={150} />
+          <Form.Item label="Số sinh viên tối đa" name="soHocSinhToiThieu" >
+            <InputNumber style={{ width: '100%' }} min={-10000} max={10000} />
           </Form.Item>
-          <Form.Item label="Hệ số" name="heSo" rules={[{ required: true, message: 'Vui lòng nhập hệ số!' }]}>
-            <InputNumber style={{ width: '100%' }} step={0.1} min={-1} max={3} />
+          <Form.Item label="Hệ số" name="heSo" >
+            <InputNumber style={{ width: '100%' }} step={0.1} min={-3} max={3}
+              onChange={(val) => {
+                if (typeof val === 'number') {
+                  const rounded = Math.round(val * 10) / 10;
+                  form.setFieldValue('heSo', rounded);
+                } else {
+                  form.setFieldValue('heSo', null);
+                }
+              }} />
           </Form.Item>
         </Form>
       </Modal>
