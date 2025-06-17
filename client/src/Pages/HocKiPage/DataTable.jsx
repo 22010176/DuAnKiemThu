@@ -49,7 +49,7 @@ function DataTable() {
         }
         else if (tgBatDau > tgHienTai) {
           color = 'blue';
-          status = 'Sắp diễn ra'
+          status = 'Chưa bắt đầu'
         }
         else if (tgKetThuc < tgHienTai) {
           color = 'red';

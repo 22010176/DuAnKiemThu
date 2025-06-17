@@ -67,7 +67,13 @@ function HeSoLop() {
   }, [])
   console.log(selectedNamHoc)
   const heSoColumns = [
-    { title: 'Số sinh viên', dataIndex: 'soHocSinhToiThieu', key: 'soHocSinhToiThieu', },
+    {
+      title: 'Số sinh viên', dataIndex: 'soHocSinhToiThieu', key: 'soHocSinhToiThieu',
+      render: (value) => <p>
+        {`≤${value}`}
+        {/* &lt;{value} */}
+      </p>
+    },
     {
       title: 'Hệ số', dataIndex: 'heSo', key: 'heSo',
       render: (value) => (
