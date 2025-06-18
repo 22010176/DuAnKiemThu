@@ -347,7 +347,13 @@ function TienDayGiangVien() {
 
             <p className='text-center font-bold text-blue-900 text-lg'>Chi tiết các lớp dạy:</p>
 
-            <Table columns={chiTietColumns} dataSource={selectedTeacher.chiTiet} size="small" />
+            <Table columns={chiTietColumns} dataSource={selectedTeacher.chiTiet} size="small"
+              pagination={{
+                pageSize: 6,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                showTotal: (total, range) => `${range[0]}-${range[1]} của ${total} lớp học phần`
+              }} />
 
             <div className='mt-4 p-3 rounded-lg bg-gray-100' >
               <h4>Công thức tính:</h4>

@@ -57,7 +57,7 @@ SELECT
 	G."GioiTinh",
 	CASE
 		WHEN G."GioiTinh" = 0 THEN 'Nam'
-		WHEN G."GioiTinh" = 1 THEN 'Nữ'
+		ELSE 'Nữ'
 	END,
 	COUNT(G."Id")
 FROM
@@ -108,7 +108,7 @@ FROM
       {
         MaKhoa = reader.GetString(0),
         TenKhoa = reader.GetString(1),
-        GioiTinh = reader.GetInt32(2),
+        GioiTinh = reader.IsDBNull(2) ? 0 : reader.GetInt32(2),
         GioiTinhText = reader.GetString(3),
         SoGiangVien = reader.GetInt32(4)
       });

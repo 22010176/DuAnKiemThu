@@ -34,16 +34,10 @@ function GiaoVienPage() {
     updateData()
   }, [])
   const success = m => {
-    messageApi.open({
-      type: 'success',
-      content: m,
-    });
+    messageApi.open({ type: 'success', content: m, });
   };
   const error = m => {
-    messageApi.open({
-      type: 'error',
-      content: m,
-    });
+    messageApi.open({ type: 'error', content: m, });
   };
   const columns = [
     { title: <TableHeader>STT</TableHeader>, dataIndex: 'stt', width: 5, render: (_, record, index) => <TableHeader>{index + 1}</TableHeader> },
@@ -96,7 +90,7 @@ function GiaoVienPage() {
       ),
     },
   ].filter(i => !!i);
-
+  console.log(state.giangVienData, state.viewOption, state.khoaData)
   return (
     <Context.Provider value={[state, dispatch]}>
       {contextHolder}
@@ -110,7 +104,7 @@ function GiaoVienPage() {
               onChange={e => dispatch({ type: "updateGiangVienTable", payload: e })}
               options={[
                 { value: 'all', label: 'Toàn trường' },
-                ...state.khoaData.map(i => ({ value: i.tenVietTat, label: i.tenKhoa }))
+                ...state.khoaData.map(i => ({ value: i.id, label: i.tenKhoa }))
               ]}
             />
           </div>
@@ -135,7 +129,7 @@ function GiaoVienPage() {
 
         <Table
           columns={columns}
-          dataSource={state.giangVienData.filter(i => state.viewOption === 'all' || i.tenKhoa === state.viewOption)}
+          dataSource={state.giangVienData.filter(i => state.viewOption === 'all' || i.idKhoa === state.viewOption)}
           pagination={{ pageSize: 10 }}
           size="small"
           bordered

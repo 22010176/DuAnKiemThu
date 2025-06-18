@@ -41,15 +41,38 @@ public class GiangVien : GiangVienDto, IEntityPostgre
 
     return $"{namePrefix}_{name}@{domain}";
   }
+
+  static string GenerateRandomVietnameseName()
+  {
+    Random rand = new();
+
+    string[] ho = { "Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Phan", "Vũ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Đinh" };
+    string[] tenDemNam = { "Văn", "Hữu", "Đức", "Quang", "Minh", "Gia", "Anh" };
+    string[] tenDemNu = { "Thị", "Ngọc", "Thuỳ", "Bích", "Diệu", "Cẩm", "Mai" };
+    string[] tenChinhNam = { "An", "Bình", "Dũng", "Khang", "Long", "Phong", "Nam", "Toàn", "Tuấn", "Hải", "Quốc" };
+    string[] tenChinhNu = { "Lan", "Hoa", "Hương", "Nhung", "Yến", "Trang", "Linh", "Vy", "Thảo", "Nhi", "Ngân" };
+
+    bool isMale = rand.NextDouble() < 0.7; // 70% nam, 30% nữ
+
+    string hoTen = ho[rand.Next(ho.Length)] + " ";
+
+    if (isMale)
+      hoTen += tenDemNam[rand.Next(tenDemNam.Length)] + " " + tenChinhNam[rand.Next(tenChinhNam.Length)];
+    else
+      hoTen += tenDemNu[rand.Next(tenDemNu.Length)] + " " + tenChinhNu[rand.Next(tenChinhNu.Length)];
+
+    return hoTen;
+  }
+
   public static GiangVien Generate(Guid bangCapId, int count, string khoa)
   {
     Random random = new();
-    string name = GenerateRandomName(random.Next() % 20);
+    string name = GenerateRandomVietnameseName();
     return new()
     {
       MaGiangVien = $"PU_{khoa}_{count}",
       TenGiangVien = name,
-      GioiTinh = random.Next() % 2,
+      GioiTinh = random.NextDouble() < 0.7 ? 1 : 0, // 70% nam (1), 30% nữ (0)
       SinhNhat = GenerateRandomDate(),
       SoDienThoai = GenerateRandomVietnamPhoneNumber(),
       Mail = GenerateRandomEmail(name),
