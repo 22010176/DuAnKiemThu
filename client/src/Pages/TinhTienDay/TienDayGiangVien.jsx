@@ -172,7 +172,7 @@ function TienDayGiangVien() {
     {
       title: 'Thao tác', key: 'action',
       render: (_, record) => (
-        <Button type="link"
+        <Button data-testid="btn-chi-tiet" type="link"
           onClick={() => {
             setSelectedTeacher({
               ...record,
