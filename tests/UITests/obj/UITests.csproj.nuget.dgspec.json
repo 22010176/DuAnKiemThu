@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj": {}
+    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj": {
+    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj",
         "projectName": "UITests",
-        "projectPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj",
+        "projectPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,13 +44,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
-            "MSTest": {
-              "target": "Package",
-              "version": "[3.6.4, )"
-            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
-              "version": "[17.12.0, )"
+              "version": "[17.14.1, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[4.3.2, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             },
             "Selenium.Support": {
               "target": "Package",

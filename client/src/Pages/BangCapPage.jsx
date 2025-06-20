@@ -47,10 +47,10 @@ function BangCapPage() {
       render: i => <div className="text-lg text-center">{i}</div>
     },
     {
-      title: () => <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 100,
+      title: () => <TableHeader>Thao tác</TableHeader>, key: 'action', width: 100,
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
+          <Button data-testid="btn-sua" title="Sửa" variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
             onClick={async () => {
               setCreateForm(true)
               setMode("edit")
@@ -69,7 +69,7 @@ function BangCapPage() {
               updateData()
               success("Xoá bằng cấp thành công!")
             })}>
-            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+            <Button data-testid="btn-xoa" title="Xoá" variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </div>
       ),
@@ -94,14 +94,14 @@ function BangCapPage() {
       {contextHolder}
       <div className="p-5 flex flex-col gap-5" >
         <div className="flex justify-end gap-2 items-center">
-          <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
+          <Button data-testid="btn-them" variant="link" title="Thêm" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
             setCreateForm(true)
             setMode('create')
             setForm(d => ({ ...d, maBangCap: `BC-${getNextIdNumber(data.map(i => i.maBangCap))}` }))
           }} />
-          <Button variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} onClick={() => {
+          <Button title="Upload" variant="link" color="green" icon={<FontAwesomeIcon icon={faUpload} className="scale-150" />} onClick={() => {
           }} />
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
+          <Button title="Tải lại" variant="link" color="blue" icon={<FontAwesomeIcon icon={faArrowRotateRight} className="scale-150" />} onClick={updateData} />
         </div>
 
         <Table columns={columns} dataSource={data} pagination={{ pageSize: 10 }} size="small" bordered className="shadow-md" />
@@ -158,7 +158,7 @@ function BangCapPage() {
             <label className="font-semibold">Tên viết tắt</label>
             <Input maxLength={10} showCount name="tenVietTat" value={form.tenVietTat} onChange={e => setForm(d => ({ ...d, tenVietTat: e.target.value }))} />
           </div>
-          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
+          <Button data-testid="btn-submit" htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành
           </Button>
         </form>
