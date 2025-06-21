@@ -22,8 +22,7 @@ public class Startup(IConfiguration configuration)
       options.AddDefaultPolicy(builder =>
         builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
     services.AddControllers().AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-    );
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
     // services.AddControllers();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
