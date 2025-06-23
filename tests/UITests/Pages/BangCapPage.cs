@@ -27,11 +27,21 @@ namespace UITests.Pages
 
     public void EnterBangCap(string name, string abbrev)
     {
-      TenBangCapInput.Clear();
-      TenBangCapInput.SendKeys(name);
-      TenVietTatInput.Clear();
-      TenVietTatInput.SendKeys(abbrev);
+      var tenBangCapInput = _driver.FindElement(By.CssSelector("input[name='tenBangCap']"));
+      var tenVietTatInput = _driver.FindElement(By.CssSelector("input[name='tenVietTat']"));
+
+      // Xoá nội dung cũ
+      tenBangCapInput.SendKeys(Keys.Control + "a");
+      tenBangCapInput.SendKeys(Keys.Delete);
+
+      tenVietTatInput.SendKeys(Keys.Control + "a");
+      tenVietTatInput.SendKeys(Keys.Delete);
+
+      // Gõ nội dung mới
+      tenBangCapInput.SendKeys(name);
+      tenVietTatInput.SendKeys(abbrev);
     }
+
 
     public void SubmitForm() => SubmitButton.Click();
 
@@ -48,9 +58,9 @@ namespace UITests.Pages
       }
     }
 
-    public void ClickEditButton(string maBangCap)
+    public void ClickEditButton(string tenBangCap)
     {
-      var row = _wait.Until(d => d.FindElement(By.XPath($"//table//tr[td/div[contains(text(), '{maBangCap}')]]")));
+      var row = _wait.Until(d => d.FindElement(By.XPath($"//table//tr[td/div[contains(text(), '{tenBangCap}')]]")));
       var editButton = row.FindElement(By.CssSelector("[data-testid='btn-sua']"));
       editButton.Click();
     }
@@ -81,13 +91,13 @@ namespace UITests.Pages
     }
 
 
-    public void WaitUntilRowExists(string maBangCap)
+    public void WaitUntilRowExists(string tenBangCap)
     {
       _wait.Until(d =>
       {
         try
         {
-          var row = d.FindElement(By.XPath($"//table//tr[td/div[contains(text(), '{maBangCap}')]]"));
+          var row = d.FindElement(By.XPath($"//table//tr[td/div[contains(text(), '{tenBangCap}')]]"));
           return row.Displayed;
         }
         catch (NoSuchElementException)

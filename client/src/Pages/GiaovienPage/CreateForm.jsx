@@ -129,7 +129,7 @@ function CreateForm() {
             onChange={e => dispatch({ type: "updateChucVuInput", payload: e })} />
         </div>
         <div className="col-span-2 flex justify-end">
-          <Button htmlType="submit" className="w-min" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
+          <Button data-testid="btn-submit" htmlType="submit" className="w-min" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành
           </Button>
         </div>
