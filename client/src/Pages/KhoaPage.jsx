@@ -30,7 +30,7 @@ function KhoaPage() {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 20,
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue"
+          <Button variant="outlined" color="blue" data-testid="btn-sua"
             disabled={entry.soGiangVien > 0 || entry.soLop > 0}
             icon={<FontAwesomeIcon icon={faPen} />}
             onClick={function () {
@@ -51,7 +51,7 @@ function KhoaPage() {
               updateData()
               success("Xoá khoa thành công!")
             })}>
-            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+            <Button data-testid="btn-xoa" variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </div>
       ),
@@ -74,13 +74,13 @@ function KhoaPage() {
       <div className="p-5 flex flex-col gap-5" >
         <div className="flex justify-end gap-2 items-center">
           <Input placeholder="Tìm kiếm" style={{ width: "200px" }} value={search} onChange={e => setSearch(e.target.value)} />
-          <Button variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
+          <Button data-testid="btn-tim" variant="link" color="blue" icon={<FontAwesomeIcon icon={faSearch} className="scale-150" />} onClick={async () => {
             const response = await axios.get("http://localhost:5249/Khoa")
             const result = response.data.filter(i => JSON.stringify(i).toLowerCase().includes(search.toLowerCase()))
             if (result.length === 0) error("Không tìm thấy kết quả!!")
             setData(result)
           }} />
-          <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
+          <Button data-testid="btn-them" variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
             setMode("create")
             setForm(d => ({ ...d, maKhoa: `K-${getNextIdNumber(data.map(i => i.maKhoa))}` }))
             setCreateForm(true)
@@ -147,7 +147,7 @@ function KhoaPage() {
             <label className="font-semibold">Mô tả</label>
             <Input name="moTa" value={form.moTa} onChange={e => setForm(d => ({ ...d, moTa: e.target.value }))} />
           </div>
-          <Button htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
+          <Button data-testid="btn-submit" htmlType="submit" className="w-min self-end" variant="solid" color="orange" icon={<FontAwesomeIcon icon={faCheck} />}>
             Hoàn thành
           </Button>
         </form>

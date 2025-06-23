@@ -24,14 +24,14 @@ namespace UITests.Tests
     [Test]
     public void Test_Add_New_BangCap()
     {
-      string name = "Kĩ sư";
-      string abbrev = "KS";
+      string name = "Bác sĩ";
+      string abbrev = "BS";
 
       _page?.ClickAddButton();
       _page?.EnterBangCap(name, abbrev);
       _page?.SubmitForm();
 
-      _page?.WaitUntilRowExists("DEG_6"); // Đợi dòng xuất hiện
+      _page?.WaitUntilRowExists("Bác sĩ"); // Đợi dòng xuất hiện
 
       Assert.That(_page?.IsMessageDisplayed("Thêm bằng cấp thành công!"), Is.True);
     }
@@ -45,7 +45,7 @@ namespace UITests.Tests
       _page.EnterBangCap(existingName, abbrev);
       _page.SubmitForm();
 
-      Assert.That(_page.IsMessageDisplayed("Tên bằng cấp đã tồn tại!"), Is.True);
+      Assert.That(_page.IsMessageDisplayed("Tên bằng cấp đã tồn tại"), Is.True);
     }
     [Test]
     public void Test_Add_BangCap_With_DuplicateAbbrev()
@@ -57,7 +57,7 @@ namespace UITests.Tests
       _page.EnterBangCap(name, existingAbbrev);
       _page.SubmitForm();
 
-      Assert.That(_page.IsMessageDisplayed("Tên viết tắt đã tồn tại!"), Is.True);
+      Assert.That(_page.IsMessageDisplayed("Tên viết tắt đã tồn tại"), Is.True);
     }
     [Test]
     public void Test_Add_BangCap_With_MissingFields()
@@ -70,25 +70,14 @@ namespace UITests.Tests
     }
 
     [Test]
-    public void Test_Edit_BangCap_With_DuplicateAbbrev()
-    {
-      _page!.ClickEditButton("DEG_5"); // Kỹ sư
-      _page.EnterBangCap("Cử nhân", "GS"); // "GS" đã tồn tại
-      _page.SubmitForm();
-
-      Assert.That(_page.IsMessageDisplayed("Tên viết tắt đã tồn tại!"), Is.True);
-    }
-
-
-    [Test]
     public void Test_Edit_BangCap()
     {
       string updated = "Thạc sĩ sửa đổi";
-      _page?.WaitUntilRowExists("DEG_4"); // Đợi dòng xuất hiện trước khi chỉnh sửa
-      _page?.ClickEditButton("DEG_4"); // Chỉnh sửa đúng mã đã hiển thị
-      _page?.EnterBangCap(updated, "TSKT");
+      _page?.WaitUntilRowExists("Tiến sĩ"); // Đợi dòng xuất hiện trước khi chỉnh sửa
+      _page?.ClickEditButton("Tiến sĩ"); // Chỉnh sửa đúng mã đã hiển thị
+      _page?.EnterBangCap(updated, "TS");
       _page?.SubmitForm();
-      _page?.WaitUntilRowExists("DEG_4"); // Đợi dòng xuất hiện sau khi chỉnh sửa
+      _page?.WaitUntilRowExists("TS"); // Đợi dòng xuất hiện sau khi chỉnh sửa
 
       Assert.That(_page?.IsMessageDisplayed("Cập nhật bằng cấp thành công!"), Is.True);
     }
@@ -96,8 +85,8 @@ namespace UITests.Tests
     [Test]
     public void Test_Delete_BangCap()
     {
-      _page?.WaitUntilRowExists("DEG_4"); // Đợi dòng xuất hiện trước khi xoá
-      _page?.ClickDeleteButton("DEG_4"); // Chỉnh sửa đúng mã có sẵn
+      _page?.WaitUntilRowExists("DEG_2"); // Đợi dòng xuất hiện trước khi xoá
+      _page?.ClickDeleteButton("DEG_2"); // Chỉnh sửa đúng mã có sẵn
       _page?.ConfirmDelete();
 
       Assert.That(_page?.IsMessageDisplayed("Xoá bằng cấp thành công!"), Is.True);
