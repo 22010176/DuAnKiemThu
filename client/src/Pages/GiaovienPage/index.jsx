@@ -54,7 +54,7 @@ function GiaoVienPage() {
       title: <TableHeader>Tùy chọn</TableHeader>, key: 'action', width: 5,
       render: (_, entry) => (
         <div className="flex gap-5 items-center justify-center" >
-          <Button variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
+          <Button data-testid="btn=sua" variant="outlined" color="blue" icon={<FontAwesomeIcon icon={faPen} />}
             onClick={function () {
               // console.log(entry)
               dispatch({
@@ -84,7 +84,7 @@ function GiaoVienPage() {
               success("Xoá giáo viên thành công!")
               updateData()
             })}>
-            <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
+            <Button data-testid="btn-xoa" variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>
         </div>
       ),
@@ -117,7 +117,7 @@ function GiaoVienPage() {
               dispatch({ type: "updateGiangVienData", payload: result })
 
             }} />
-            <Button variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
+            <Button data-testid="btn-them" variant="link" color="orange" icon={<FontAwesomeIcon icon={faPlus} className="scale-150" />} onClick={() => {
               dispatch({ type: "openForm" })
               dispatch({ type: "updateInputMode", payload: "create" })
               dispatch({ type: "resetInput" })

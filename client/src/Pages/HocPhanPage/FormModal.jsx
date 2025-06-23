@@ -7,7 +7,7 @@ import { useData } from "./context";
 
 function isValidString(str) {
   // Chỉ cho phép chữ cái và số, KHÔNG chứa ký tự đặc biệt
-  return /^[a-zA-Z0-9 ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáảãăắẳặằâấầậẫèéẻẽẹêềễệếìíịỉòóõỏôổỗộồốùúụủũđĩơởờớỡừứửựƯĂÊÔƯƠâêôơưĂÂÊÔƯ\s\-_]+$/.test(str);
+  return /^[a-zA-Z0-9 ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáạảãăắẳặằâấầậẫèéẻẽẹêềễệếìíịỉòóõỏôổỗộồốùúụủũđĩơởờớỡừứửựƯĂÊÔƯƠâêôơưĂÂÊÔƯ\s\-_]+$/.test(str);
 }
 
 
@@ -21,7 +21,7 @@ function FormModal() {
     if (!tenHocPhan || !soTinChi || !soTiet || !heSoHocPhan) return message.error("Nhập thiếu thông tin!")
     if (!isValidString(tenHocPhan)) {
       // console.log(tenHocPhan)
-      return message.error("Tên học phần không được chứa kí tự đặc biệt (ngoại trừ dấu _)!")
+      return message.error("Tên học phần không được chứa kí tự đặc biệt (ngoại trừ dấu - và _ )!")
     }
 
     if (modalMode == 'add') {
@@ -31,11 +31,21 @@ function FormModal() {
         message.success("Thêm học phần thành công!")
       } catch (err) {
         console.error(err)
-        message.error("Tên học phần không được chứa kí tự đặc biệt (ngoại trừ dấu _)!")
+        message.error("Tên học phần đã tồn tại!")
         return
       }
     }
-    else if (modalMode == 'edit') await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+    else if (modalMode == 'edit') {
+      try {
+        // console.log(selectedKhoa)
+        await UpdateHocPhan(id, { tenHocPhan, khoaId, soTinChi, soTiet, heSoHocPhan })
+        message.success("Cập nhật học phần thành công!")
+      } catch (err) {
+        console.error(err)
+        message.error("Tên học phần không được chứa kí tự đặc biệt (ngoại trừ dấu - và _)!")
+        return
+      }
+    }
 
     const data = await GetHocPhan().then(data => data)
     dispatch([

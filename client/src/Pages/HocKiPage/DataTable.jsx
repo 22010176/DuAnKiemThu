@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Space, Table, Tag } from 'antd';
+import { Button, message, Popconfirm, Space, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
 
@@ -80,6 +80,7 @@ function DataTable() {
                 { type: "updateKyData", payload: await GetHocKyList() },
                 // { type: "updateSelectedYear", payload: 'all' }
               ])
+              message.success("Xóa học kỳ thành công!")
             }}>
             <Button disabled={new Date(record.thoiGianBatDau) <= new Date()} variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>

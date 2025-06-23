@@ -1,6 +1,6 @@
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Popconfirm, Space, Table } from "antd";
+import { Button, message, Popconfirm, Space, Table } from "antd";
 import { useEffect } from "react";
 
 import { DeleteHocPhan, GetHocPhan } from "@/api/hocphanApi";
@@ -45,6 +45,7 @@ function DataTable() {
               const data = await GetHocPhan()
 
               dispatch({ type: "updateHocPhanList", payload: data })
+              message.success("Xóa học phần thành công!")
             }}>
             <Button variant="outlined" color="red" icon={<FontAwesomeIcon icon={faTrash} />} />
           </Popconfirm>

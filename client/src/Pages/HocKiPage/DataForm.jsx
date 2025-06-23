@@ -24,18 +24,25 @@ function DataForm() {
 
     let result;
     try {
-      if (modelMode == 'add') result = await CreateHocKy({
-        tenKi,
-        thoiGianBatDau: thoiGianBatDau.toDate(),
-        thoiGianKetThuc: thoiGianKetThuc.toDate()
-      })
-      else if (modelMode == 'edit') result = await UpdateHocKy({
-        id: id,
-        tenKi,
-        thoiGianBatDau: thoiGianBatDau.toDate(),
-        thoiGianKetThuc: thoiGianKetThuc.toDate()
-      })
-    } catch (error) {
+      if (modelMode == 'add') {
+        result = await CreateHocKy({
+          tenKi,
+          thoiGianBatDau: thoiGianBatDau.toDate(),
+          thoiGianKetThuc: thoiGianKetThuc.toDate()
+        })
+        message.success("Thêm học kì thành công!")
+      }
+      else if (modelMode == 'edit') {
+        result = await UpdateHocKy({
+          id: id,
+          tenKi,
+          thoiGianBatDau: thoiGianBatDau.toDate(),
+          thoiGianKetThuc: thoiGianKetThuc.toDate()
+        })
+        message.success("Cập nhật học kì thành công!")
+      }
+    }
+    catch (error) {
       console.log(error)
       message.error("Lỗi không thể thêm học kì!")
     }
@@ -49,7 +56,6 @@ function DataForm() {
       { type: "updateKyData", payload: data },
       { type: "updateSelectedYear", payload: 'all' }
     ])
-    message.success("Thêm học kì thành công!")
   }
 
   return (
