@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xXSF+UJmflM=",
+  "dgSpecHash": "ZdRdpKHF21U=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.applicationinsights\\2.22.0\\microsoft.applicationinsights.2.22.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.codecoverage\\17.14.1\\microsoft.codecoverage.17.14.1.nupkg.sha512",

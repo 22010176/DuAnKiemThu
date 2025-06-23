@@ -54,7 +54,7 @@ public class BangCapController(IRepository<BangCap> repo, AppDbContext context) 
     }
     catch (Exception)
     {
-      return BadRequest("Thông tin không hợp lệ!");
+      // return BadRequest("Thông tin không hợp lệ!");
     }
     return CreatedAtAction(nameof(Get), new { id = bc.Id }, item);
   }

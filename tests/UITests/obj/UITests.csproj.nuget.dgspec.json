@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj": {}
+    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj": {
+    "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj",
         "projectName": "UITests",
-        "projectPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\UITests.csproj",
+        "projectPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\UITests.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\Tests\\UITests\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Workspace\\kiemThu\\DuAnKiemThu\\tests\\UITests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
