@@ -1,18 +1,33 @@
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, DatePicker, Input, message, Modal, Select } from 'antd';
+import dayjs from 'dayjs';
 
 import { CreateHocKy, GetHocKyList, UpdateHocKy } from '@/api/hocKiApi';
 import { useData } from './context';
 
 const { RangePicker } = DatePicker;
 
+function isValidString(str) {
+  // Chỉ cho phép chữ cái và số, KHÔNG chứa ký tự đặc biệt
+  return /^[a-zA-Z0-9 ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáạảãăắẳặằâấầậẫèéẻẽẹêềễệếìíịỉòóõỏôổỗộồốùúụủũđĩơởờớỡừứửựƯĂÊÔƯƠâêôơưĂÂÊÔƯ\s\-_]+$/.test(str);
+}
+
+
 function DataForm() {
-  const [{
-    showModal, modelMode, formData },
+  const [
+    { showModal, modelMode, formData, kyData },
     dispatch] = useData();
   const { id, tenKi, year, thoiGianBatDau, thoiGianKetThuc } = formData
-
+  console.log(kyData)
+  //   {
+  //     "tenKi": "3e231b1a-0c9a-4ca1-8891-12bd8fc6b5b1",
+  //     "thoiGianBatDau": "2013-08-12T23:08:47.655Z",
+  //     "thoiGianKetThuc": "2014-02-12T23:08:47.655Z",
+  //     "id": "166faae4-0c7c-452c-99e7-cec827a9b2ea",
+  //     "soLop": 42,
+  //     "key": 109
+  // }
   async function onSubmit() {
     // console.log(thoiGianBatDau, thoiGianKetThuc)
 
@@ -21,7 +36,9 @@ function DataForm() {
     if (!tenKi) return message.error("Nhập thiếu thông tin!")
     if (thoiGianKetThuc.diff(thoiGianBatDau, 'month') < 4) return message.error("Thời gian kết thúc phải cách thời gian bắt đầu 4 tháng!")
     // const _bd = thoiGianBatDau.toDate(), _kt = thoiGianKetThuc.toDate();
-
+    if (!isValidString(tenKi)) return message.error("Tên học kì không được chứa kí tự đặc biệt (ngoại trừ dấu - và _ )!")
+    if (kyData.find(i => i.tenKi === tenKi && thoiGianBatDau.year() === dayjs(i.thoiGianBatDau).year()))
+      return message.error(`Học kì này đã tồn tại trong năm học ${year}-${year + 1} rồi!`)
     let result;
     try {
       if (modelMode == 'add') {
@@ -29,33 +46,49 @@ function DataForm() {
           tenKi,
           thoiGianBatDau: thoiGianBatDau.toDate(),
           thoiGianKetThuc: thoiGianKetThuc.toDate()
+        }).then(async res => {
+
+          message.success("Thêm học kì thành công!")
+          const data = await GetHocKyList()
+          dispatch([
+            { type: "updateModel", payload: false },
+            { type: "resetFormData" },
+            { type: "updateModelMode" },
+            { type: "updateKyData", payload: data },
+            { type: "updateSelectedYear", payload: 'all' }
+          ])
+        }).catch(err => {
+          message.error("Lỗi không thể thêm học kì!")
         })
-        message.success("Thêm học kì thành công!")
       }
       else if (modelMode == 'edit') {
-        result = await UpdateHocKy({
+        await UpdateHocKy({
           id: id,
           tenKi,
           thoiGianBatDau: thoiGianBatDau.toDate(),
           thoiGianKetThuc: thoiGianKetThuc.toDate()
+        }).then(async vres => {
+          message.success("Cập nhật học kì thành công!")
+          const data = await GetHocKyList()
+          dispatch([
+            { type: "updateModel", payload: false },
+            { type: "resetFormData" },
+            { type: "updateModelMode" },
+            { type: "updateKyData", payload: data },
+            { type: "updateSelectedYear", payload: 'all' }
+          ])
+        }).catch(err => {
+          message.error("Lỗi không thể sửa học kì!")
         })
-        message.success("Cập nhật học kì thành công!")
       }
     }
     catch (error) {
       console.log(error)
-      message.error("Lỗi không thể thêm học kì!")
+      message.error("Lỗi không thể thêm/sửa học kì!")
     }
     // console.log(result)
     // console.log({ id, tenKi, thoiGianBatDau, thoiGianKetThuc })
-    const data = await GetHocKyList()
-    dispatch([
-      { type: "updateModel", payload: false },
-      { type: "resetFormData" },
-      { type: "updateModelMode" },
-      { type: "updateKyData", payload: data },
-      { type: "updateSelectedYear", payload: 'all' }
-    ])
+
   }
 
   return (

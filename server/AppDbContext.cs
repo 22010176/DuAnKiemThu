@@ -46,8 +46,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     base.OnModelCreating(modelBuilder);
 
     //UC 2
-    modelBuilder.Entity<HocKi>().HasIndex(b => b.TenKi).IsUnique();
-    modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianBatDau).IsUnique();
+    modelBuilder.Entity<HocKi>().HasIndex(b => new { b.TenKi, b.ThoiGianBatDau }).IsUnique();
+    // modelBuilder.Entity<HocKi>().HasIndex(b => ).IsUnique();
     modelBuilder.Entity<HocKi>().HasIndex(b => b.ThoiGianKetThuc).IsUnique();
 
     // modelBuilder.Entity<TinChi>().HasIndex(b => b.LoaiTinChi).IsUnique();

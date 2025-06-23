@@ -20,7 +20,7 @@ export default function ClassSelectionModal() {
 
       {/* Content */}
       <h3 className="text-lg font-semibold mb-4" style={{ color: '#0A34A0' }}>
-        Danh sách lớp học phần vừa tạo (10):
+        Danh sách lớp học phần vừa tạo ({classes.length}):
       </h3>
 
       {/* Class List */}
