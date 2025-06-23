@@ -64,7 +64,7 @@ const items = {
   thongKe: [
     { content: "Thiết lập định mức tiền theo tiết", to: "/dinh-muc-tien" },
     { content: "Hệ số tính tiền", to: "/he-so-tinh-tien" },
-    { content: "Tra cứu tiền dạy", to: "/tinh-tien-day" },
+    { content: "Thống kê tiền dạy", to: "/tinh-tien-day" },
   ]
 }
 
