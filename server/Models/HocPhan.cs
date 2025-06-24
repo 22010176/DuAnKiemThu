@@ -24,9 +24,9 @@ public class HocPhan : HocPhanDto, IEntityPostgre
     {
       MaHocPhan = $"{khoa.MaKhoa}_{DateTime.Now.Ticks}",
       TenHocPhan = Guid.NewGuid().ToString().Substring(5, 15),
-      HeSoHocPhan = (float)(random.Next(1, 10) + random.NextDouble()),
+      HeSoHocPhan = (float)Math.Round(random.NextDouble() * 0.5 + 1.0, 2),
       SoTinChi = (uint)random.Next(1, 5),
-      SoTiet = (uint)random.Next(10, 1000),
+      SoTiet = (uint)random.Next(15, 61),
       KhoaId = khoa.Id
     };
   }
