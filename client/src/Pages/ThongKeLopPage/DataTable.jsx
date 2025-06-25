@@ -17,7 +17,7 @@ function DataTable() {
     { title: 'Tổng sinh viên', dataIndex: 'tongSinhVien', key: 'tongSinhVien', width: 120, align: 'center', },
     {
       title: 'SV trung bình/lớp', dataIndex: 'trungBinhSinhVienLop', key: 'trungBinhSinhVienLop', width: 150, align: 'center',
-      render: data => (data ?? 0).toFixed(2)
+      render: data => (data ?? 0).toFixed(0)
     },
     { title: 'Khoa', dataIndex: 'tenKhoa', key: 'tenKhoa', width: 100, align: 'center', }
   ];

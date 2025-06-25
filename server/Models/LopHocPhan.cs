@@ -24,7 +24,7 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
         {
             MaLop = $"{hocPhan}_{hocKi}_{namBd}_{random.Next()}", // HP_KI_Năm bd
             TenLop = name,
-            SoLuongSinhVien = (uint)random.Next(20, 200),
+            SoLuongSinhVien = (uint)random.Next(20, 100),
             HocPhanId = hocPhanId,
             HocKiId = hocKiId,
             GiangVienId = giangVienId
@@ -37,7 +37,7 @@ public class LopHocPhan : LopHocPhanDto, IEntityPostgre
         {
             MaLop = $"{hocPhan.MaHocPhan}-{index.ToString().PadLeft(2, '0')}", // HP_KI_Năm bd
             TenLop = $"{hocPhan.TenHocPhan} (N{index.ToString().PadLeft(2, '0')})",
-            SoLuongSinhVien = (uint)random.Next(40, 200),
+            SoLuongSinhVien = (uint)random.Next(40, 100),
             HocPhanId = hocPhan.Id,
             HocKiId = hocKi.Id,
             GiangVienId = giangVien?.Id

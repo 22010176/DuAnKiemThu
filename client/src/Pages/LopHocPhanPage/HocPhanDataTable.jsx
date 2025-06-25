@@ -39,7 +39,7 @@ function HocPhanDataTable() {
     { title: <TableHeader>Tên học phần</TableHeader>, dataIndex: 'tenHocPhan', key: 'tenHocPhan', width: 200, },
     { title: <TableHeader>Khoa</TableHeader>, dataIndex: 'tenKhoa', key: 'tenKhoa', width: 120, },
     { title: <TableHeader>Số tín chỉ</TableHeader>, dataIndex: 'soTinChi', key: 'soTinChi', width: 100, align: 'center', },
-    { title: <TableHeader>Hệ số</TableHeader>, dataIndex: 'heSoHocPhan', key: 'heSoHocPhan', width: 80, align: 'center', },
+    { title: <TableHeader>Hệ số</TableHeader>, dataIndex: 'heSoHocPhan', key: 'heSoHocPhan', width: 80, align: 'center', render: _ => _?.toFixed(2) },
     { title: <TableHeader>Số tiết</TableHeader>, dataIndex: 'soTiet', key: 'soTiet', width: 80, align: 'center', },
     {
       title: <TableHeader>Trạng thái</TableHeader>, dataIndex: 'soTiet', key: 'soTiet', width: 80, align: 'center',

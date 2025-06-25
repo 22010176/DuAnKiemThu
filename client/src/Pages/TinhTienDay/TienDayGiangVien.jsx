@@ -17,11 +17,19 @@ function LayHeSoDinhMucSinhVien(danhSachHeSoLop, soHocSinhToiThieu, namHoc) {
   return result.length > 0 ? result[result.length - 1].heSo : 1;
 }
 
+// function LayDinhMuc(danhSachDinhMuc, namHoc) {
+//   const result = danhSachDinhMuc.filter(i => new Date(i.ngayCapNhat).getFullYear() <= namHoc)
+//   return (result.length > 0 ? result[result.length - 1] : danhSachDinhMuc[0])?.soTien || 1;
+// }
 function LayDinhMuc(danhSachDinhMuc, namHoc) {
-  const result = danhSachDinhMuc.filter(i => new Date(i.ngayCapNhat).getFullYear() <= namHoc)
+  // Tìm bản ghi có ngày cập nhật gần nhất nhưng không lớn hơn ngày 1/1/(namHoc + 1)
+  const limitDate = new Date(`${namHoc + 1}-01-01`);
+  const result = danhSachDinhMuc
+    .filter(i => new Date(i.ngayCapNhat) < limitDate)
+    .sort((a, b) => new Date(a.ngayCapNhat) - new Date(b.ngayCapNhat));
+
   return (result.length > 0 ? result[result.length - 1] : danhSachDinhMuc[0])?.soTien || 1;
 }
-
 function GetYear(str) {
   return new Date(str).getFullYear();
 }

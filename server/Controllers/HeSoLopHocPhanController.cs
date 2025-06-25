@@ -35,13 +35,18 @@ public class HeSoLopHocPhanController(AppDbContext context) : ControllerBase
       context.HeSoLop.AddRange([
         new HeSoLop()
       {
-        HeSo = 1,
-        SoHocSinhToiThieu = 1,
+        HeSo = -0.3,
+        SoHocSinhToiThieu = 20,
         NamHoc = nam
       },
       new HeSoLop(){
-        HeSo = 2,
-        SoHocSinhToiThieu = 75,
+        HeSo = 0.2,
+        SoHocSinhToiThieu = 70,
+        NamHoc = nam
+      },
+      new HeSoLop(){
+        HeSo = 0.3,
+        SoHocSinhToiThieu = 100,
         NamHoc = nam
       }
       ]);
